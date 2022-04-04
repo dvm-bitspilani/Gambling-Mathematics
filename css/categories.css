@@ -1,0 +1,179 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
+
+@font-face {
+  font-family: "Pirulen";
+  src: local("Pirulen"), url("/fonts/Pirulen.otf") format("opentype");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "Forgotten Futurist";
+  src: local("Forgotten Futurist"),
+    url("/fonts/Forgotten\ Futurist.ttf") format("truetype");
+  font-weight: normal;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  color: white;
+  font-family: "Forgotten Futurist";
+  box-sizing: border-box;
+}
+
+body {
+  background-color: black;
+  background-image: url("/assets/background.png");
+  background-size: cover;
+}
+
+.heading,
+.content {
+  margin: 10vh 10vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-family: "Pirulen";
+  font-size: 4rem;
+}
+
+.stash {
+  background: rgba(0, 0, 0, 0.09);
+  backdrop-filter: blur(130px);
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+}
+
+.stashTitle {
+  letter-spacing: 0.15rem;
+}
+
+.stashAmount {
+  font-weight: 700;
+  font-size: 2.6rem;
+  letter-spacing: 0.3rem;
+  text-align: right;
+  margin-left: 1rem;
+}
+
+.categories {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 3rem;
+  margin-left: 5vw;
+}
+
+.category {
+  width: 18vw;
+  cursor: pointer;
+  font-size: 1.5rem;
+  letter-spacing: 0.12em;
+  display: flex;
+  align-items: baseline;
+  gap: 13px;
+  padding: 1.5rem;
+  background: rgba(7, 9, 73, 0.09);
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+  backdrop-filter: blur(130px);
+  border-radius: 15px;
+}
+
+.check {
+  width: 1.3rem;
+  height: 1.3rem;
+  outline: 2px solid rgba(255, 255, 255, 1);
+  border-radius: 3px;
+}
+
+.prompt {
+  width: 27vw;
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+}
+
+.promptText {
+  font-size: 1.8rem;
+  letter-spacing: 0.12em;
+}
+
+.promptButton {
+  cursor: pointer;
+  font-weight: 700;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  background-color: white;
+  color: black;
+  width: max-content;
+  border: 4px solid black;
+  outline: 1px solid rgba(255, 255, 255, 1);
+  padding: 0.5rem 2rem;
+}
+
+@media screen and (max-width: 1400px) {
+  * {
+    font-size: smaller;
+  }
+  .title {
+    font-size: 2.5rem;
+  }
+  .category {
+    width: 20vw;
+  }
+}
+
+@media screen and (max-width: 980px) {
+  .content {
+    flex-direction: column-reverse;
+  }
+  .categories {
+    grid-template-columns: auto;
+    margin: 0 20vw;
+  }
+  .category {
+    width: 60vw;
+    justify-content: center;
+  }
+  .prompt {
+    width: 40vw;
+    text-align: center;
+    align-items: center;
+    margin-bottom: 10vh;
+  }
+}
+
+@media screen and (max-width: 850px) {
+  .heading {
+    flex-direction: column;
+  }
+  .title {
+    font-size: 3rem;
+    margin-bottom: 10vh;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .title {
+    font-size: 2.4rem;
+    text-align: center;
+  }
+  .prompt {
+    width: 60vw;
+  }
+  .promptText {
+    font-size: 20px;
+  }
+  .category {
+    font-size: 15px;
+  }
+}
