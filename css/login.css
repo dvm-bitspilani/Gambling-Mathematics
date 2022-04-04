@@ -1,0 +1,118 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("../fonts/Gilroy-Light.otf");
+}
+
+@font-face {
+  font-family: "Forgotten Futurist";
+  src: url("../fonts/Forgotten Futurist.ttf");
+}
+
+@font-face {
+  font-family: "Pirulen";
+  src: url("../fonts/Pirulen.otf");
+}
+
+@font-face {
+  font-family: "SF Pro";
+  src: url("../fonts/SF-Pro-Text-Regular.otf");
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: black;
+  background-image: url("../assets/background.png");
+  background-size: 100%;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+}
+
+#left {
+  align-self: center;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-rows: min-content;
+  grid-row-gap: 20px;
+  padding-left: 50px;
+}
+
+#right {
+  align-self: center;
+}
+
+#login-head {
+  font-family: "Pirulen", sans-serif;
+  font-size: 4rem;
+  color: white;
+}
+
+.reg-par {
+  font-family: "Forgotten Futurist", sans-serif;
+  font-size: 1.5rem;
+  color: white;
+}
+
+#login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-self: center;
+  justify-items: center;
+  justify-content: center;
+}
+
+.login-field {
+  display: block;
+  width: 40vw;
+  background-color: transparent;
+  padding: 16.5px 14px;
+  outline: none;
+  border: 1px solid white;
+  border-radius: 10px;
+}
+
+.btn {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  width: max-content;
+  border: 4px solid black;
+  outline: 1px solid rgba(255, 255, 255, 1);
+  padding: 5px 30px;
+}
+
+#google-btn {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: 1fr;
+  grid-column-gap: 40px;
+}
+
+#google-logo {
+  width: 26px;
+  height: 26px;
+}
+
+.line {
+  height: 1px;
+  width: 140px;
+  background-color: white;
+}
+
+#or-cont {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+#par-alt {
+  font-family: "SF Pro", sans-serif;
+  color: white;
+}
