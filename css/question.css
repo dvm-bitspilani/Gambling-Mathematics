@@ -159,7 +159,14 @@ body {
   width: 1.3rem;
   height: 1.3rem;
   outline: 2px solid rgba(255, 255, 255, 1);
+  border: none;
+  background-color: black;
   border-radius: 3px;
+}
+
+.check.checked {
+  border: 3px solid black;
+  background-color: white;
 }
 
 #stash {

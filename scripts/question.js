@@ -19,17 +19,19 @@ setInterval(() => {
 const answer = Array.from(document.getElementsByClassName("answer"));
 const checkBox = Array.from(document.getElementsByClassName("check"));
 const timer = document.getElementById("timer");
+let activeIdx = -1;
 
 checkBox.forEach((box, idx) => {
   answer[idx].addEventListener("click", () => {
     if (!checkBox[idx].classList.contains("checked")) {
-      box.style.backgroundColor = "white";
-      box.style.border = "3px solid black";
       checkBox[idx].classList.add("checked");
+      if (activeIdx !== -1) {
+        checkBox[activeIdx].classList.remove("checked");
+      }
+      activeIdx = idx;
     } else {
-      box.style.backgroundColor = "black";
-      box.style.border = "none";
       checkBox[idx].classList.remove("checked");
+      activeIdx = -1;
     }
   });
 });
