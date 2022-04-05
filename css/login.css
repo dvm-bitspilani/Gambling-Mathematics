@@ -73,6 +73,21 @@ body {
   justify-items: center;
 }
 
+.login-field-cont {
+  position: relative;
+}
+
+.login-field-cont label {
+  position: absolute;
+  top: -9px;
+  left: 10px;
+  padding: 0px 3px;
+  font-family: "Gilroy", sans-serif;
+  font-size: 1rem;
+  color: white;
+  background-color: black;
+}
+
 .login-field {
   display: block;
   width: 30vw;
