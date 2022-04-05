@@ -131,7 +131,7 @@ body {
 
 .promptButton:hover {
   transform: scaleX(1.05);
-  background-color: rgb(154, 154, 156);
+  opacity: 0.6;
 }
 
 @media screen and (max-width: 1400px) {

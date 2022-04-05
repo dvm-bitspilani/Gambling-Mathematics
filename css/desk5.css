@@ -1,230 +1,290 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
+
 @font-face {
-    font-family: "Pirulen";
-    src: local("Pirulen"), url("/fonts/Pirulen.otf") format("opentype");
-    font-weight: normal;
+  font-family: "Pirulen";
+  src: local("Pirulen"), url("../fonts/Pirulen.otf") format("opentype");
+  font-weight: normal;
 }
 
 @font-face {
-    font-family: "Forgotten Futurist";
-    src: local("Forgotten Futurist"),
-        url("/fonts/Forgotten\ Futurist.ttf") format("truetype");
-    font-weight: normal;
+  font-family: "Forgotten Futurist";
+  src: local("Forgotten Futurist"),
+    url("../fonts/Forgotten Futurist.ttf") format("truetype");
+  font-weight: normal;
 }
 
 * {
-    padding: 0;
-    margin: 0;
-    color: white;
-    font-family: "Forgotten Futurist";
-    box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  color: white;
+  font-family: "Forgotten Futurist";
+  box-sizing: border-box;
 }
 
 body {
-    background-color: black;
-    background-image: url("/assets/background.png");
-    background-size: cover;
+  background-color: black;
+  background-image: url("/assets/background.png");
+  background-size: cover;
 }
 
 .heading,
 .content {
-    margin: 10vh 10vw;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  margin: 10vh 10vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .title {
-    font-family: "Pirulen";
-    font-size: 4rem;
+  font-family: "Pirulen";
+  font-size: 4rem;
 }
 
 .stash {
-    background: rgba(0, 0, 0, 0.09);
-    backdrop-filter: blur(130px);
-    border-radius: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1rem 2rem;
-    box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
-        inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+  background: rgba(0, 0, 0, 0.09);
+  backdrop-filter: blur(130px);
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
 }
 
 .stashTitle {
-    letter-spacing: 0.15rem;
+  letter-spacing: 0.15rem;
 }
 
 .stashAmount {
-    font-weight: 700;
-    font-size: 2.6rem;
-    letter-spacing: 0.3rem;
-    text-align: right;
-    margin-left: 1rem;
+  font-weight: 700;
+  font-size: 2.6rem;
+  letter-spacing: 0.3rem;
+  text-align: right;
+  margin-left: 1rem;
 }
 
-.betNumber{
-    text-align: center;
-    padding: 1.4rem;
-    border-radius: 15px;
-    font-weight: 700;
-    font-size: 9em;
-    align-items: center;
-    letter-spacing: 0.12em;
-    color: #FFFFFF;
-    margin-top: 0.9em;
-    margin-left: 1.2em;
+.betNumber {
+  text-align: center;
+  padding: 1.4rem;
+  border-radius: 15px;
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  font-size: 9em;
+  align-items: start;
+  justify-content: center;
+  justify-self: center;
+  letter-spacing: 0.12em;
+  color: #ffffff;
 }
-
 
 .betSelect {
-    font-size: 1.8rem;
-    letter-spacing: 0.12em;
-    line-height: 1.4em;
+  font-size: 1.8rem;
+  letter-spacing: 0.12em;
+  line-height: 1.4em;
 }
+
 .btn {
-    font-family: "Montserrat", sans-serif;
-    font-weight: 700;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  background-color: white;
+  color: black;
+  margin-top: 2.5em;
+  width: 12em;
+  text-align: center;
+  border: 4px solid black;
+  outline: 1px solid rgba(255, 255, 255, 1);
+  padding: 5px 20px;
+  cursor: pointer;
+  transition: all 300ms ease-in-out;
+}
+
+.btn:hover {
+  transform: scaleX(1.05);
+  opacity: 0.6;
+}
+
+.sliderHere {
+  width: 158%;
+  margin-left: -0.9em;
+  margin-top: -0.3em;
+}
+
+.slidecontainer {
+  position: relative;
+}
+
+.input-field {
+  -webkit-appearance: none;
+  width: 90%;
+  background: transparent;
+  padding: 16.5px 14px;
+  outline: none;
+  border: 1px solid white;
+  font-family: "Gilroy", sans-serif;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 500;
+  border-radius: 10px;
+}
+
+.input-field::-webkit-inner-spin-button,
+.input-field::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input-field[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.input-field::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 23px;
+  height: 49px;
+  /* border: 0; */
+  background: url("../assets/Slider.png");
+  cursor: pointer;
+}
+
+.input-field::-moz-range-thumb {
+  width: 23px;
+  height: 25px;
+  /* border: 0; */
+  background: url("../assets/Slider.png");
+  cursor: pointer;
+}
+
+.end1 {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: white;
+  position: absolute;
+  top: 0.85em;
+  left: 3%;
+}
+
+.end2 {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: white;
+  position: absolute;
+  top: 0.85em;
+  left: 95%;
+}
+
+.textContent {
+  font-size: 0.2em;
+  display: flex;
+  justify-content: space-between;
+  letter-spacing: 0.12em;
+}
+
+.desc {
+  margin-top: 4em;
+  letter-spacing: 0.12em;
+  font-size: 0.18em;
+  font-weight: 200;
+  line-height: 1.4em;
+}
+
+.desc span {
+  font-weight: bold;
+}
+
+@media (max-width: 1600px) {
+  .betNumber {
+    font-size: 7em;
+  }
+
+  .betSelect {
+    margin-left: 2em;
+  }
+}
+
+@media (max-width: 1300px) {
+  .title {
+    font-size: 2.4em;
+  }
+
+  .betNumber {
+    font-size: 4em;
+  }
+
+  .betSelect {
     font-size: 1.2rem;
-    background-color: white;
-    color: black;
-    margin-top: 2.5em;
-    width: 12em;
+  }
+
+  .input-field {
+    font-size: 1rem;
+  }
+
+  .btn {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .heading {
+    flex-direction: column;
+  }
+
+  .title {
     text-align: center;
-    border: 4px solid black;
-    outline: 1px solid rgba(255, 255, 255, 1);
-    padding: 5px 20px;
+    margin-bottom: 2em;
   }
-  .sliderHere{
-      width: 150%;
-      margin-left: -0.9em;
-      margin-top: -0.3em;
+
+  .stash {
+    margin-left: -2em;
   }
-  .slidecontainer{
-      position: relative;
+
+  .content {
+    flex-direction: column-reverse;
+    margin-top: 5em;
   }
-  .slider {
-    -webkit-appearance: none;
-    width: 90%;
-    height: 2px;
-    border-radius: 5px;  
-    background: #FFFFFF;
-    outline: none;
-    opacity: 0.9;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
+
+  .sliderHere {
+    width: 150%;
   }
-  .slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 23px;
-    height: 49px;
-    /* border: 0; */
-    background: url('../assets/Slider.png');
-    cursor: pointer;
+
+  .info {
+    text-align: center;
   }
-  .slider::-moz-range-thumb {
-    width: 23px;
-    height: 25px;
-    /* border: 0; */
-    background: url('../assets/Slider.png');
-    cursor: pointer;
+
+  .number {
+    width: 100%;
+    margin-left: -1em;
+    font-size: 0.8em;
   }
-  .end1{
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background-color: white;
-      position: absolute;
-      top:0.85em;
-      left: 3%;
+
+  .end1 {
+    width: 15px;
+    height: 15px;
+    top: 0.8em;
   }
-  .end2{
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background-color: white;
-      position: absolute;
-      top:0.85em;
-      left: 95%;
+
+  .end2 {
+    width: 15px;
+    height: 15px;
+    top: 0.8em;
   }
-  .textContent{
-      font-size: 0.2em;
-      display: flex;
-      justify-content: space-between;
-      letter-spacing: 0.12em;
+
+  .desc {
+    margin: inherit auto;
+    /*font-size: 1em;*/
   }
-  .desc{
-      margin-top: 4em;
-      letter-spacing: 0.12em;
-      font-size: 0.18em;
-      font-weight: 200;
-      line-height: 1.4em;
+
+  .betSelect {
+    margin-left: -1em;
+    font-size: 0.9em;
   }
-  .desc span{
-      font-weight: bold;
+
+  .btn {
+    margin: 0 auto;
   }
-  @media (max-width: 1600px) {
-      .betNumber{
-          font-size: 7em;
-      }      
-      .betSelect{
-          margin-left: 2em;
-      }
-  }
-  @media (max-width: 1300px) {
-      .title{
-          font-size: 2.4em;
-      }
-      .betNumber{
-        font-size: 4em;
-    } 
-    .betSelect{
-        font-size: 1.2em;
-    }
-    .btn{
-        font-size: 0.8em;
-    }
-      
-  }
-  @media(max-width: 900px){
-      .heading{
-          flex-direction: column;
-      }
-      .title{
-          margin-bottom: 2em;
-      }
-      .stash{
-          margin-left: -2em;
-      }
-      .content{
-          flex-direction: column-reverse;
-          margin-top: 5em;
-      }
-      .sliderHere{
-          width: 150%;
-      }
-      .number{
-          width: 100%;
-          margin-left: -1em;
-          font-size: 0.8em;
-      }
-      .end1{
-          width: 15px;
-          height: 15px;
-          top:0.8em
-      }
-      .end2{
-          width: 15px;
-          height: 15px;
-          top:0.8em
-      }
-      .desc{
-          margin-left: -6em;
-          /* font-size: 1em; */
-      }
-      .betSelect{
-          margin-left: -1em;
-          font-size: 0.9em;
-      }
-  }
+}

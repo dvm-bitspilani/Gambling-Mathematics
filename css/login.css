@@ -118,6 +118,7 @@ body {
 
 .btn:hover,
 .btn:active {
+  transform: scaleX(1.05);
   opacity: 0.6;
 }
 
@@ -191,6 +192,10 @@ body {
     text-align: center;
     margin: auto;
     width: min-content;
+  }
+
+  .login-field {
+    font-size: 1rem;
   }
 
   .btn {

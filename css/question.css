@@ -80,6 +80,7 @@ body {
 
 .btn:hover,
 .btn:active {
+  transform: scaleX(1.05);
   opacity: 0.6;
 }
 
