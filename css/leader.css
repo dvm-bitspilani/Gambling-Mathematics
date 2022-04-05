@@ -132,14 +132,17 @@ body {
   font-size: 3em;
   margin-top: 2em;
 }
+
 .ranks div div {
   width: max-content;
 }
+
 .ranks div {
   display: flex;
   width: 50%;
   justify-content: space-between;
 }
+
 .current {
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
@@ -152,6 +155,7 @@ body {
   outline: 1px solid rgba(255, 255, 255, 1);
   padding: 15px 40px;
 }
+
 .other {
   background: rgba(0, 0, 0, 0.09);
   backdrop-filter: blur(130px);
@@ -163,12 +167,14 @@ body {
   box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
     inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
 }
+
 .rules {
   position: fixed;
   bottom: 1%;
   right: 2%;
   font-size: 2em;
 }
+
 .rules a {
   text-decoration: underline;
   color: white;
@@ -178,102 +184,180 @@ body {
   .betNumber {
     font-size: 7em;
   }
+
   .betSelect {
     margin-left: 2em;
   }
 }
+
 @media (max-width: 1300px) {
   .title {
     font-size: 2.4em;
   }
+
   .betNumber {
     font-size: 4em;
   }
+
   .betSelect {
     font-size: 1.2em;
   }
+
   .btn {
     font-size: 0.8em;
   }
 }
+
 @media (max-width: 900px) {
   .heading {
     flex-direction: column;
   }
+
   .pictures {
     gap: 0;
   }
+
   .pictures .first {
     width: 150px;
     height: 150px;
   }
+
   .first::after {
     left: 42px;
   }
+
   .first::before {
     left: 28px;
   }
+
   .pictures .second {
     width: 150px;
     height: 150px;
   }
+
   .second::after {
     left: 42px;
   }
+
   .pictures .third {
     width: 150px;
     height: 150px;
   }
+
   .third::after {
     left: 42px;
   }
+
   .current {
     width: 90vw;
     padding: 10px 8px;
     font-size: 1.3rem;
     justify-content: space-around;
   }
+
   .left {
     width: max-content;
   }
+
   .other {
     width: 100vw;
     padding: 10px 8px;
     font-size: 1.3rem;
   }
+
   .title {
     margin-bottom: 2em;
+    font-size: 1.7em;
   }
+
   .stash {
     margin-left: -2em;
   }
+
   .content {
     flex-direction: column-reverse;
     margin-top: 5em;
   }
+
   .sliderHere {
     width: 150%;
   }
+
   .number {
     width: 100%;
     margin-left: -1em;
     font-size: 0.8em;
   }
+
   .end1 {
     width: 15px;
     height: 15px;
     top: 0.8em;
   }
+
   .end2 {
     width: 15px;
     height: 15px;
     top: 0.8em;
   }
+
   .desc {
     margin-left: -6em;
   }
+
   .betSelect {
     margin-left: -1em;
     font-size: 0.9em;
+  }
+
+  .ranks div {
+    width: 80%;
+  }
+  .rules{
+    display: none;
+  }
+  .current {
+  
+    padding: 1em;
+  }
+  @media (max-width:450px) {
+    .pictures .first {
+      width: 100px;
+      height: 100px;
+    }
+  
+    .first::after {
+      left: 24px;
+    }
+  
+    .first::before {
+      left: 8px;
+    }
+    .ranks{
+      gap: 0.4em;
+    }
+  
+    .pictures .second {
+      width: 100px;
+      height: 100px;
+    }
+  
+    .second::after {
+      left: 24px;
+    }
+  
+    .pictures .third {
+      width: 100px;
+      height: 100px;
+    }
+  
+    .third::after {
+      left: 24px;
+      /* font-size: 0.4em; */
+    }
+    .current{
+      margin-bottom: 1.5em; 
+    }
+    
   }
 }
