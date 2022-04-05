@@ -197,6 +197,65 @@ body {
   font-weight: bold;
 }
 
+#err-cont {
+  background-color: transparent;
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reg-par {
+  font-family: "Forgotten Futurist", sans-serif;
+  word-break: break-word;
+  font-size: 1.5rem;
+  color: white;
+  width: max-content;
+  letter-spacing: 1.2px;
+  opacity: 0.8;
+}
+
+.glass {
+  padding: 1.5rem;
+  background: rgba(7, 9, 73, 0.09);
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+  backdrop-filter: blur(130px);
+  border-radius: 15px;
+}
+
+#err {
+  width: max-content;
+  height: min-content;
+}
+
+#err .reg-par {
+  padding: 50px;
+}
+
+#err-head {
+  font-family: "Pirulen", sans-serif;
+  font-size: 2rem;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#err-head svg {
+  stroke: white;
+  fill: white;
+  height: 25px;
+  width: 25px;
+}
+
 @media (max-width: 1600px) {
   .betNumber {
     font-size: 7em;
@@ -286,5 +345,13 @@ body {
 
   .btn {
     margin: 0 auto;
+  }
+
+  .reg-par {
+    font-size: 1rem;
+    margin: auto;
+  }
+  #err .reg-par {
+    padding: 10px 0;
   }
 }
