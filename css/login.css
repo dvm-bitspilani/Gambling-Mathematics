@@ -25,11 +25,14 @@ body {
   padding: 0;
   height: 100vh;
   width: 100vw;
+  overflow: hidden;
   background-color: black;
   background-image: url("../assets/background.png");
   background-size: 100%;
   display: grid;
-  grid-template-columns: 1.5fr 1fr;
+  grid-template-columns: 2fr 1fr;
+  grid-row-gap: 50px;
+  grid-column-gap: 100px;
 }
 
 #left {
@@ -38,7 +41,7 @@ body {
   grid-template-columns: 1fr;
   grid-auto-rows: min-content;
   grid-row-gap: 20px;
-  padding-left: 50px;
+  padding: 100px 100px;
 }
 
 #right {
@@ -53,22 +56,24 @@ body {
 
 .reg-par {
   font-family: "Forgotten Futurist", sans-serif;
+  word-break: break-word;
   font-size: 1.5rem;
   color: white;
+  width: max-content;
 }
 
 #login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: min-content;
+  grid-auto-rows: min-content;
+  grid-row-gap: 20px;
   justify-self: center;
   justify-items: center;
-  justify-content: center;
 }
 
 .login-field {
   display: block;
-  width: 40vw;
+  width: 30vw;
   background-color: transparent;
   padding: 16.5px 14px;
   outline: none;
@@ -81,16 +86,19 @@ body {
   font-weight: 700;
   font-size: 1.2rem;
   width: max-content;
+  background-color: white;
   border: 4px solid black;
   outline: 1px solid rgba(255, 255, 255, 1);
   padding: 5px 30px;
+  transition: all 300ms ease-in-out;
+  cursor: pointer;
 }
 
 #google-btn {
   display: grid;
-  grid-template-columns: auto;
-  grid-template-rows: 1fr;
-  grid-column-gap: 40px;
+  grid-template-columns: auto auto;
+  align-items: center;
+  grid-column-gap: 10px;
 }
 
 #google-logo {
@@ -105,14 +113,58 @@ body {
 }
 
 #or-cont {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
+  display: grid;
+  grid-template-columns: repeat(3, min-content);
+  grid-column-gap: 10px;
   align-items: center;
-  justify-content: space-evenly;
 }
 
 #par-alt {
   font-family: "SF Pro", sans-serif;
   color: white;
+}
+
+@media (max-width: 1000px) {
+  body {
+    grid-template-columns: 1fr;
+    grid-auto-rows: max-content;
+  }
+
+  #left {
+    padding: 50px 10px;
+  }
+
+  #right {
+    justify-self: center;
+    align-self: end;
+  }
+
+  #login-head {
+    font-size: 2rem;
+    text-align: center;
+    margin: auto;
+    width: min-content;
+  }
+
+  .btn {
+    font-size: 1rem;
+  }
+
+  .line {
+    width: 100px;
+  }
+
+  #google-logo {
+    height: 22px;
+    width: 22px;
+  }
+
+  .reg-par {
+    font-size: 1rem;
+    margin: auto;
+  }
+
+  .login-field {
+    width: 70vw;
+  }
 }
