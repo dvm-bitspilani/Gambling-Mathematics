@@ -1,0 +1,192 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
+
+@font-face {
+  font-family: "Forgotten Futurist";
+  src: url("../fonts/Forgotten Futurist.ttf");
+}
+
+@font-face {
+  font-family: "Pirulen";
+  src: url("../fonts/Pirulen.otf");
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+  background-color: black;
+  background-image: url("../assets/background.png");
+  background-size: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-row-gap: 50px;
+  grid-column-gap: 100px;
+}
+
+.glass {
+  padding: 1.5rem;
+  background: rgba(7, 9, 73, 0.09);
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+  backdrop-filter: blur(130px);
+  border-radius: 15px;
+}
+
+#left {
+  align-self: center;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-rows: min-content;
+  grid-row-gap: 0;
+  padding: 0 50px;
+}
+
+#right {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+#right-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-rows: min-content;
+  align-self: center;
+  align-items: center;
+  justify-items: center;
+  grid-row-gap: 20px;
+}
+
+.btn {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  width: max-content;
+  background-color: white;
+  border: 4px solid black;
+  outline: 1px solid rgba(255, 255, 255, 1);
+  padding: 5px 30px;
+  transition: all 300ms ease-in-out;
+  cursor: pointer;
+}
+
+#question-head {
+  font-family: "Pirulen", sans-serif;
+  font-size: 4rem;
+  color: white;
+  text-align: center;
+}
+
+.reg-par {
+  width: max-content;
+  padding: 0;
+  margin: 0;
+  font-family: "Forgotten Futurist", sans-serif;
+  font-size: 1.5rem;
+  color: white;
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  letter-spacing: 1.2px;
+}
+
+.small-par {
+  width: max-content;
+  padding: 0;
+  margin: 0;
+  font-family: "Forgotten Futurist", sans-serif;
+  font-size: 1rem;
+  color: white;
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  letter-spacing: 2px;
+}
+
+.num {
+  width: max-content;
+  padding: 5px 60px;
+  margin: 0;
+  font-family: "Forgotten Futurist", sans-serif;
+  font-size: 2rem;
+  font-weight: 900;
+  color: white;
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  letter-spacing: 5px;
+}
+
+#answers {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-rows: 1fr;
+  grid-row-gap: 20px;
+  align-items: center;
+  justify-items: center;
+}
+
+.answer {
+  width: 25vw;
+  height: min-content;
+  cursor: pointer;
+  font-family: "Forgotten Futurist", sans-serif;
+  font-size: 1.5rem;
+  color: white;
+  letter-spacing: 1.2px;
+  display: flex;
+  align-items: baseline;
+  gap: 13px;
+}
+
+.check {
+  box-sizing: border-box;
+  width: 1.3rem;
+  height: 1.3rem;
+  outline: 2px solid rgba(255, 255, 255, 1);
+  border-radius: 3px;
+}
+
+#stash {
+  position: fixed;
+  top: 50px;
+  right: 30px;
+}
+
+@media (max-width: 1000px) {
+  body {
+    grid-template-columns: 1fr;
+    grid-auto-rows: max-content;
+  }
+
+  #left {
+    padding: 50px 10px;
+  }
+
+  #right {
+    justify-self: center;
+    align-self: end;
+  }
+
+  #question-head {
+    font-size: 2rem;
+    text-align: center;
+    margin: auto;
+    width: min-content;
+  }
+
+  .btn {
+    font-size: 1rem;
+  }
+
+  .reg-par {
+    font-size: 1rem;
+    margin: auto;
+  }
+}
