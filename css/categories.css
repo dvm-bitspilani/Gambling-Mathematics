@@ -2,14 +2,14 @@
 
 @font-face {
   font-family: "Pirulen";
-  src: local("Pirulen"), url("/fonts/Pirulen.otf") format("opentype");
+  src: local("Pirulen"), url("../fonts/Pirulen.otf") format("opentype");
   font-weight: normal;
 }
 
 @font-face {
   font-family: "Forgotten Futurist";
   src: local("Forgotten Futurist"),
-    url("/fonts/Forgotten\ Futurist.ttf") format("truetype");
+    url("../fonts/Forgotten Futurist.ttf") format("truetype");
   font-weight: normal;
 }
 
@@ -121,9 +121,17 @@ body {
   transition: all 0.3s;
 }
 
-.promptButton:hover{
+#btn1 {
+  display: none;
+}
+
+#btn2 {
+  display: block;
+}
+
+.promptButton:hover {
   transform: scaleX(1.05);
-  background-color: rgb(154,154,156);
+  background-color: rgb(154, 154, 156);
 }
 
 @media screen and (max-width: 1400px) {
@@ -155,6 +163,13 @@ body {
     text-align: center;
     align-items: center;
     margin-bottom: 10vh;
+  }
+  #btn1 {
+    display: block;
+    justify-self: center;
+  }
+  #btn2 {
+    display: none;
   }
 }
 

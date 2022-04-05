@@ -1,13 +1,13 @@
 @font-face {
   font-family: "Pirulen";
-  src: local("Pirulen"), url("/fonts/Pirulen.otf") format("opentype");
+  src: local("Pirulen"), url("../fonts/Pirulen.otf") format("opentype");
   font-weight: normal;
 }
 
 @font-face {
   font-family: "Forgotten Futurist";
   src: local("Forgotten Futurist"),
-    url("/fonts/Forgotten\ Futurist.ttf") format("truetype");
+    url("../fonts/Forgotten Futurist.ttf") format("truetype");
   font-weight: normal;
 }
 
@@ -96,7 +96,7 @@ body {
 }
 
 @media screen and (max-width: 1500px) {
-  .level{
+  .level {
     width: 25vw;
   }
   .title {
@@ -105,21 +105,19 @@ body {
 }
 
 @media screen and (max-width: 1300px) {
-  *{
+  * {
     font-size: smaller;
   }
-  .heading{
+  .heading {
     margin: 10vh 7vw;
   }
 }
-
-
 
 @media screen and (max-width: 999px) {
   .content {
     flex-direction: column-reverse;
   }
-  .levels{
+  .levels {
     margin: 0;
   }
   .level {
