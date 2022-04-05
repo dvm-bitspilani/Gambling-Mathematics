@@ -1,0 +1,202 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("../fonts/Gilroy-Light.otf");
+}
+
+@font-face {
+  font-family: "Forgotten Futurist";
+  src: url("../fonts/Forgotten Futurist.ttf");
+}
+
+@font-face {
+  font-family: "Pirulen";
+  src: url("../fonts/Pirulen.otf");
+}
+
+@font-face {
+  font-family: "SF Pro";
+  src: url("../fonts/SF-Pro-Text-Regular.otf");
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: black;
+  background-image: url("../assets/background.png");
+  background-size: 100%;
+  display: grid;
+  grid-template-columns: 2.5fr 1fr;
+  grid-row-gap: 50px;
+  grid-column-gap: 100px;
+}
+
+#left {
+  align-self: center;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-rows: min-content;
+  grid-row-gap: 20px;
+  padding: 50px 50px 100px;
+}
+
+#right {
+  align-self: center;
+}
+
+#login-head {
+  font-family: "Pirulen", sans-serif;
+  font-size: 4rem;
+  color: white;
+}
+
+.reg-par {
+  font-family: "Forgotten Futurist", sans-serif;
+  word-break: break-word;
+  font-size: 1.5rem;
+  color: white;
+  width: max-content;
+  letter-spacing: 1.2px;
+  opacity: 0.8;
+}
+
+#login-form {
+  display: grid;
+  grid-template-columns: min-content;
+  grid-auto-rows: min-content;
+  grid-row-gap: 20px;
+  justify-self: center;
+  justify-items: center;
+}
+
+.login-field-cont {
+  position: relative;
+}
+
+.login-field-cont label {
+  position: absolute;
+  top: -9px;
+  left: 10px;
+  padding: 0px 3px;
+  font-family: "Gilroy", sans-serif;
+  font-size: 1rem;
+  color: white;
+  background-color: black;
+}
+
+.login-field {
+  display: block;
+  width: 30vw;
+  background-color: transparent;
+  padding: 16.5px 14px;
+  outline: none;
+  border: 1px solid white;
+  color: white;
+  border-radius: 10px;
+}
+
+.btn {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  width: max-content;
+  background-color: white;
+  border: 4px solid black;
+  outline: 1px solid rgba(255, 255, 255, 1);
+  padding: 10px 30px;
+  transition: all 300ms ease-in-out;
+  cursor: pointer;
+}
+
+.btn:hover {
+  opacity: 0.6;
+}
+
+#google-btn {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  grid-column-gap: 10px;
+}
+
+#google-logo {
+  width: 26px;
+  height: 26px;
+}
+
+.line {
+  height: 1px;
+  width: 140px;
+  background-color: white;
+  opacity: 0.6;
+}
+
+#or-cont {
+  display: grid;
+  grid-template-columns: repeat(3, min-content);
+  grid-column-gap: 10px;
+  align-items: center;
+}
+
+#par-alt {
+  font-family: "SF Pro", sans-serif;
+  color: white;
+}
+
+@media (max-width: 1100px) {
+  #login-head {
+    font-size: 2.9rem;
+  }
+  body {
+    grid-column-gap: 10px;
+  }
+}
+
+@media (max-width: 1000px) {
+  body {
+    grid-template-columns: 1fr;
+    grid-auto-rows: max-content;
+  }
+
+  #left {
+    padding: 50px 10px;
+  }
+
+  #right {
+    justify-self: center;
+    align-self: end;
+  }
+
+  #login-head {
+    font-size: 2rem;
+    text-align: center;
+    margin: auto;
+    width: min-content;
+  }
+
+  .btn {
+    font-size: 1rem;
+  }
+
+  .line {
+    width: 100px;
+  }
+
+  #google-logo {
+    height: 22px;
+    width: 22px;
+  }
+
+  .reg-par {
+    font-size: 1rem;
+    margin: auto;
+  }
+
+  .login-field {
+    width: 70vw;
+  }
+}
