@@ -1,193 +1,279 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
 
 @font-face {
-    font-family: "Pirulen";
-    src: local("Pirulen"), url("/fonts/Pirulen.otf") format("opentype");
-    font-weight: normal;
+  font-family: "Pirulen";
+  src: local("Pirulen"), url("/fonts/Pirulen.otf") format("opentype");
+  font-weight: normal;
 }
 
 @font-face {
-    font-family: "Forgotten Futurist";
-    src: local("Forgotten Futurist"),
-        url("/fonts/Forgotten\ Futurist.ttf") format("truetype");
-    font-weight: normal;
+  font-family: "Forgotten Futurist";
+  src: local("Forgotten Futurist"),
+    url("/fonts/Forgotten\ Futurist.ttf") format("truetype");
+  font-weight: normal;
 }
 
 * {
-    padding: 0;
-    margin: 0;
-    /* color: white; */
-    font-family: "Forgotten Futurist";
-    box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  /* color: white; */
+  font-family: "Forgotten Futurist";
+  box-sizing: border-box;
 }
 
 body {
-    color: white;
-    background-color: black;
-    background-image: url("/assets/background.png");
-    background-size: cover;
+  color: white;
+  background-color: black;
+  background-image: url("/assets/background.png");
+  background-size: cover;
 }
 
 .heading {
-    margin: 10vh 10vw;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  margin: 10vh 10vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .title {
-    font-family: "Pirulen";
-    font-size: 4rem;
+  font-family: "Pirulen";
+  font-size: 4rem;
 }
 
 .pictures {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    gap: 9em;
-    margin-top: -2em;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  gap: 9em;
+  margin-top: -2em;
 }
 
 .pictures div {
-    width: 14em;
-    height: 14em;
-    background-color: #C4C4C4;
-    border-radius: 50%;
-    position: relative;
+  width: 14em;
+  height: 14em;
+  background-color: #c4c4c4;
+  border-radius: 50%;
+  position: relative;
 }
 
 .first {
-    border: 8px solid #FAE100;
-    margin-top: 4em;
+  position: relative;
+  border: 8px solid #fae100;
+  margin-top: 4em;
+}
+
+.first::before {
+  content: url("../assets/Vector.png");
+  position: absolute;
+  top: -65px;
+  left: 69px;
+}
+
+.first::after {
+  position: absolute;
+  content: "1";
+  padding: 8px 18px;
+  bottom: -20px;
+  left: 84px;
+  border-radius: 50%;
+  background-color: #fae100;
+  color: black;
+  font-weight: 900;
+  font-size: 1.5rem;
 }
 
 .second {
-    border: 4px solid #FF0000;
-    margin-top: 10em;
+  position: relative;
+  border: 4px solid #ff0000;
+  margin-top: 10em;
+}
+
+.second::after {
+  position: absolute;
+  content: "2";
+  padding: 8px 18px;
+  bottom: -30px;
+  left: 84px;
+  border-radius: 50%;
+  background-color: #ff0000;
+  font-weight: 900;
+  font-size: 1.5rem;
 }
 
 .third {
-    margin-top: 12em;
+  position: relative;
+  margin-top: 12em;
+}
+
+.third::after {
+  position: absolute;
+  content: "3";
+  padding: 8px 18px;
+  bottom: -30px;
+  left: 84px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  color: black;
+  font-weight: 900;
+  font-size: 1.5rem;
 }
 
 .pictures div div {
-    position: absolute;
-    top: 0;
-    background-color: white;
+  position: absolute;
+  top: 0;
+  background-color: white;
 }
 
 .ranks {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-    align-items: center;
-    font-size: 3em;
-    margin-top: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  align-items: center;
+  font-size: 3em;
+  margin-top: 2em;
 }
-.ranks div div{
-    width: max-content;
+.ranks div div {
+  width: max-content;
 }
 .ranks div {
-    display: flex;
-    width: 50%;
-    justify-content: space-between;
+  display: flex;
+  width: 50%;
+  justify-content: space-between;
 }
-.current{
-    font-family: "Montserrat", sans-serif;
-    font-weight: 700;
-    font-size: 2rem;
-    background-color: white;
-    color: black;
-    border: 4px solid black;
-    outline-offset: 0.2em;
-    letter-spacing: 0.2rem;
-    outline: 1px solid rgba(255, 255, 255, 1);
-    padding: 15px 40px;    
+.current {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 2rem;
+  background-color: white;
+  color: black;
+  border: 4px solid black;
+  outline-offset: 0.2em;
+  letter-spacing: 0.2rem;
+  outline: 1px solid rgba(255, 255, 255, 1);
+  padding: 15px 40px;
 }
-.other{
-    background: rgba(0, 0, 0, 0.09);
-    backdrop-filter: blur(130px);
-    border-radius: 15px;
-    gap: 1rem;
-    font-size: 2rem;
-    letter-spacing: 0.2rem;
-    padding: 2rem 3rem;
-    box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
-        inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+.other {
+  background: rgba(0, 0, 0, 0.09);
+  backdrop-filter: blur(130px);
+  border-radius: 15px;
+  gap: 1rem;
+  font-size: 2rem;
+  letter-spacing: 0.2rem;
+  padding: 2rem 3rem;
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
 }
-.rules{
-    position: absolute;
-    bottom: 1%;
-    right: 2%;
-    font-size: 2em;
+.rules {
+  position: fixed;
+  bottom: 1%;
+  right: 2%;
+  font-size: 2em;
 }
-.rules a{
-    text-decoration: underline;
-    color: white;
+.rules a {
+  text-decoration: underline;
+  color: white;
+}
 
-}
-
-
-/* @media (max-width: 1600px) {
-      .betNumber{
-          font-size: 7em;
-      }      
-      .betSelect{
-          margin-left: 2em;
-      }
+@media (max-width: 1600px) {
+  .betNumber {
+    font-size: 7em;
   }
-  @media (max-width: 1300px) {
-      .title{
-          font-size: 2.4em;
-      }
-      .betNumber{
-        font-size: 4em;
-    } 
-    .betSelect{
-        font-size: 1.2em;
-    }
-    .btn{
-        font-size: 0.8em;
-    }
-      
+  .betSelect {
+    margin-left: 2em;
   }
-  @media(max-width: 900px){
-      .heading{
-          flex-direction: column;
-      }
-      .title{
-          margin-bottom: 2em;
-      }
-      .stash{
-          margin-left: -2em;
-      }
-      .content{
-          flex-direction: column-reverse;
-          margin-top: 5em;
-      }
-      .sliderHere{
-          width: 150%;
-      }
-      .number{
-          width: 100%;
-          margin-left: -1em;
-          font-size: 0.8em;
-      }
-      .end1{
-          width: 15px;
-          height: 15px;
-          top:0.8em
-      }
-      .end2{
-          width: 15px;
-          height: 15px;
-          top:0.8em
-      }
-      .desc{
-          margin-left: -6em;
-      }
-      .betSelect{
-          margin-left: -1em;
-          font-size: 0.9em;
-      }
-  } */
+}
+@media (max-width: 1300px) {
+  .title {
+    font-size: 2.4em;
+  }
+  .betNumber {
+    font-size: 4em;
+  }
+  .betSelect {
+    font-size: 1.2em;
+  }
+  .btn {
+    font-size: 0.8em;
+  }
+}
+@media (max-width: 900px) {
+  .heading {
+    flex-direction: column;
+  }
+  .pictures {
+    gap: 0;
+  }
+  .pictures .first {
+    width: 150px;
+    height: 150px;
+  }
+  .first::after {
+    left: 42px;
+  }
+  .first::before {
+    left: 28px;
+  }
+  .pictures .second {
+    width: 150px;
+    height: 150px;
+  }
+  .second::after {
+    left: 42px;
+  }
+  .pictures .third {
+    width: 150px;
+    height: 150px;
+  }
+  .third::after {
+    left: 42px;
+  }
+  .current {
+    width: 90vw;
+    padding: 10px 8px;
+    font-size: 1.3rem;
+    justify-content: space-around;
+  }
+  .left {
+    width: max-content;
+  }
+  .other {
+    width: 100vw;
+    padding: 10px 8px;
+    font-size: 1.3rem;
+  }
+  .title {
+    margin-bottom: 2em;
+  }
+  .stash {
+    margin-left: -2em;
+  }
+  .content {
+    flex-direction: column-reverse;
+    margin-top: 5em;
+  }
+  .sliderHere {
+    width: 150%;
+  }
+  .number {
+    width: 100%;
+    margin-left: -1em;
+    font-size: 0.8em;
+  }
+  .end1 {
+    width: 15px;
+    height: 15px;
+    top: 0.8em;
+  }
+  .end2 {
+    width: 15px;
+    height: 15px;
+    top: 0.8em;
+  }
+  .desc {
+    margin-left: -6em;
+  }
+  .betSelect {
+    margin-left: -1em;
+    font-size: 0.9em;
+  }
+}
