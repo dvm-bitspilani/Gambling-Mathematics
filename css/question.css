@@ -64,7 +64,8 @@ body {
   grid-row-gap: 20px;
 }
 
-.btn {
+.btn,
+.btn:visited {
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
   font-size: 1.2rem;
@@ -77,7 +78,8 @@ body {
   cursor: pointer;
 }
 
-.btn:hover {
+.btn:hover,
+.btn:active {
   opacity: 0.6;
 }
 
@@ -215,6 +217,7 @@ body {
     text-align: center;
     font-size: 1rem;
     margin: 0;
+    padding: 0 20px;
   }
 
   .answer {

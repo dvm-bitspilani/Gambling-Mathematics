@@ -102,7 +102,8 @@ body {
   border-radius: 10px;
 }
 
-.btn {
+.btn,
+.btn:visited {
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
   font-size: 1.2rem;
@@ -115,7 +116,8 @@ body {
   cursor: pointer;
 }
 
-.btn:hover {
+.btn:hover,
+.btn:active {
   opacity: 0.6;
 }
 
@@ -148,6 +150,16 @@ body {
 #par-alt {
   font-family: "SF Pro", sans-serif;
   color: white;
+}
+
+#rules {
+  text-decoration: white solid underline;
+  cursor: pointer;
+  transition: all 300ms ease-in-out;
+}
+
+#rules:hover {
+  transform: scale(1.02);
 }
 
 @media (max-width: 1100px) {
