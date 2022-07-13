@@ -372,52 +372,50 @@ body {
   .ranks div {
     width: 80%;
   }
-  .rules{
+  .rules {
     display: none;
   }
   .current {
-  
     padding: 1em;
   }
-  @media (max-width:450px) {
+  @media (max-width: 450px) {
     .pictures .first {
       width: 100px;
       height: 100px;
     }
-  
+
     .first::after {
       left: 24px;
     }
-  
+
     .first::before {
       left: 8px;
     }
-    .ranks{
+    .ranks {
       gap: 0.4em;
     }
-  
+
     .pictures .second {
       width: 100px;
       height: 100px;
     }
-  
+
     .second::after {
       left: 24px;
     }
-  
+
     .pictures .third {
       width: 100px;
       height: 100px;
     }
-  
+
     .third::after {
       left: 24px;
       /* font-size: 0.4em; */
     }
-    .current{
-      margin-bottom: 1.5em; 
+    .current {
+      margin-bottom: 1.5em;
     }
-    
   }
   .reg-par {
     font-size: 1rem;

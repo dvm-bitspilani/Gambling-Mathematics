@@ -13,7 +13,7 @@ checkBox.forEach((box) => {
       cat.style.backgroundColor = "black";
       cat.style.border = "none";
     });
-    
+
     category[oldChecked - 1].style.fontWeight = "400";
     category[index - 1].style.fontWeight = "600";
     box.style.backgroundColor = "white";
