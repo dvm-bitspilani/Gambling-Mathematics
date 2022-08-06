@@ -1,18 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
-
 @font-face {
   font-family: "Pirulen";
   src: local("Pirulen"), url("/fonts/Pirulen.otf") format("opentype");
   font-weight: normal;
 }
-
 @font-face {
   font-family: "Forgotten Futurist";
-  src: local("Forgotten Futurist"),
-    url("/fonts/Forgotten\ Futurist.ttf") format("truetype");
+  src: local("Forgotten Futurist"), url("/fonts/Forgotten Futurist.ttf") format("truetype");
   font-weight: normal;
 }
-
 * {
   padding: 0;
   margin: 0;
@@ -134,6 +130,8 @@ body {
 }
 
 .ranks div div {
+  width: -webkit-max-content;
+  width: -moz-max-content;
   width: max-content;
 }
 
@@ -152,20 +150,20 @@ body {
   border: 4px solid black;
   outline-offset: 0.2em;
   letter-spacing: 0.2rem;
-  outline: 1px solid rgba(255, 255, 255, 1);
+  outline: 1px solid rgb(255, 255, 255);
   padding: 15px 40px;
 }
 
 .other {
   background: rgba(0, 0, 0, 0.09);
-  backdrop-filter: blur(130px);
+  -webkit-backdrop-filter: blur(130px);
+          backdrop-filter: blur(130px);
   border-radius: 15px;
   gap: 1rem;
   font-size: 2rem;
   letter-spacing: 0.2rem;
   padding: 2rem 3rem;
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
-    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3), inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
 }
 
 .rules {
@@ -199,6 +197,8 @@ body {
   word-break: break-word;
   font-size: 1.5rem;
   color: white;
+  width: -webkit-max-content;
+  width: -moz-max-content;
   width: max-content;
   letter-spacing: 1.2px;
   opacity: 0.8;
@@ -207,14 +207,18 @@ body {
 .glass {
   padding: 1.5rem;
   background: rgba(7, 9, 73, 0.09);
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
-    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
-  backdrop-filter: blur(130px);
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3), inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+  -webkit-backdrop-filter: blur(130px);
+          backdrop-filter: blur(130px);
   border-radius: 15px;
 }
 
 #err {
+  width: -webkit-max-content;
+  width: -moz-max-content;
   width: max-content;
+  height: -webkit-min-content;
+  height: -moz-min-content;
   height: min-content;
 }
 
@@ -243,132 +247,107 @@ body {
   .betNumber {
     font-size: 7em;
   }
-
   .betSelect {
     margin-left: 2em;
   }
 }
-
 @media (max-width: 1300px) {
   .title {
     font-size: 2.4em;
   }
-
   .betNumber {
     font-size: 4em;
   }
-
   .betSelect {
     font-size: 1.2em;
   }
-
   .btn {
     font-size: 0.8em;
   }
 }
-
 @media (max-width: 900px) {
   .heading {
     flex-direction: column;
   }
-
   .pictures {
     gap: 0;
   }
-
   .pictures .first {
     width: 150px;
     height: 150px;
   }
-
   .first::after {
     left: 42px;
   }
-
   .first::before {
     left: 28px;
   }
-
   .pictures .second {
     width: 150px;
     height: 150px;
   }
-
   .second::after {
     left: 42px;
   }
-
   .pictures .third {
     width: 150px;
     height: 150px;
   }
-
   .third::after {
     left: 42px;
   }
-
   .current {
     width: 90vw;
     padding: 10px 8px;
     font-size: 1.3rem;
     justify-content: space-around;
   }
-
   .left {
+    width: -webkit-max-content;
+    width: -moz-max-content;
     width: max-content;
   }
-
   .other {
     width: 100vw;
     padding: 10px 8px;
     font-size: 1.3rem;
   }
-
   .title {
     margin-bottom: 2em;
     font-size: 1.7em;
   }
-
   .stash {
     margin-left: -2em;
   }
-
   .content {
     flex-direction: column-reverse;
     margin-top: 5em;
   }
-
   .sliderHere {
     width: 150%;
   }
-
   .number {
     width: 100%;
     margin-left: -1em;
     font-size: 0.8em;
   }
-
   .end1 {
     width: 15px;
     height: 15px;
     top: 0.8em;
   }
-
   .end2 {
     width: 15px;
     height: 15px;
     top: 0.8em;
   }
-
   .desc {
     margin-left: -6em;
   }
-
   .betSelect {
     margin-left: -1em;
     font-size: 0.9em;
   }
-
   .ranks div {
     width: 80%;
   }
@@ -378,50 +357,48 @@ body {
   .current {
     padding: 1em;
   }
-  @media (max-width: 450px) {
-    .pictures .first {
-      width: 100px;
-      height: 100px;
-    }
-
-    .first::after {
-      left: 24px;
-    }
-
-    .first::before {
-      left: 8px;
-    }
-    .ranks {
-      gap: 0.4em;
-    }
-
-    .pictures .second {
-      width: 100px;
-      height: 100px;
-    }
-
-    .second::after {
-      left: 24px;
-    }
-
-    .pictures .third {
-      width: 100px;
-      height: 100px;
-    }
-
-    .third::after {
-      left: 24px;
-      /* font-size: 0.4em; */
-    }
-    .current {
-      margin-bottom: 1.5em;
-    }
+}
+@media (max-width: 900px) and (max-width: 450px) {
+  .pictures .first {
+    width: 100px;
+    height: 100px;
   }
+  .first::after {
+    left: 24px;
+  }
+  .first::before {
+    left: 8px;
+  }
+  .ranks {
+    gap: 0.4em;
+  }
+  .pictures .second {
+    width: 100px;
+    height: 100px;
+  }
+  .second::after {
+    left: 24px;
+  }
+  .pictures .third {
+    width: 100px;
+    height: 100px;
+  }
+  .third::after {
+    left: 24px;
+    /* font-size: 0.4em; */
+  }
+  .current {
+    margin-bottom: 1.5em;
+  }
+}
+@media (max-width: 900px) {
   .reg-par {
     font-size: 1rem;
     margin: auto;
   }
+}
+@media (max-width: 900px) {
   #err .reg-par {
     padding: 10px 0;
   }
-}
+}/*# sourceMappingURL=leader.css.map */

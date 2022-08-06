@@ -3,14 +3,11 @@
   src: local("Pirulen"), url("../fonts/Pirulen.otf") format("opentype");
   font-weight: normal;
 }
-
 @font-face {
   font-family: "Forgotten Futurist";
-  src: local("Forgotten Futurist"),
-    url("../fonts/Forgotten Futurist.ttf") format("truetype");
+  src: local("Forgotten Futurist"), url("../fonts/Forgotten Futurist.ttf") format("truetype");
   font-weight: normal;
 }
-
 * {
   padding: 0;
   margin: 0;
@@ -40,14 +37,14 @@ body {
 
 .stash {
   background: rgba(0, 0, 0, 0.09);
-  backdrop-filter: blur(130px);
+  -webkit-backdrop-filter: blur(130px);
+          backdrop-filter: blur(130px);
   border-radius: 15px;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   padding: 1rem 2rem;
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
-    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3), inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
 }
 
 .stashTitle {
@@ -77,9 +74,9 @@ body {
   text-align: center;
   padding: 1.4rem;
   background: rgba(7, 9, 73, 0.09);
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
-    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
-  backdrop-filter: blur(130px);
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3), inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+  -webkit-backdrop-filter: blur(130px);
+          backdrop-filter: blur(130px);
   border-radius: 15px;
 }
 
@@ -108,6 +105,8 @@ body {
   word-break: break-word;
   font-size: 1.5rem;
   color: white;
+  width: -webkit-max-content;
+  width: -moz-max-content;
   width: max-content;
   letter-spacing: 1.2px;
   opacity: 0.8;
@@ -116,14 +115,18 @@ body {
 .glass {
   padding: 1.5rem;
   background: rgba(7, 9, 73, 0.09);
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
-    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
-  backdrop-filter: blur(130px);
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3), inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+  -webkit-backdrop-filter: blur(130px);
+          backdrop-filter: blur(130px);
   border-radius: 15px;
 }
 
 #err {
+  width: -webkit-max-content;
+  width: -moz-max-content;
   width: max-content;
+  height: -webkit-min-content;
+  height: -moz-min-content;
   height: min-content;
 }
 
@@ -153,7 +156,6 @@ body {
     font-size: larger;
   }
 }
-
 @media screen and (max-width: 1500px) {
   .level {
     width: 25vw;
@@ -162,7 +164,6 @@ body {
     font-size: 3.5rem;
   }
 }
-
 @media screen and (max-width: 1300px) {
   * {
     font-size: smaller;
@@ -171,7 +172,6 @@ body {
     margin: 10vh 7vw;
   }
 }
-
 @media screen and (max-width: 999px) {
   .content {
     flex-direction: column-reverse;
@@ -204,7 +204,6 @@ body {
     padding: 10px 0;
   }
 }
-
 @media screen and (max-width: 650px) {
   .title {
     font-size: 2.8rem;
@@ -219,4 +218,4 @@ body {
   .category {
     font-size: 15px;
   }
-}
+}/*# sourceMappingURL=levels.css.map */

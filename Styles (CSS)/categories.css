@@ -1,18 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
-
 @font-face {
   font-family: "Pirulen";
   src: local("Pirulen"), url("../fonts/Pirulen.otf") format("opentype");
   font-weight: normal;
 }
-
 @font-face {
   font-family: "Forgotten Futurist";
-  src: local("Forgotten Futurist"),
-    url("../fonts/Forgotten Futurist.ttf") format("truetype");
+  src: local("Forgotten Futurist"), url("../fonts/Forgotten Futurist.ttf") format("truetype");
   font-weight: normal;
 }
-
 * {
   padding: 0;
   margin: 0;
@@ -42,14 +38,14 @@ body {
 
 .stash {
   background: rgba(0, 0, 0, 0.09);
-  backdrop-filter: blur(130px);
+  -webkit-backdrop-filter: blur(130px);
+          backdrop-filter: blur(130px);
   border-radius: 15px;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   padding: 1rem 2rem;
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
-    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3), inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
 }
 
 .stashTitle {
@@ -81,16 +77,16 @@ body {
   gap: 13px;
   padding: 1.5rem;
   background: rgba(7, 9, 73, 0.09);
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
-    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
-  backdrop-filter: blur(130px);
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3), inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+  -webkit-backdrop-filter: blur(130px);
+          backdrop-filter: blur(130px);
   border-radius: 15px;
 }
 
 .check {
   width: 1.3rem;
   height: 1.3rem;
-  outline: 2px solid rgba(255, 255, 255, 1);
+  outline: 2px solid rgb(255, 255, 255);
   border-radius: 3px;
 }
 
@@ -114,9 +110,11 @@ body {
   font-size: 1.2rem;
   background-color: white;
   color: black;
+  width: -webkit-max-content;
+  width: -moz-max-content;
   width: max-content;
   border: 4px solid black;
-  outline: 1px solid rgba(255, 255, 255, 1);
+  outline: 1px solid rgb(255, 255, 255);
   padding: 0.5rem 2rem;
   transition: all 0.3s;
 }
@@ -153,6 +151,8 @@ body {
   word-break: break-word;
   font-size: 1.5rem;
   color: white;
+  width: -webkit-max-content;
+  width: -moz-max-content;
   width: max-content;
   letter-spacing: 1.2px;
   opacity: 0.8;
@@ -161,14 +161,18 @@ body {
 .glass {
   padding: 1.5rem;
   background: rgba(7, 9, 73, 0.09);
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
-    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
-  backdrop-filter: blur(130px);
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3), inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+  -webkit-backdrop-filter: blur(130px);
+          backdrop-filter: blur(130px);
   border-radius: 15px;
 }
 
 #err {
+  width: -webkit-max-content;
+  width: -moz-max-content;
   width: max-content;
+  height: -webkit-min-content;
+  height: -moz-min-content;
   height: min-content;
 }
 
@@ -204,7 +208,6 @@ body {
     width: 20vw;
   }
 }
-
 @media screen and (max-width: 980px) {
   .content {
     flex-direction: column-reverse;
@@ -231,7 +234,6 @@ body {
     display: none;
   }
 }
-
 @media screen and (max-width: 850px) {
   .heading {
     flex-direction: column;
@@ -241,7 +243,6 @@ body {
     margin-bottom: 10vh;
   }
 }
-
 @media screen and (max-width: 650px) {
   .title {
     font-size: 2.4rem;
@@ -263,4 +264,4 @@ body {
   #err .reg-par {
     padding: 10px 0;
   }
-}
+}/*# sourceMappingURL=categories.css.map */
