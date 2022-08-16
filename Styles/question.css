@@ -1,12 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
 @font-face {
   font-family: "Forgotten Futurist";
-  src: url("../Fonts/Forgotten Futurist.ttf");
+  src: url("../Font/Forgotten Futurist.ttf");
 }
 
 @font-face {
   font-family: "Pirulen";
-  src: url("../Fonts/Pirulen.otf");
+  src: url("../Font/Pirulen.otf");
 }
 
 * {
@@ -17,7 +17,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: black;
-  background-image: url("../assets/background.png");
+  background-image: url("../Asset/background.png");
   background-size: 100%;
   display: grid;
   grid-template-columns: 2fr 1fr;

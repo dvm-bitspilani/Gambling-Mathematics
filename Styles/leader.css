@@ -24,7 +24,7 @@
 body {
   color: white;
   background-color: black;
-  background-image: url("/assets/background.png");
+  background-image: url("/Asset/background.png");
   background-size: cover;
 }
 
@@ -63,7 +63,7 @@ body {
 }
 
 .first::before {
-  content: url("../assets/Vector.png");
+  content: url("../Asset/Vector.png");
   position: absolute;
   top: -65px;
   left: 69px;

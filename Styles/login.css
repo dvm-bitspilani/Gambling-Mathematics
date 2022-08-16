@@ -1,22 +1,22 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
 @font-face {
   font-family: "Gilroy";
-  src: url("../Fonts/Gilroy-Light.otf");
+  src: url("../Font/Gilroy-Light.otf");
 }
 
 @font-face {
   font-family: "Forgotten Futurist";
-  src: url("../Fonts/Forgotten Futurist.ttf");
+  src: url("../Font/Forgotten Futurist.ttf");
 }
 
 @font-face {
   font-family: "Pirulen";
-  src: url("../Fonts/Pirulen.otf");
+  src: url("../Font/Pirulen.otf");
 }
 
 @font-face {
   font-family: "SF Pro";
-  src: url("../Fonts/SF-Pro-Text-Regular.otf");
+  src: url("../Font/SF-Pro-Text-Regular.otf");
 }
 
 body {
@@ -26,7 +26,7 @@ body {
   width: 100vw;
   overflow: hidden;
   background-color: black;
-  background-image: url("../assets/background.png");
+  background-image: url("../Asset/background.png");
   background-size: 100%;
   display: grid;
   grid-template-columns: 2.5fr 1fr;
