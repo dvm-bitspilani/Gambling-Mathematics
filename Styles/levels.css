@@ -1,13 +1,16 @@
 @font-face {
   font-family: "Pirulen";
-  src: local("Pirulen"), url("../fonts/Pirulen.otf") format("opentype");
+  src: local("Pirulen"), url("../Fonts/Pirulen.otf") format("opentype");
   font-weight: normal;
 }
+
 @font-face {
   font-family: "Forgotten Futurist";
-  src: local("Forgotten Futurist"), url("../fonts/Forgotten Futurist.ttf") format("truetype");
+  src: local("Forgotten Futurist"),
+    url("../Fonts/Forgotten Futurist.ttf") format("truetype");
   font-weight: normal;
 }
+
 * {
   padding: 0;
   margin: 0;
@@ -38,13 +41,14 @@ body {
 .stash {
   background: rgba(0, 0, 0, 0.09);
   -webkit-backdrop-filter: blur(130px);
-          backdrop-filter: blur(130px);
+  backdrop-filter: blur(130px);
   border-radius: 15px;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   padding: 1rem 2rem;
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3), inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
 }
 
 .stashTitle {
@@ -74,9 +78,10 @@ body {
   text-align: center;
   padding: 1.4rem;
   background: rgba(7, 9, 73, 0.09);
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3), inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
   -webkit-backdrop-filter: blur(130px);
-          backdrop-filter: blur(130px);
+  backdrop-filter: blur(130px);
   border-radius: 15px;
 }
 
@@ -115,9 +120,10 @@ body {
 .glass {
   padding: 1.5rem;
   background: rgba(7, 9, 73, 0.09);
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3), inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
   -webkit-backdrop-filter: blur(130px);
-          backdrop-filter: blur(130px);
+  backdrop-filter: blur(130px);
   border-radius: 15px;
 }
 
@@ -156,66 +162,83 @@ body {
     font-size: larger;
   }
 }
+
 @media screen and (max-width: 1500px) {
   .level {
     width: 25vw;
   }
+
   .title {
     font-size: 3.5rem;
   }
 }
+
 @media screen and (max-width: 1300px) {
   * {
     font-size: smaller;
   }
+
   .heading {
     margin: 10vh 7vw;
   }
 }
+
 @media screen and (max-width: 999px) {
   .content {
     flex-direction: column-reverse;
   }
+
   .levels {
     margin: 0;
   }
+
   .level {
     width: 60vw;
     font-size: 2rem;
   }
+
   .prompt {
     width: 70vw;
     font-size: 2rem;
     text-align: center;
     margin-bottom: 10vh;
   }
+
   .heading {
     flex-direction: column;
   }
+
   .title {
     font-size: 3.2rem;
     margin-bottom: 10vh;
   }
+
   .reg-par {
     font-size: 1rem;
     margin: auto;
   }
+
   #err .reg-par {
     padding: 10px 0;
   }
 }
+
 @media screen and (max-width: 650px) {
   .title {
     font-size: 2.8rem;
     text-align: center;
   }
+
   .prompt {
     width: 60vw;
   }
+
   .promptText {
     font-size: 20px;
   }
+
   .category {
     font-size: 15px;
   }
-}/*# sourceMappingURL=levels.css.map */
+}
+/*# sourceMappingURL=levels.css.map */

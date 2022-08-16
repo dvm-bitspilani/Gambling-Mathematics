@@ -1,20 +1,24 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
 @font-face {
   font-family: "Gilroy";
-  src: url("../fonts/Gilroy-Light.otf");
+  src: url("../Fonts/Gilroy-Light.otf");
 }
+
 @font-face {
   font-family: "Forgotten Futurist";
-  src: url("../fonts/Forgotten Futurist.ttf");
+  src: url("../Fonts/Forgotten Futurist.ttf");
 }
+
 @font-face {
   font-family: "Pirulen";
-  src: url("../fonts/Pirulen.otf");
+  src: url("../Fonts/Pirulen.otf");
 }
+
 @font-face {
   font-family: "SF Pro";
-  src: url("../fonts/SF-Pro-Text-Regular.otf");
+  src: url("../Fonts/SF-Pro-Text-Regular.otf");
 }
+
 body {
   margin: 0;
   padding: 0;
@@ -158,7 +162,7 @@ body {
 
 #rules {
   -webkit-text-decoration: white solid underline;
-          text-decoration: white solid underline;
+  text-decoration: white solid underline;
   cursor: pointer;
   transition: all 300ms ease-in-out;
 }
@@ -207,9 +211,10 @@ body {
 .glass {
   padding: 1.5rem;
   background: rgba(7, 9, 73, 0.09);
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3), inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
   -webkit-backdrop-filter: blur(130px);
-          backdrop-filter: blur(130px);
+  backdrop-filter: blur(130px);
   border-radius: 15px;
 }
 
@@ -224,23 +229,28 @@ body {
   #login-head {
     font-size: 2.9rem;
   }
+
   body {
     grid-column-gap: 10px;
   }
 }
+
 @media (max-width: 1000px) {
   body {
     grid-template-columns: 1fr;
     grid-auto-rows: -webkit-max-content;
     grid-auto-rows: max-content;
   }
+
   #left {
     padding: 50px 10px;
   }
+
   #right {
     justify-self: center;
     align-self: end;
   }
+
   #login-head {
     font-size: 2rem;
     text-align: center;
@@ -249,27 +259,35 @@ body {
     width: -moz-min-content;
     width: min-content;
   }
+
   .login-field {
     font-size: 1rem;
   }
+
   .btn {
     font-size: 1rem;
   }
+
   .line {
     width: 100px;
   }
+
   #google-logo {
     height: 22px;
     width: 22px;
   }
+
   .reg-par {
     font-size: 1rem;
     margin: auto;
   }
+
   .login-field {
     width: 70vw;
   }
+
   #err .reg-par {
     padding: 10px 0;
   }
-}/*# sourceMappingURL=login.css.map */
+}
+/*# sourceMappingURL=login.css.map */

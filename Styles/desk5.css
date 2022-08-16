@@ -1,14 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
+
 @font-face {
   font-family: "Pirulen";
-  src: local("Pirulen"), url("../fonts/Pirulen.otf") format("opentype");
+  src: local("Pirulen"), url("../Fonts/Pirulen.otf") format("opentype");
   font-weight: normal;
 }
+
 @font-face {
   font-family: "Forgotten Futurist";
-  src: local("Forgotten Futurist"), url("../fonts/Forgotten Futurist.ttf") format("truetype");
+  src: local("Forgotten Futurist"),
+    url("../Fonts/Forgotten Futurist.ttf") format("truetype");
   font-weight: normal;
 }
+
 * {
   padding: 0;
   margin: 0;
@@ -39,13 +43,14 @@ body {
 .stash {
   background: rgba(0, 0, 0, 0.09);
   -webkit-backdrop-filter: blur(130px);
-          backdrop-filter: blur(130px);
+  backdrop-filter: blur(130px);
   border-radius: 15px;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   padding: 1rem 2rem;
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3), inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
 }
 
 .stashTitle {
@@ -132,7 +137,7 @@ body {
   margin: 0;
 }
 
-.input-field[type=number] {
+.input-field[type="number"] {
   -moz-appearance: textfield;
 }
 
@@ -222,9 +227,10 @@ body {
 .glass {
   padding: 1.5rem;
   background: rgba(7, 9, 73, 0.09);
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3), inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
   -webkit-backdrop-filter: blur(130px);
-          backdrop-filter: blur(130px);
+  backdrop-filter: blur(130px);
   border-radius: 15px;
 }
 
@@ -262,79 +268,100 @@ body {
   .betNumber {
     font-size: 7em;
   }
+
   .betSelect {
     margin-left: 2em;
   }
 }
+
 @media (max-width: 1300px) {
   .title {
     font-size: 2.4em;
   }
+
   .betNumber {
     font-size: 4em;
   }
+
   .betSelect {
     font-size: 1.2rem;
   }
+
   .input-field {
     font-size: 1rem;
   }
+
   .btn {
     font-size: 1rem;
   }
 }
+
 @media (max-width: 900px) {
   .heading {
     flex-direction: column;
   }
+
   .title {
     text-align: center;
     margin-bottom: 2em;
   }
+
   .stash {
     margin-left: -2em;
   }
+
   .content {
     flex-direction: column-reverse;
     margin-top: 5em;
   }
+
   .sliderHere {
     width: 150%;
   }
+
   .info {
     text-align: center;
   }
+
   .number {
     width: 100%;
     margin-left: -1em;
     font-size: 0.8em;
   }
+
   .end1 {
     width: 15px;
     height: 15px;
     top: 0.8em;
   }
+
   .end2 {
     width: 15px;
     height: 15px;
     top: 0.8em;
   }
+
   .desc {
     margin: inherit auto;
     /*font-size: 1em;*/
   }
+
   .betSelect {
     margin-left: -1em;
     font-size: 0.9em;
   }
+
   .btn {
     margin: 0 auto;
   }
+
   .reg-par {
     font-size: 1rem;
     margin: auto;
   }
+
   #err .reg-par {
     padding: 10px 0;
   }
-}/*# sourceMappingURL=desk5.css.map */
+}
+/*# sourceMappingURL=desk5.css.map */

@@ -1,12 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
 @font-face {
   font-family: "Forgotten Futurist";
-  src: url("../fonts/Forgotten Futurist.ttf");
+  src: url("../Fonts/Forgotten Futurist.ttf");
 }
+
 @font-face {
   font-family: "Pirulen";
-  src: url("../fonts/Pirulen.otf");
+  src: url("../Fonts/Pirulen.otf");
 }
+
 * {
   box-sizing: border-box;
 }
@@ -27,9 +29,10 @@ body {
 .glass {
   padding: 1.5rem;
   background: rgba(7, 9, 73, 0.09);
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3), inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
   -webkit-backdrop-filter: blur(130px);
-          backdrop-filter: blur(130px);
+  backdrop-filter: blur(130px);
   border-radius: 15px;
 }
 
@@ -235,19 +238,23 @@ body {
     font-size: 2.8rem;
   }
 }
+
 @media (max-width: 1000px) {
   body {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
     padding-bottom: 20px;
   }
+
   #left {
     padding: 50px 0;
   }
+
   #right {
     justify-self: center;
     align-self: end;
   }
+
   #question-head {
     font-size: 2rem;
     text-align: center;
@@ -260,9 +267,11 @@ body {
     grid-row-gap: 20px;
     grid-template-columns: 1fr;
   }
+
   .btn {
     font-size: 1rem;
   }
+
   .reg-par {
     width: 100vw;
     text-align: center;
@@ -270,15 +279,19 @@ body {
     margin: 0;
     padding: 0 20px;
   }
+
   .answer {
     font-size: 1rem;
     width: 80vw;
   }
+
   #stash {
     position: static;
     margin: auto;
   }
+
   #err .reg-par {
     padding: 10px 0;
   }
-}/*# sourceMappingURL=question.css.map */
+}
+/*# sourceMappingURL=question.css.map */

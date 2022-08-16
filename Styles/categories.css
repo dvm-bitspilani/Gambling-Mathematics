@@ -1,14 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
+
 @font-face {
   font-family: "Pirulen";
-  src: local("Pirulen"), url("../fonts/Pirulen.otf") format("opentype");
+  src: local("Pirulen"), url("../Fonts/Pirulen.otf") format("opentype");
   font-weight: normal;
 }
+
 @font-face {
   font-family: "Forgotten Futurist";
-  src: local("Forgotten Futurist"), url("../fonts/Forgotten Futurist.ttf") format("truetype");
+  src: local("Forgotten Futurist"),
+    url("../Fonts/Forgotten Futurist.ttf") format("truetype");
   font-weight: normal;
 }
+
 * {
   padding: 0;
   margin: 0;
@@ -39,13 +43,14 @@ body {
 .stash {
   background: rgba(0, 0, 0, 0.09);
   -webkit-backdrop-filter: blur(130px);
-          backdrop-filter: blur(130px);
+  backdrop-filter: blur(130px);
   border-radius: 15px;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   padding: 1rem 2rem;
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3), inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
 }
 
 .stashTitle {
@@ -77,9 +82,10 @@ body {
   gap: 13px;
   padding: 1.5rem;
   background: rgba(7, 9, 73, 0.09);
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3), inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
   -webkit-backdrop-filter: blur(130px);
-          backdrop-filter: blur(130px);
+  backdrop-filter: blur(130px);
   border-radius: 15px;
 }
 
@@ -161,9 +167,10 @@ body {
 .glass {
   padding: 1.5rem;
   background: rgba(7, 9, 73, 0.09);
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3), inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
   -webkit-backdrop-filter: blur(130px);
-          backdrop-filter: blur(130px);
+  backdrop-filter: blur(130px);
   border-radius: 15px;
 }
 
@@ -201,67 +208,84 @@ body {
   * {
     font-size: smaller;
   }
+
   .title {
     font-size: 2.5rem;
   }
+
   .category {
     width: 20vw;
   }
 }
+
 @media screen and (max-width: 980px) {
   .content {
     flex-direction: column-reverse;
   }
+
   .categories {
     grid-template-columns: auto;
     margin: 0 20vw;
   }
+
   .category {
     width: 60vw;
     justify-content: center;
   }
+
   .prompt {
     width: 40vw;
     text-align: center;
     align-items: center;
     margin-bottom: 10vh;
   }
+
   #btn1 {
     display: block;
     justify-self: center;
   }
+
   #btn2 {
     display: none;
   }
 }
+
 @media screen and (max-width: 850px) {
   .heading {
     flex-direction: column;
   }
+
   .title {
     font-size: 3rem;
     margin-bottom: 10vh;
   }
 }
+
 @media screen and (max-width: 650px) {
   .title {
     font-size: 2.4rem;
     text-align: center;
   }
+
   .prompt {
     width: 60vw;
   }
+
   .promptText {
     font-size: 20px;
   }
+
   .category {
     font-size: 15px;
   }
+
   .reg-par {
     font-size: 1rem;
     margin: auto;
   }
+
   #err .reg-par {
     padding: 10px 0;
   }
-}/*# sourceMappingURL=categories.css.map */
+}
+/*# sourceMappingURL=categories.css.map */
