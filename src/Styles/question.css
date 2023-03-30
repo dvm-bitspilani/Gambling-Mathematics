@@ -21,6 +21,9 @@ body {
 }
 
 .question-wrapper {
+  width: 100vw;
+  height: 100vh;
+  padding: 100px;
   display: grid;
   grid-template-columns: 2fr 1fr;
   grid-template-rows: auto;

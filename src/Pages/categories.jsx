@@ -57,17 +57,19 @@ const Categories = () => {
 
       <div className="content">
         <div className="categories">
-          {categories.all.map((cat) => {
-            return (
-              <div
-                id={cat.id}
-                onClick={() => locate(cat.id)}
-                className="category"
-              >
-                {cat.name}
-              </div>
-            );
-          })}
+          {categories.all
+            .filter((cat) => !categories.completed.includes(cat))
+            .map((cat) => {
+              return (
+                <div
+                  id={cat.id}
+                  onClick={() => locate(cat.id)}
+                  className="category"
+                >
+                  {cat.name}
+                </div>
+              );
+            })}
         </div>
       </div>
 
