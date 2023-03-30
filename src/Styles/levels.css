@@ -35,7 +35,7 @@ body {
 
 .title {
   font-family: "Pirulen";
-  font-size: 4rem;
+  font-size: 3.2rem;
 }
 
 .stash {
@@ -44,7 +44,6 @@ body {
   backdrop-filter: blur(130px);
   border-radius: 15px;
   display: flex;
-  flex-direction: column;
   gap: 1rem;
   padding: 1rem 2rem;
   box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),

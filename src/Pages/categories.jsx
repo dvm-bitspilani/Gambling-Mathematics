@@ -1,62 +1,84 @@
-import React, { useEffect } from "react";
+import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import baseURL from "../baseURL";
+import GlobalContext from "../globalContext";
 import "../Styles/categories.css";
 
 const Categories = () => {
+  const { user, setUser } = useContext(GlobalContext);
+  const [error, setError] = useState(false);
+
+  const navigate = useNavigate();
+  const [categories, setCategories] = useState({ all: [], completed: [] });
+
+  const locate = (id) => {
+    setUser({ ...user, category: id });
+    navigate(`/select`);
+  };
+
   useEffect(() => {
-    document.title = "Gambling Maths | Categories";
+    document.title = "Gambling Maths | View Your Categories";
+
+    axios({
+      method: "get",
+      url: `${baseURL.base}/gamblingmaths/category`,
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
+      .then((res) => {
+        setCategories({
+          all: res.data.all_categories,
+          completed: res.data.completed_categories,
+        });
+      })
+      .catch((err) => {
+        setError(true);
+      });
   }, []);
 
   return (
     <div className="categories-wrapper">
-      <div class="heading">
-        <div class="title">GAMBLING MATHS</div>
-        <div class="stash">
-          <div class="stashTitle">Betting Stash</div>
-          <div class="stashAmount">10,00,000</div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <div className="title">GAMBLING MATHS</div>
+
+        <div className="stash">
+          <div className="stashTitle">Betting Stash</div>
+          <div className="stashAmount">{user.points ?? "N/A"}</div>
         </div>
       </div>
 
-      <div class="content">
-        <form class="categories">
-          <div class="category">
-            <span id="1" class="check"></span> Category 01
-          </div>
-          <div class="category">
-            <span id="2" class="check"></span> Category 02
-          </div>
-          <div class="category">
-            <span id="3" class="check"></span> Category 03
-          </div>
-          <div class="category">
-            <span id="4" class="check"></span> Category 04
-          </div>
-          <div class="category">
-            <span id="5" class="check"></span> Category 05
-          </div>
-          <div class="category">
-            <span id="6" class="check"></span> Category 06
-          </div>
-          <div class="category">
-            <span id="7" class="check"></span> Category 07
-          </div>
-          <div class="category">
-            <span id="8" class="check"></span> Category 08
-          </div>
-          <div class="category">
-            <span id="9" class="check"></span> Category 09
-          </div>
-          <div class="category">
-            <span id="10" class="check"></span> Category 10
-          </div>
-          <div class="promptButton" id="btn1">
-            SELECT
-          </div>
-        </form>
+      <div className="content">
+        <div className="categories">
+          {categories.all.map((cat) => {
+            return (
+              <div
+                id={cat.id}
+                onClick={() => locate(cat.id)}
+                className="category"
+              >
+                {cat.name}
+              </div>
+            );
+          })}
+        </div>
+      </div>
 
-        <div class="prompt">
-          <div class="promptText">Choose the difficulty of the questions</div>
-          <div class="promptButton" id="btn2">
-            SELECT
+      <div
+        id="err-cont"
+        style={error ? { display: "flex" } : { display: "none" }}
+      >
+        <div id="err" className="glass">
+          <div id="err-head">ERROR</div>
+          <div className="reg-par">
+            An error occured while fetching categories. Please try again later.
           </div>
         </div>
       </div>

@@ -28,18 +28,37 @@ body {
   background-image: url("../Asset/background.png");
 }
 
-.heading,
-.content {
-  padding: 0 100px;
-  gap: 100px;
+.instructions-wrapper,
+.categories-wrapper {
+  width: 100vw;
+  height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  padding: 80px;
+}
+
+.instructions {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.instructionsTitle {
+  font-size: 2rem;
+  font-family: "Pirulen";
+}
+
+.instructionsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 1.3rem;
+  letter-spacing: 0.1rem;
 }
 
 .title {
   font-family: "Pirulen";
-  font-size: 4rem;
+  font-size: 3.2rem;
 }
 
 .stash {
@@ -48,15 +67,16 @@ body {
   backdrop-filter: blur(130px);
   border-radius: 15px;
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  align-items: baseline;
+  width: max-content;
+  gap: 5px;
   padding: 1rem 2rem;
   box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
     inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
 }
 
 .stashTitle {
-  letter-spacing: 0.15rem;
+  font-size: 1.5rem;
 }
 
 .stashAmount {
@@ -68,21 +88,18 @@ body {
 }
 
 .categories {
+  padding: 2rem 1rem;
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto auto auto;
   gap: 3rem;
-  margin-left: 5vw;
 }
 
 .category {
-  width: 18vw;
+  text-align: center;
   cursor: pointer;
+  padding: 1.5rem;
   font-size: 1.5rem;
   letter-spacing: 0.12em;
-  display: flex;
-  align-items: baseline;
-  gap: 13px;
-  padding: 1.5rem;
   background: rgba(7, 9, 73, 0.09);
   box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
     inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
@@ -91,26 +108,7 @@ body {
   border-radius: 15px;
 }
 
-.check {
-  width: 1.3rem;
-  height: 1.3rem;
-  outline: 2px solid rgb(255, 255, 255);
-  border-radius: 3px;
-}
-
-.prompt {
-  width: 27vw;
-  display: flex;
-  flex-direction: column;
-  gap: 1.3rem;
-}
-
-.promptText {
-  font-size: 1.8rem;
-  letter-spacing: 0.12em;
-}
-
-.promptButton {
+.instructionsButton {
   cursor: pointer;
   font-weight: 700;
   font-family: "Montserrat", sans-serif;
@@ -123,21 +121,12 @@ body {
   width: max-content;
   border: 4px solid black;
   outline: 1px solid rgb(255, 255, 255);
-  padding: 0.5rem 2rem;
+  padding: 5px 20px;
   transition: all 0.3s;
 }
 
-#btn1 {
-  display: none;
-}
-
-#btn2 {
-  display: block;
-}
-
-.promptButton:hover {
-  transform: scaleX(1.05);
-  opacity: 0.6;
+.instructionsButton:hover {
+  background-color: rgba(256, 256, 256, 0.7);
 }
 
 #err-cont {

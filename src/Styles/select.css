@@ -22,14 +22,23 @@
 }
 
 body {
+  margin: 0;
+  padding: 0;
   background-color: black;
-  background-image: url("/Asset/background.png");
-  background-size: cover;
+  background-image: url("../Asset/background.png");
+}
+
+.select-wrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 80px;
 }
 
 .heading,
 .content {
-  margin: 10vh 10vw;
+  margin: 100px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -37,7 +46,7 @@ body {
 
 .title {
   font-family: "Pirulen";
-  font-size: 4rem;
+  font-size: 3.2rem;
 }
 
 .stash {
@@ -46,15 +55,15 @@ body {
   backdrop-filter: blur(130px);
   border-radius: 15px;
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  align-items: baseline;
+  gap: 5px;
   padding: 1rem 2rem;
   box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
     inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
 }
 
 .stashTitle {
-  letter-spacing: 0.15rem;
+  font-size: 1.5rem;
 }
 
 .stashAmount {
@@ -66,16 +75,14 @@ body {
 }
 
 .betNumber {
-  text-align: center;
   padding: 1.4rem;
   border-radius: 15px;
   font-weight: 700;
   display: flex;
   flex-direction: column;
-  font-size: 9em;
-  align-items: start;
+  align-items: center;
   justify-content: center;
-  justify-self: center;
+  font-size: 9em;
   letter-spacing: 0.12em;
   color: #ffffff;
 }
@@ -84,9 +91,15 @@ body {
   font-size: 1.8rem;
   letter-spacing: 0.12em;
   line-height: 1.4em;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
-.btn {
+.btns {
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
   font-size: 1.2rem;
@@ -102,15 +115,8 @@ body {
   transition: all 300ms ease-in-out;
 }
 
-.btn:hover {
-  transform: scaleX(1.05);
-  opacity: 0.6;
-}
-
-.sliderHere {
-  width: 158%;
-  margin-left: -0.9em;
-  margin-top: -0.3em;
+.btns:hover {
+  opacity: 0.8;
 }
 
 .slidecontainer {
@@ -119,7 +125,7 @@ body {
 
 .input-field {
   -webkit-appearance: none;
-  width: 90%;
+  width: 200px;
   background: transparent;
   padding: 16.5px 14px;
   outline: none;
@@ -187,27 +193,25 @@ body {
 }
 
 .desc {
-  margin-top: 4em;
+  width: max-content;
+  margin-top: 1rem;
   letter-spacing: 0.12em;
-  font-size: 0.18em;
-  font-weight: 200;
-  line-height: 1.4em;
-}
-
-.desc span {
-  font-weight: bold;
+  font-size: 0.9rem;
+  font-weight: 400;
+  line-height: 1.4rem;
 }
 
 #err-cont {
-  background-color: transparent;
-  position: absolute;
-  height: 100vh;
-  width: 100vw;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
+
+  height: 100vh;
+  width: 100vw;
   display: flex;
+  background-color: transparent;
+  position: absolute;
   align-items: center;
   justify-content: center;
 }
@@ -276,7 +280,7 @@ body {
 
 @media (max-width: 1300px) {
   .title {
-    font-size: 2.4em;
+    font-size: 2.5rem;
   }
 
   .betNumber {
@@ -291,7 +295,7 @@ body {
     font-size: 1rem;
   }
 
-  .btn {
+  .btns {
     font-size: 1rem;
   }
 }
@@ -313,10 +317,6 @@ body {
   .content {
     flex-direction: column-reverse;
     margin-top: 5em;
-  }
-
-  .sliderHere {
-    width: 150%;
   }
 
   .info {
@@ -341,17 +341,12 @@ body {
     top: 0.8em;
   }
 
-  .desc {
-    margin: inherit auto;
-    /*font-size: 1em;*/
-  }
-
   .betSelect {
     margin-left: -1em;
     font-size: 0.9em;
   }
 
-  .btn {
+  .btns {
     margin: 0 auto;
   }
 

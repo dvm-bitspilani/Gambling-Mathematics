@@ -1,13 +1,16 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import baseURL from "./baseURL";
 import "./Styles/login.css";
 import { useNavigate } from "react-router-dom";
+import GlobalContext from "./globalContext";
 
 function App() {
   const navigate = useNavigate();
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  const { user, setUser } = useContext(GlobalContext);
 
   useEffect(() => {
     document.title = "Gambling Maths | Login";
@@ -24,6 +27,10 @@ function App() {
     if (success)
       setTimeout(() => {
         setSuccess(false);
+
+        setTimeout(() => {
+          navigate("/instructions");
+        }, 1000);
       }, 2000);
   }, [success]);
 
@@ -50,9 +57,13 @@ function App() {
             })
               .then((res) => {
                 if (res.data.message === "login") {
-                  localStorage.setItem("token", res.data.token);
-
-                  navigate("/dashboard");
+                  setSuccess(true);
+                  setUser({
+                    name: res.data.name,
+                    points: res.data.points,
+                    token: res.data.token,
+                    category: "",
+                  });
                 } else {
                   setError(true);
                 }
@@ -107,7 +118,7 @@ function App() {
         <div id="succ" className="glass">
           <div id="succ-head">SUCCESS</div>
           <div className="reg-par">
-            Login successful. You will be redirected to the dashboard.
+            Login successful. You will be redirected to the game.
           </div>
         </div>
       </div>

@@ -18,7 +18,9 @@ body {
   padding: 0;
   background-color: black;
   background-image: url("../Asset/background.png");
-  background-size: 100%;
+}
+
+.question-wrapper {
   display: grid;
   grid-template-columns: 2fr 1fr;
   grid-template-rows: auto;
@@ -73,13 +75,12 @@ body {
   font-size: 1.2rem;
   width: -webkit-max-content;
   width: -moz-max-content;
-  width: max-content;
-  background-color: white;
   border: 4px solid black;
   outline: 1px solid rgb(255, 255, 255);
-  padding: 10px 30px;
   transition: all 300ms ease-in-out;
+  padding: 10px 30px;
   cursor: pointer;
+  width: max-content;
 }
 
 .btn:hover,
@@ -92,7 +93,7 @@ body {
   font-family: "Pirulen", sans-serif;
   margin: 0;
   padding: 20px 50px;
-  font-size: 4rem;
+  font-size: 3.2rem;
   color: white;
   display: grid;
   grid-template-columns: 1fr -webkit-min-content;
@@ -103,7 +104,7 @@ body {
 }
 
 .reg-par {
-  width: 100%;
+  width: 100% !important;
   padding: 0;
   margin: 0;
   font-family: "Forgotten Futurist", sans-serif;
