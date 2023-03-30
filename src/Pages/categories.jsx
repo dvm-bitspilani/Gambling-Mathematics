@@ -12,8 +12,16 @@ const Categories = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState({ all: [], completed: [] });
 
-  const locate = (id) => {
-    setUser({ ...user, category: id });
+  const locate = (cat) => {
+    axios({
+      method: "post",
+      url: `${baseURL.base}/gamblingmaths/category`,
+      headers: { Authorization: `Bearer ${user.token}` },
+      data: { category: cat.name },
+    })
+      .then((res) => setUser({ ...user, category: cat.id }))
+      .catch((err) => setError(true));
+
     navigate(`/select`);
   };
 
@@ -58,12 +66,15 @@ const Categories = () => {
       <div className="content">
         <div className="categories">
           {categories.all
-            .filter((cat) => !categories.completed.includes(cat))
+            .filter(
+              (cat) =>
+                !categories.completed.map((cat) => cat.id).includes(cat.id)
+            )
             .map((cat) => {
               return (
                 <div
                   id={cat.id}
-                  onClick={() => locate(cat.id)}
+                  onClick={() => locate(cat)}
                   className="category"
                 >
                   {cat.name}
