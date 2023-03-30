@@ -22,14 +22,16 @@
 }
 
 body {
+  margin: 0;
+  padding: 0;
   background-color: black;
-  background-image: url("/Asset/background.png");
-  background-size: cover;
+  background-image: url("../Asset/background.png");
 }
 
 .heading,
 .content {
-  margin: 10vh 10vw;
+  padding: 0 100px;
+  gap: 100px;
   display: flex;
   align-items: center;
   justify-content: space-between;
