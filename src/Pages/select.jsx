@@ -31,7 +31,10 @@ const Select = () => {
       setMaxPoints(POINTS);
 
       if (POINTS < 200) {
-        setError(true);
+        setError(
+          "Your points are not enough to place more bets. Redirecting you to the results page."
+        );
+
         setTimeout(() => {
           navigate("/finished");
         }, 600);
@@ -85,37 +88,50 @@ const Select = () => {
 
           <div
             onClick={() => {
-              axios({
-                method: "post",
-                url: `${baseURL.base}/gm_api/place_bet/${user.category}`,
-                headers: {
-                  Authorization: `Bearer ${
-                    user.token ?? JSON.parse(localStorage.user).token
-                  }`,
-                },
-                data: {
-                  bet: bet,
-                },
-              })
-                .then((res) => {
-                  setUser({ ...user, points: res.data.points });
-
-                  localStorage.setItem(
-                    "user",
-                    JSON.stringify({ ...user, points: res.data.points })
-                  );
-
-                  setSuccess(true);
-                  setTimeout(() => {
-                    navigate("/question");
-                  }, 600);
+              if (bet > maxPoints)
+                setError(
+                  `An error occured while placing your bet. Please try again with a bet of ${maxPoints} points or less`
+                );
+              else
+                axios({
+                  method: "post",
+                  url: `${baseURL.base}/gm_api/place_bet/${user.category}`,
+                  headers: {
+                    Authorization: `Bearer ${
+                      user.token ?? JSON.parse(localStorage.user).token
+                    }`,
+                  },
+                  data: {
+                    bet: bet,
+                  },
                 })
-                .catch((err) => {
-                  setError(true);
-                  setTimeout(() => {
-                    navigate("/finished");
-                  }, 600);
-                });
+                  .then((res) => {
+                    setUser({ ...user, points: res.data.points });
+
+                    localStorage.setItem(
+                      "user",
+                      JSON.stringify({ ...user, points: res.data.points })
+                    );
+
+                    setSuccess(true);
+                    setTimeout(() => {
+                      navigate("/question");
+                    }, 600);
+                  })
+                  .catch((err) => {
+                    if (err.response.status == 400)
+                      setError(
+                        "An error occured while placing your bet. Please try again with a bet of 200 points or more"
+                      );
+
+                    if (err.response.status == 403) {
+                      setError(
+                        "Current active category is not your selected category. Redirecting you to the categories."
+                      );
+
+                      setTimeout(() => navigate("/categories"), 600);
+                    }
+                  });
             }}
             className="btns"
           >
@@ -130,15 +146,7 @@ const Select = () => {
       >
         <div id="err" className="glass">
           <div id="err-head">ERROR</div>
-          <div className="reg-par">
-            {maxPoints
-              ? maxPoints < 200
-                ? ` Your points are not enough to place more bets. Redirecting you to the results page.`
-                : `An error occured while placing your bet. Please try again with a bet
-                of ${maxPoints} points or less`
-              : `An error occured while placing your bet. Please try again with a bet of 200 points or more`}
-            .
-          </div>
+          <div className="reg-par">{error}</div>
           <div
             onClick={() => {
               maxPoints < 200 && navigate("/finished");
