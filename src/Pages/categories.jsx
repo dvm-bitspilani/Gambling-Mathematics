@@ -39,7 +39,6 @@ const Categories = () => {
       .catch((err) => setError(true));
 
     navigate("/select");
-    
   };
 
   useEffect(() => {
@@ -98,7 +97,6 @@ const Categories = () => {
 
       setTimeout(() => {
         navigate("/finished");
-        
       }, 2000);
     }
   }, [success]);
@@ -147,6 +145,15 @@ const Categories = () => {
           <div className="reg-par">
             Congratulations! You have completed all the categories and hence the
             game.
+          </div>
+          <div
+            onClick={() => {
+              navigate("/question");
+              setSuccess(false);
+            }}
+            className="btns"
+          >
+            Continue
           </div>
         </div>
       </div>

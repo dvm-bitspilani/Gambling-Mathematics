@@ -141,7 +141,7 @@ const Select = () => {
           </div>
           <div
             onClick={() => {
-              navigate("/finished");
+              maxPoints < 200 && navigate("/finished");
               setError(false);
             }}
             className="btns"
