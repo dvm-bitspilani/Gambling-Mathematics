@@ -30,7 +30,6 @@ function App() {
 
         setTimeout(() => {
           navigate("/instructions");
-          
         }, 1000);
       }, 1400);
   }, [success]);
@@ -64,7 +63,6 @@ function App() {
                     points: res.data.points,
                     token: res.data.token,
                     category: null,
-                    score: 0,
                   });
 
                   localStorage.setItem(
@@ -74,7 +72,6 @@ function App() {
                       points: res.data.points,
                       token: res.data.token,
                       category: null,
-                      score: 0,
                     })
                   );
                 } else {

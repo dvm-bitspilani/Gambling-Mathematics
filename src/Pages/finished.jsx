@@ -24,8 +24,8 @@ const Finsihed = () => {
         <div id="login-form">
           <div className="login-field-cont">
             <div className="login-field">
-              Your final score is:{" "}
-              {user.score ?? JSON.parse(localStorage.user).score ?? "N/A"}
+              Your final points are:{" "}
+              {user.points ?? JSON.parse(localStorage.user).points ?? "N/A"}
             </div>
           </div>
         </div>

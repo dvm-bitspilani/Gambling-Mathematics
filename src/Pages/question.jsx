@@ -79,7 +79,7 @@ const Question = () => {
 
   const getDeadTime = () => {
     let deadline = new Date();
-    deadline.setSeconds(deadline.getSeconds() + 5);
+    deadline.setSeconds(deadline.getSeconds() + 180);
     return deadline;
   };
 
