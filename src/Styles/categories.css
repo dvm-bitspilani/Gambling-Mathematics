@@ -32,9 +32,11 @@ body {
 .categories-wrapper {
   width: 100vw;
   height: 100vh;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   padding: 80px;
+  padding-bottom: 0;
 }
 
 .instructions {

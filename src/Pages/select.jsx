@@ -11,10 +11,27 @@ const Select = () => {
 
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [maxPoints, setMaxPoints] = useState(0);
   const [bet, setBet] = useState(200);
 
   useEffect(() => {
     document.title = "Gambling Maths | Place Your Bet";
+
+    axios({
+      method: "get",
+      url: `${baseURL.base}/gamblingmaths/get_max_bet`,
+      headers: { Authorization: `Bearer ${user.token}` },
+    }).then((res) => {
+      const POINTS = parseInt(res.data.max_bet);
+      console.log(POINTS);
+
+      setMaxPoints(POINTS);
+      if (POINTS < 200) {
+        setTimeout(() => {
+          navigate("/finished");
+        }, 1400);
+      }
+    });
   }, []);
 
   useEffect(() => {
@@ -112,7 +129,8 @@ const Select = () => {
           <div id="err-head">ERROR</div>
           <div className="reg-par">
             An error occured while placing your bet. Please try again with a bet
-            of 200 points or more.
+            of{" "}
+            {maxPoints ? `${maxPoints} points or less` : "200 points or more"}.
           </div>
         </div>
       </div>

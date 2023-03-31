@@ -20,7 +20,7 @@ function App() {
     if (error)
       setTimeout(() => {
         setError(false);
-      }, 2000);
+      }, 1400);
   }, [error]);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ function App() {
         setTimeout(() => {
           navigate("/instructions");
         }, 1000);
-      }, 2000);
+      }, 1400);
   }, [success]);
 
   return (

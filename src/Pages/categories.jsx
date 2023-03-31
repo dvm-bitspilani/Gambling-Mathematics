@@ -8,9 +8,14 @@ import "../Styles/categories.css";
 const Categories = () => {
   const { user, setUser } = useContext(GlobalContext);
   const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const navigate = useNavigate();
-  const [categories, setCategories] = useState({ all: [], completed: [] });
+  const [categories, setCategories] = useState({
+    all: [],
+    completed: [],
+    shown: [],
+  });
 
   const locate = (cat) => {
     axios({
@@ -36,15 +41,52 @@ const Categories = () => {
       },
     })
       .then((res) => {
+        const DATA = res.data;
+
         setCategories({
-          all: res.data.all_categories,
-          completed: res.data.completed_categories,
+          all: DATA.all_categories,
+          completed: DATA.completed_categories,
+          shown: [],
         });
+
+        const returnVal = DATA.all_categories.filter(
+          (cat) =>
+            !DATA.completed_categories.map((cat) => cat.id).includes(cat.id)
+        );
+
+        if (returnVal.length === 0) setSuccess(true);
+        else
+          setCategories({
+            all: DATA.all_categories,
+            completed: DATA.completed_categories,
+            shown: returnVal.map((cat) => {
+              return (
+                <div
+                  id={cat.id}
+                  key={cat.id}
+                  onClick={() => locate(cat)}
+                  className="category"
+                >
+                  {cat.name}
+                </div>
+              );
+            }),
+          });
       })
-      .catch((err) => {
-        setError(true);
-      });
+      .catch((err) => setError(true));
   }, []);
+
+  useEffect(() => {
+    if (success) {
+      setTimeout(() => {
+        setSuccess(false);
+      }, 1400);
+
+      setTimeout(() => {
+        navigate("/finished");
+      }, 2000);
+    }
+  }, [success]);
 
   return (
     <div className="categories-wrapper">
@@ -64,24 +106,7 @@ const Categories = () => {
       </div>
 
       <div className="content">
-        <div className="categories">
-          {categories.all
-            .filter(
-              (cat) =>
-                !categories.completed.map((cat) => cat.id).includes(cat.id)
-            )
-            .map((cat) => {
-              return (
-                <div
-                  id={cat.id}
-                  onClick={() => locate(cat)}
-                  className="category"
-                >
-                  {cat.name}
-                </div>
-              );
-            })}
-        </div>
+        <div className="categories">{categories.shown}</div>
       </div>
 
       <div
@@ -92,6 +117,19 @@ const Categories = () => {
           <div id="err-head">ERROR</div>
           <div className="reg-par">
             An error occured while fetching categories. Please try again later.
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="succ-cont"
+        style={success ? { display: "flex" } : { display: "none" }}
+      >
+        <div id="succ" className="glass">
+          <div id="succ-head">SUCCESS</div>
+          <div className="reg-par">
+            Congratulations! You have completed all the categories and hence the
+            game.
           </div>
         </div>
       </div>

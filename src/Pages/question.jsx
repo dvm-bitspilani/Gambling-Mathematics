@@ -9,9 +9,12 @@ const Question = () => {
   const Ref = useRef(null);
   const navigate = useNavigate();
   const { user, setUser } = useContext(GlobalContext);
+
   const [ques, setQues] = useState({});
-  const [error, setError] = useState(false);
   const [timer, setTimer] = useState("00:00:00");
+
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const getTimeRemaining = (e) => {
     const total = Date.parse(e) - Date.parse(new Date());
@@ -20,13 +23,12 @@ const Question = () => {
     const hours = Math.floor((total / 1000 / 60 / 60) % 24);
 
     if (total <= 0) cancel();
-    else
-      return {
-        total,
-        hours,
-        minutes,
-        seconds,
-      };
+    return {
+      total,
+      hours,
+      minutes,
+      seconds,
+    };
   };
 
   const startTimer = (e) => {
@@ -59,8 +61,11 @@ const Question = () => {
     setError(true);
     clearInterval(Ref.current);
 
-    setUser({ ...user, category: "" });
-    setTimeout(() => navigate("/categories"), 2000);
+    setTimeout(() => setError(false), 1400);
+    setTimeout(() => {
+      navigate("/categories");
+      // window.location.reload();
+    }, 2000);
   };
 
   useEffect(() => {
@@ -75,6 +80,8 @@ const Question = () => {
       },
     })
       .then((res) => {
+        setUser({ ...user, points: res.data.points });
+
         setQues({
           question: res.data.question,
           options: res.data.options,
@@ -86,13 +93,15 @@ const Question = () => {
       });
   }, []);
 
+  useEffect(() => {}, [navigate]);
+
   return (
     <div className="question-wrapper">
       <div id="question-head">
         GAMBLING MATHS
         <div className="stash">
           <div className="stashTitle">Betting Stash</div>
-          <div className="stashAmount">{user.role ?? "N/A"}</div>
+          <div className="stashAmount">{user.points ?? "N/A"}</div>
         </div>
       </div>
 
@@ -109,6 +118,7 @@ const Question = () => {
           {ques?.options?.map((opt) => {
             return (
               <div
+                key={opt.option_id}
                 id={opt.option_id}
                 className="answer glass"
                 onClick={() => {
@@ -130,7 +140,21 @@ const Question = () => {
                         points: res.data.points,
                       });
 
-                      setTimeout(() => navigate("/categories"), 2000);
+                      if (res.data.status === "correct") setSuccess(true);
+                      else if (res.data.status === "incorrect") setError(true);
+
+                      clearInterval(Ref.current);
+                      setTimeout(() => {
+                        setError(false);
+                        setSuccess(false);
+                      }, 1400);
+
+                      setTimeout(() => {
+                        navigate("/categories");
+                        // window.location.reload();
+
+                        opt.click();
+                      }, 2000);
                     })
                     .catch((err) => cancel());
                 }}
@@ -156,10 +180,22 @@ const Question = () => {
         style={error ? { display: "flex" } : { display: "none" }}
       >
         <div id="err" className="glass">
-          <div id="err-head">ERROR</div>
+          <div id="err-head">FAILURE</div>
           <div className="reg-par">
             You could not pick the correct answer. Redirecting you back to
             categories.
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="succ-cont"
+        style={success ? { display: "flex" } : { display: "none" }}
+      >
+        <div id="succ" className="glass">
+          <div id="succ-head">SUCCESS</div>
+          <div className="reg-par">
+            You picked the correct answer. Redirecting you back to categories.
           </div>
         </div>
       </div>

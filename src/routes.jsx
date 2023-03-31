@@ -6,6 +6,7 @@ import Categories from "./Pages/categories";
 import Question from "./Pages/question";
 import GlobalContext from "./globalContext";
 import Select from "./Pages/select";
+import Finsihed from "./Pages/finished";
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -28,6 +29,14 @@ const Routes = () => {
     {
       path: "/question",
       element: <Question />,
+    },
+    {
+      path: "/finished",
+      element: <Finsihed />,
+    },
+    {
+      path: "*",
+      element: <App />,
     },
   ]);
 
