@@ -9,9 +9,8 @@ import Select from "./Pages/select";
 import Finsihed from "./Pages/finished";
 
 const Routes = () => {
-  const router = createBrowserRouter({
-    basename: "/gamblingmaths",
-    routes: [
+  const router = createBrowserRouter(
+    [
       {
         path: "/",
         element: <App />,
@@ -41,7 +40,10 @@ const Routes = () => {
         element: <App />,
       },
     ],
-  });
+    {
+      basename: "/gamblingmaths",
+    }
+  );
 
   const [user, setUser] = useState({
     name: null,
