@@ -42,7 +42,8 @@ body {
 .instructions {
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 30px;
+  margin-bottom: 2rem;
 }
 
 .instructionsTitle {
@@ -56,6 +57,7 @@ body {
   gap: 10px;
   font-size: 1.3rem;
   letter-spacing: 0.1rem;
+  margin-left: 2rem;
 }
 
 .title {
@@ -129,6 +131,10 @@ body {
 
 .instructionsButton:hover {
   background-color: rgba(256, 256, 256, 0.7);
+}
+
+.rules-img {
+  width: 50vw;
 }
 
 #err-cont {

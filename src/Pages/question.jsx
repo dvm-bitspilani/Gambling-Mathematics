@@ -22,7 +22,39 @@ const Question = () => {
     const minutes = Math.floor((total / 1000 / 60) % 60);
     const hours = Math.floor((total / 1000 / 60 / 60) % 24);
 
-    if (total <= 0) cancel();
+    if (total <= 0) {
+      axios({
+        method: "post",
+        url: `${baseURL.base}/gm_api/answer`,
+        headers: {
+          Authorization: `Bearer ${
+            user.token ?? JSON.parse(localStorage.user).token
+          }`,
+        },
+        data: {
+          question_id: ques.qid,
+        },
+      }).then((res) => {
+        setUser({
+          ...user,
+          category: null,
+          points: res.data.points,
+        });
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            ...user,
+            category: null,
+            points: res.data.points,
+          })
+        );
+      });
+
+      clearInterval(Ref.current);
+      cancel();
+    }
+
     return {
       total,
       hours,
