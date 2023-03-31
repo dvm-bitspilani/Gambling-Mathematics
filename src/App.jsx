@@ -62,8 +62,20 @@ function App() {
                     name: res.data.name,
                     points: res.data.points,
                     token: res.data.token,
-                    category: "",
+                    category: null,
+                    score: 0,
                   });
+
+                  localStorage.setItem(
+                    "user",
+                    JSON.stringify({
+                      name: res.data.name,
+                      points: res.data.points,
+                      token: res.data.token,
+                      category: null,
+                      score: 0,
+                    })
+                  );
                 } else {
                   setError(true);
                 }

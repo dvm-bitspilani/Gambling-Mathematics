@@ -20,7 +20,11 @@ const Select = () => {
     axios({
       method: "get",
       url: `${baseURL.base}/gamblingmaths/get_max_bet`,
-      headers: { Authorization: `Bearer ${user.token}` },
+      headers: {
+        Authorization: `Bearer ${
+          user.token ?? JSON.parse(localStorage.user).token
+        }`,
+      },
     }).then((res) => {
       const POINTS = parseInt(res.data.max_bet);
       console.log(POINTS);
@@ -29,6 +33,7 @@ const Select = () => {
       if (POINTS < 200) {
         setTimeout(() => {
           navigate("/finished");
+          window.location.reload();
         }, 1400);
       }
     });
@@ -65,7 +70,9 @@ const Select = () => {
 
         <div className="stash">
           <div className="stashTitle">Betting Stash</div>
-          <div className="stashAmount">{user.points ?? "N/A"}</div>
+          <div className="stashAmount">
+            {user.points ?? JSON.parse(localStorage.user).points ?? "N/A"}
+          </div>
         </div>
       </div>
 
@@ -100,7 +107,9 @@ const Select = () => {
                 method: "post",
                 url: `${baseURL.base}/gamblingmaths/place_bet/${user.category}`,
                 headers: {
-                  Authorization: `Bearer ${user.token}`,
+                  Authorization: `Bearer ${
+                    user.token ?? JSON.parse(localStorage.user).token
+                  }`,
                 },
                 data: {
                   bet: bet,
@@ -109,6 +118,11 @@ const Select = () => {
                 .then((res) => {
                   setSuccess(true);
                   setUser({ ...user, points: res.data.points });
+
+                  localStorage.setItem(
+                    "user",
+                    JSON.stringify({ ...user, points: res.data.points })
+                  );
                 })
                 .catch((err) => {
                   setError(true);

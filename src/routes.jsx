@@ -41,10 +41,10 @@ const Routes = () => {
   ]);
 
   const [user, setUser] = useState({
-    name: "",
-    points: "",
-    token: "",
-    category: "",
+    name: null,
+    points: null,
+    token: null,
+    category: null,
   });
 
   return (

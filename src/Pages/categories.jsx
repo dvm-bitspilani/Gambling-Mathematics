@@ -21,10 +21,21 @@ const Categories = () => {
     axios({
       method: "post",
       url: `${baseURL.base}/gamblingmaths/category`,
-      headers: { Authorization: `Bearer ${user.token}` },
+      headers: {
+        Authorization: `Bearer ${
+          user.token ?? JSON.parse(localStorage.user).token
+        }`,
+      },
       data: { category: cat.name },
     })
-      .then((res) => setUser({ ...user, category: cat.id }))
+      .then((res) => {
+        setUser({ ...user, category: cat.id });
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify({ ...user, category: cat.id })
+        );
+      })
       .catch((err) => setError(true));
 
     navigate(`/select`);
@@ -37,7 +48,9 @@ const Categories = () => {
       method: "get",
       url: `${baseURL.base}/gamblingmaths/category`,
       headers: {
-        Authorization: `Bearer ${user.token}`,
+        Authorization: `Bearer ${
+          user.token ?? JSON.parse(localStorage.user).token
+        }`,
       },
     })
       .then((res) => {
@@ -101,7 +114,9 @@ const Categories = () => {
 
         <div className="stash">
           <div className="stashTitle">Betting Stash</div>
-          <div className="stashAmount">{user.points ?? "N/A"}</div>
+          <div className="stashAmount">
+            {user.points ?? JSON.parse(localStorage.user).points ?? "N/A"}
+          </div>
         </div>
       </div>
 

@@ -64,7 +64,7 @@ const Question = () => {
     setTimeout(() => setError(false), 1400);
     setTimeout(() => {
       navigate("/categories");
-      // window.location.reload();
+      window.location.reload();
     }, 2000);
   };
 
@@ -76,11 +76,17 @@ const Question = () => {
       method: "get",
       url: `${baseURL.base}/gamblingmaths/get_question`,
       headers: {
-        Authorization: `Bearer ${user.token}`,
+        Authorization: `Bearer ${
+          user.token ?? JSON.parse(localStorage.user).token
+        }`,
       },
     })
       .then((res) => {
         setUser({ ...user, points: res.data.points });
+        localStorage.setItem(
+          "user",
+          JSON.stringify({ ...user, points: res.data.points })
+        );
 
         setQues({
           question: res.data.question,
@@ -101,7 +107,9 @@ const Question = () => {
         GAMBLING MATHS
         <div className="stash">
           <div className="stashTitle">Betting Stash</div>
-          <div className="stashAmount">{user.points ?? "N/A"}</div>
+          <div className="stashAmount">
+            {user.points ?? JSON.parse(localStorage.user).points ?? "N/A"}
+          </div>
         </div>
       </div>
 
@@ -126,7 +134,9 @@ const Question = () => {
                     method: "post",
                     url: `${baseURL.base}/gamblingmaths/answer`,
                     headers: {
-                      Authorization: `Bearer ${user.token}`,
+                      Authorization: `Bearer ${
+                        user.token ?? JSON.parse(localStorage.user).token
+                      }`,
                     },
                     data: {
                       question_id: ques.qid,
@@ -136,9 +146,18 @@ const Question = () => {
                     .then((res) => {
                       setUser({
                         ...user,
-                        category: "",
+                        category: null,
                         points: res.data.points,
                       });
+
+                      localStorage.setItem(
+                        "user",
+                        JSON.stringify({
+                          ...user,
+                          category: null,
+                          points: res.data.points,
+                        })
+                      );
 
                       if (res.data.status === "correct") setSuccess(true);
                       else if (res.data.status === "incorrect") setError(true);
@@ -151,7 +170,7 @@ const Question = () => {
 
                       setTimeout(() => {
                         navigate("/categories");
-                        // window.location.reload();
+                        window.location.reload();
                       }, 2000);
                     })
                     .catch((err) => cancel());
