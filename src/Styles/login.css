@@ -26,9 +26,9 @@ body {
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  background-color: black;
-  background-image: url("../Asset/background.png");
   background-size: 100%;
+  background-color: black !important;
+  background-image: url("../Asset/background.png") !important;
 }
 
 #login-wrapper {

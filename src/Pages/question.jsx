@@ -64,7 +64,7 @@ const Question = () => {
     setTimeout(() => setError(false), 1400);
     setTimeout(() => {
       navigate("/categories");
-      window.location.reload();
+      // window.location.reload();
     }, 2000);
   };
 
@@ -170,7 +170,7 @@ const Question = () => {
 
                       setTimeout(() => {
                         navigate("/categories");
-                        window.location.reload();
+                        // window.location.reload();
                       }, 2000);
                     })
                     .catch((err) => cancel());

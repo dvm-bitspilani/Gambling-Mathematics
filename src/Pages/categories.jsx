@@ -39,7 +39,7 @@ const Categories = () => {
       .catch((err) => setError(true));
 
     navigate("/select");
-    window.location.reload();
+    // window.location.reload();
   };
 
   useEffect(() => {
@@ -98,7 +98,7 @@ const Categories = () => {
 
       setTimeout(() => {
         navigate("/finished");
-        window.location.reload();
+        // window.location.reload();
       }, 2000);
     }
   }, [success]);

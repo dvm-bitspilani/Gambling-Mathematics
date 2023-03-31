@@ -11,6 +11,7 @@ const Select = () => {
 
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+
   const [maxPoints, setMaxPoints] = useState(0);
   const [bet, setBet] = useState(200);
 
@@ -33,7 +34,7 @@ const Select = () => {
       if (POINTS < 200) {
         setTimeout(() => {
           navigate("/finished");
-          window.location.reload();
+          // window.location.reload();
         }, 1400);
       }
     });
@@ -53,7 +54,7 @@ const Select = () => {
 
         setTimeout(() => {
           navigate("/question");
-          window.location.reload();
+          // window.location.reload();
         }, 1000);
       }, 2000);
   }, [success]);
