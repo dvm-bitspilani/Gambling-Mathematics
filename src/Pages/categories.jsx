@@ -38,7 +38,7 @@ const Categories = () => {
       })
       .catch((err) => setError(true));
 
-    navigate(`/select`);
+    navigate("/gamblingmaths/select");
   };
 
   useEffect(() => {
@@ -96,7 +96,7 @@ const Categories = () => {
       }, 1400);
 
       setTimeout(() => {
-        navigate("/finished");
+        navigate("/gamblingmaths/finished");
       }, 2000);
     }
   }, [success]);

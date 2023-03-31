@@ -29,7 +29,7 @@ function App() {
         setSuccess(false);
 
         setTimeout(() => {
-          navigate("/instructions");
+          navigate("/gamblingmaths/instructions");
         }, 1000);
       }, 1400);
   }, [success]);

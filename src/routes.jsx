@@ -9,36 +9,39 @@ import Select from "./Pages/select";
 import Finsihed from "./Pages/finished";
 
 const Routes = () => {
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <App />,
-    },
-    {
-      path: "/instructions",
-      element: <Instructions />,
-    },
-    {
-      path: "/select",
-      element: <Select />,
-    },
-    {
-      path: "/categories",
-      element: <Categories />,
-    },
-    {
-      path: "/question",
-      element: <Question />,
-    },
-    {
-      path: "/finished",
-      element: <Finsihed />,
-    },
-    {
-      path: "*",
-      element: <App />,
-    },
-  ]);
+  const router = createBrowserRouter({
+    basename: "/gamblingmaths",
+    routes: [
+      {
+        path: "/",
+        element: <App />,
+      },
+      {
+        path: "/instructions",
+        element: <Instructions />,
+      },
+      {
+        path: "/select",
+        element: <Select />,
+      },
+      {
+        path: "/categories",
+        element: <Categories />,
+      },
+      {
+        path: "/question",
+        element: <Question />,
+      },
+      {
+        path: "/finished",
+        element: <Finsihed />,
+      },
+      {
+        path: "*",
+        element: <App />,
+      },
+    ],
+  });
 
   const [user, setUser] = useState({
     name: null,

@@ -32,7 +32,7 @@ const Select = () => {
       setMaxPoints(POINTS);
       if (POINTS < 200) {
         setTimeout(() => {
-          navigate("/finished");
+          navigate("/gamblingmaths/finished");
           window.location.reload();
         }, 1400);
       }
@@ -52,7 +52,7 @@ const Select = () => {
         setSuccess(false);
 
         setTimeout(() => {
-          navigate("/question");
+          navigate("/gamblingmaths/question");
         }, 1000);
       }, 2000);
   }, [success]);

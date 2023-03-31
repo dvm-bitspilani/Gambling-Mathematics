@@ -63,7 +63,7 @@ const Question = () => {
 
     setTimeout(() => setError(false), 1400);
     setTimeout(() => {
-      navigate("/categories");
+      navigate("/gamblingmaths/categories");
       window.location.reload();
     }, 2000);
   };
@@ -169,7 +169,7 @@ const Question = () => {
                       }, 1400);
 
                       setTimeout(() => {
-                        navigate("/categories");
+                        navigate("/gamblingmaths/categories");
                         window.location.reload();
                       }, 2000);
                     })
