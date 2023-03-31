@@ -38,7 +38,7 @@ const Categories = () => {
       })
       .catch((err) => setError(true));
 
-    navigate("/gamblingmaths/select");
+    navigate("/select");
     window.location.reload();
   };
 
@@ -97,7 +97,7 @@ const Categories = () => {
       }, 1400);
 
       setTimeout(() => {
-        navigate("/gamblingmaths/finished");
+        navigate("/finished");
         window.location.reload();
       }, 2000);
     }

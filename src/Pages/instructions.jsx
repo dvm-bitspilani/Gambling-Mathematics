@@ -55,7 +55,7 @@ const Instructions = () => {
         <div
           className="instructionsButton"
           onClick={() => {
-            navigate("/gamblingmaths/categories");
+            navigate("/categories");
             window.location.reload();
           }}
         >

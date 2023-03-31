@@ -29,7 +29,7 @@ function App() {
         setSuccess(false);
 
         setTimeout(() => {
-          navigate("/gamblingmaths/instructions");
+          navigate("/instructions");
           window.location.reload();
         }, 1000);
       }, 1400);
