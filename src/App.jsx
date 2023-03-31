@@ -30,7 +30,7 @@ function App() {
 
         setTimeout(() => {
           navigate("/instructions");
-          // window.location.reload();
+          
         }, 1000);
       }, 1400);
   }, [success]);

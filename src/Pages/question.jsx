@@ -53,7 +53,7 @@ const Question = () => {
 
   const getDeadTime = () => {
     let deadline = new Date();
-    deadline.setSeconds(deadline.getSeconds() + 180);
+    deadline.setSeconds(deadline.getSeconds() + 5);
     return deadline;
   };
 
@@ -61,11 +61,9 @@ const Question = () => {
     setError(true);
     clearInterval(Ref.current);
 
-    setTimeout(() => setError(false), 1400);
     setTimeout(() => {
       navigate("/categories");
-      // window.location.reload();
-    }, 2000);
+    }, 600);
   };
 
   useEffect(() => {
@@ -161,17 +159,11 @@ const Question = () => {
 
                       if (res.data.status === "correct") setSuccess(true);
                       else if (res.data.status === "incorrect") setError(true);
-
                       clearInterval(Ref.current);
-                      setTimeout(() => {
-                        setError(false);
-                        setSuccess(false);
-                      }, 1400);
 
                       setTimeout(() => {
                         navigate("/categories");
-                        // window.location.reload();
-                      }, 2000);
+                      }, 600);
                     })
                     .catch((err) => cancel());
                 }}
@@ -202,6 +194,15 @@ const Question = () => {
             You could not pick the correct answer. Redirecting you back to
             categories.
           </div>
+          <div
+            onClick={() => {
+              navigate("/categories");
+              setError(false);
+            }}
+            className="btns"
+          >
+            Continue
+          </div>
         </div>
       </div>
 
@@ -213,6 +214,15 @@ const Question = () => {
           <div id="succ-head">SUCCESS</div>
           <div className="reg-par">
             You picked the correct answer. Redirecting you back to categories.
+          </div>
+          <div
+            onClick={() => {
+              navigate("/categories");
+              setSuccess(false);
+            }}
+            className="btns"
+          >
+            Continue
           </div>
         </div>
       </div>

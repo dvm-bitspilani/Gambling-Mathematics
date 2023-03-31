@@ -25,10 +25,13 @@ a:hover {
 
 body {
   margin: 0;
+  padding: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: black;
+  background-image: url("../Asset/background.png");
 }
 
 h1 {

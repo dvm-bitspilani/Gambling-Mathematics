@@ -28,36 +28,16 @@ const Select = () => {
       },
     }).then((res) => {
       const POINTS = parseInt(res.data.max_bet);
-      console.log(POINTS);
-
       setMaxPoints(POINTS);
+
       if (POINTS < 200) {
+        setError(true);
         setTimeout(() => {
           navigate("/finished");
-          // window.location.reload();
-        }, 1400);
+        }, 600);
       }
     });
   }, []);
-
-  useEffect(() => {
-    if (error)
-      setTimeout(() => {
-        setError(false);
-      }, 2000);
-  }, [error]);
-
-  useEffect(() => {
-    if (success)
-      setTimeout(() => {
-        setSuccess(false);
-
-        setTimeout(() => {
-          navigate("/question");
-          // window.location.reload();
-        }, 1000);
-      }, 2000);
-  }, [success]);
 
   return (
     <div className="select-wrapper">
@@ -118,16 +98,23 @@ const Select = () => {
                 },
               })
                 .then((res) => {
-                  setSuccess(true);
                   setUser({ ...user, points: res.data.points });
 
                   localStorage.setItem(
                     "user",
                     JSON.stringify({ ...user, points: res.data.points })
                   );
+
+                  setSuccess(true);
+                  setTimeout(() => {
+                    navigate("/question");
+                  }, 600);
                 })
                 .catch((err) => {
                   setError(true);
+                  setTimeout(() => {
+                    navigate("/finished");
+                  }, 600);
                 });
             }}
             className="btns"
@@ -148,6 +135,15 @@ const Select = () => {
             of{" "}
             {maxPoints ? `${maxPoints} points or less` : "200 points or more"}.
           </div>
+          <div
+            onClick={() => {
+              navigate("/finished");
+              setError(false);
+            }}
+            className="btns"
+          >
+            Continue
+          </div>
         </div>
       </div>
 
@@ -160,6 +156,15 @@ const Select = () => {
           <div className="reg-par">
             Your bet has been placed successfully. You will be redirected to the
             questions page.
+          </div>
+          <div
+            onClick={() => {
+              navigate("/question");
+              setSuccess(false);
+            }}
+            className="btns"
+          >
+            Continue
           </div>
         </div>
       </div>

@@ -56,7 +56,7 @@ const Instructions = () => {
           className="instructionsButton"
           onClick={() => {
             navigate("/categories");
-            // window.location.reload();
+            
           }}
         >
           Continue to Play
