@@ -152,8 +152,6 @@ const Question = () => {
                       setTimeout(() => {
                         navigate("/categories");
                         // window.location.reload();
-
-                        opt.click();
                       }, 2000);
                     })
                     .catch((err) => cancel());
