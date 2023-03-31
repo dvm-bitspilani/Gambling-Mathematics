@@ -131,9 +131,13 @@ const Select = () => {
         <div id="err" className="glass">
           <div id="err-head">ERROR</div>
           <div className="reg-par">
-            An error occured while placing your bet. Please try again with a bet
-            of{" "}
-            {maxPoints ? `${maxPoints} points or less` : "200 points or more"}.
+            {maxPoints
+              ? maxPoints < 200
+                ? ` Your points are not enough to place more bets. Redirecting you to the results page.`
+                : `An error occured while placing your bet. Please try again with a bet
+                of ${maxPoints} points or less`
+              : `An error occured while placing your bet. Please try again with a bet of 200 points or more`}
+            .
           </div>
           <div
             onClick={() => {

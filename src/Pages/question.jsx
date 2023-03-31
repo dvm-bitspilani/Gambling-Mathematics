@@ -8,19 +8,40 @@ import { useNavigate } from "react-router-dom";
 const Question = () => {
   const Ref = useRef(null);
   const navigate = useNavigate();
-  const { user, setUser } = useContext(GlobalContext);
 
-  const [ques, setQues] = useState({});
+  const { user, setUser } = useContext(GlobalContext);
   const [timer, setTimer] = useState("00:00:00");
+
+  const [ques, setQues] = useState({
+    question: "",
+    options: [],
+    qid: null,
+  });
+
+  useEffect(() => {
+    console.log(ques);
+  }, [ques]);
 
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const getTimeRemaining = (e) => {
     const total = Date.parse(e) - Date.parse(new Date());
+
     const seconds = Math.floor((total / 1000) % 60);
     const minutes = Math.floor((total / 1000 / 60) % 60);
     const hours = Math.floor((total / 1000 / 60 / 60) % 24);
+
+    return {
+      total,
+      hours,
+      minutes,
+      seconds,
+    };
+  };
+
+  const startTimer = (t, e) => {
+    let { total, hours, minutes, seconds } = getTimeRemaining(e);
 
     if (total <= 0) {
       axios({
@@ -32,40 +53,13 @@ const Question = () => {
           }`,
         },
         data: {
-          question_id: ques.qid,
+          question_id: t,
         },
-      }).then((res) => {
-        setUser({
-          ...user,
-          category: null,
-          points: res.data.points,
-        });
-
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            ...user,
-            category: null,
-            points: res.data.points,
-          })
-        );
       });
 
       clearInterval(Ref.current);
       cancel();
-    }
-
-    return {
-      total,
-      hours,
-      minutes,
-      seconds,
-    };
-  };
-
-  const startTimer = (e) => {
-    let { total, hours, minutes, seconds } = getTimeRemaining(e);
-    if (total >= 0) {
+    } else {
       setTimer(
         (hours > 9 ? hours : "0" + hours) +
           ":" +
@@ -76,10 +70,10 @@ const Question = () => {
     }
   };
 
-  const clearTimer = (e) => {
+  const clearTimer = (t, e) => {
     setTimer("00:03:00");
     if (Ref.current) clearInterval(Ref.current);
-    const id = setInterval(() => startTimer(e), 1000);
+    const id = setInterval(() => startTimer(t, e), 1000);
     Ref.current = id;
   };
 
@@ -100,7 +94,6 @@ const Question = () => {
 
   useEffect(() => {
     document.title = "Gambling Maths | Answer Your Question";
-    clearTimer(getDeadTime());
 
     axios({
       method: "get",
@@ -123,13 +116,13 @@ const Question = () => {
           options: res.data.options,
           qid: res.data.question_id,
         });
+
+        clearTimer(res.data.question_id, getDeadTime());
       })
       .catch((err) => {
         setError(true);
       });
   }, []);
-
-  useEffect(() => {}, [navigate]);
 
   return (
     <div className="question-wrapper">
