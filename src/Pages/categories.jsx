@@ -20,7 +20,7 @@ const Categories = () => {
   const locate = (cat) => {
     axios({
       method: "post",
-      url: `${baseURL.base}/gamblingmaths/category`,
+      url: `${baseURL.base}/gm_api/category`,
       headers: {
         Authorization: `Bearer ${
           user.token ?? JSON.parse(localStorage.user).token
@@ -39,6 +39,7 @@ const Categories = () => {
       .catch((err) => setError(true));
 
     navigate("/gamblingmaths/select");
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -46,7 +47,7 @@ const Categories = () => {
 
     axios({
       method: "get",
-      url: `${baseURL.base}/gamblingmaths/category`,
+      url: `${baseURL.base}/gm_api/category`,
       headers: {
         Authorization: `Bearer ${
           user.token ?? JSON.parse(localStorage.user).token
@@ -97,6 +98,7 @@ const Categories = () => {
 
       setTimeout(() => {
         navigate("/gamblingmaths/finished");
+        window.location.reload();
       }, 2000);
     }
   }, [success]);

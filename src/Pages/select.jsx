@@ -19,7 +19,7 @@ const Select = () => {
 
     axios({
       method: "get",
-      url: `${baseURL.base}/gamblingmaths/get_max_bet`,
+      url: `${baseURL.base}/gm_api/get_max_bet`,
       headers: {
         Authorization: `Bearer ${
           user.token ?? JSON.parse(localStorage.user).token
@@ -53,6 +53,7 @@ const Select = () => {
 
         setTimeout(() => {
           navigate("/gamblingmaths/question");
+          window.location.reload();
         }, 1000);
       }, 2000);
   }, [success]);
@@ -105,7 +106,7 @@ const Select = () => {
             onClick={() => {
               axios({
                 method: "post",
-                url: `${baseURL.base}/gamblingmaths/place_bet/${user.category}`,
+                url: `${baseURL.base}/gm_api/place_bet/${user.category}`,
                 headers: {
                   Authorization: `Bearer ${
                     user.token ?? JSON.parse(localStorage.user).token

@@ -74,7 +74,7 @@ const Question = () => {
 
     axios({
       method: "get",
-      url: `${baseURL.base}/gamblingmaths/get_question`,
+      url: `${baseURL.base}/gm_api/get_question`,
       headers: {
         Authorization: `Bearer ${
           user.token ?? JSON.parse(localStorage.user).token
@@ -132,7 +132,7 @@ const Question = () => {
                 onClick={() => {
                   axios({
                     method: "post",
-                    url: `${baseURL.base}/gamblingmaths/answer`,
+                    url: `${baseURL.base}/gm_api/answer`,
                     headers: {
                       Authorization: `Bearer ${
                         user.token ?? JSON.parse(localStorage.user).token

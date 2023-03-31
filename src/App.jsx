@@ -30,6 +30,7 @@ function App() {
 
         setTimeout(() => {
           navigate("/gamblingmaths/instructions");
+          window.location.reload();
         }, 1000);
       }, 1400);
   }, [success]);
@@ -49,7 +50,7 @@ function App() {
 
             axios({
               method: "post",
-              url: `${baseURL.base}/gamblingmaths/login`,
+              url: `${baseURL.base}/gm_api/login`,
               data: {
                 username: e.target.username.value,
                 password: e.target.password.value,
