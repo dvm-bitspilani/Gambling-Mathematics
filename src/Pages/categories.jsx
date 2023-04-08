@@ -1,26 +1,26 @@
-import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import baseURL from "../baseURL";
-import GlobalContext from "../globalContext";
-import "../Styles/categories.css";
+import axios from "axios"
+import React, { useContext, useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import GlobalContext from "../globalContext"
+import "../Styles/categories.css"
+import baseURL from "../baseURL"
 
 const Categories = () => {
-  const { user, setUser } = useContext(GlobalContext);
-  const [error, setError] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const { user, setUser } = useContext(GlobalContext)
+  const [error, setError] = useState(false)
+  const [success, setSuccess] = useState(false)
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const [categories, setCategories] = useState({
     all: [],
     completed: [],
     shown: [],
-  });
+  })
 
-  const locate = (cat) => {
+  const locate = cat => {
     axios({
       method: "post",
-      url: `${baseURL.base}/gm_api/category`,
+      url: `${baseURL.BASE}/category`,
       headers: {
         Authorization: `Bearer ${
           user.token ?? JSON.parse(localStorage.user).token
@@ -28,51 +28,50 @@ const Categories = () => {
       },
       data: { category: cat.name },
     })
-      .then((res) => {
-        setUser({ ...user, category: cat.id });
+      .then(res => {
+        setUser({ ...user, category: cat.id })
 
         localStorage.setItem(
           "user",
           JSON.stringify({ ...user, category: cat.id })
-        );
+        )
       })
-      .catch((err) => setError(true));
+      .catch(err => setError(true))
 
-    navigate("/select");
-  };
+    navigate("/select")
+  }
 
   useEffect(() => {
-    document.title = "Gambling Maths | View Your Categories";
+    document.title = "Gambling Maths | View Your Categories"
 
     axios({
       method: "get",
-      url: `${baseURL.base}/gm_api/category`,
+      url: `${baseURL.BASE}/category`,
       headers: {
         Authorization: `Bearer ${
           user.token ?? JSON.parse(localStorage.user).token
         }`,
       },
     })
-      .then((res) => {
-        const DATA = res.data;
+      .then(res => {
+        const DATA = res.data
 
         setCategories({
           all: DATA.all_categories,
           completed: DATA.completed_categories,
           shown: [],
-        });
+        })
 
         const returnVal = DATA.all_categories.filter(
-          (cat) =>
-            !DATA.completed_categories.map((cat) => cat.id).includes(cat.id)
-        );
+          cat => !DATA.completed_categories.map(cat => cat.id).includes(cat.id)
+        )
 
-        if (returnVal.length === 0) setSuccess(true);
+        if (returnVal.length === 0) setSuccess(true)
         else
           setCategories({
             all: DATA.all_categories,
             completed: DATA.completed_categories,
-            shown: returnVal.map((cat) => {
+            shown: returnVal.map(cat => {
               return (
                 <div
                   id={cat.id}
@@ -82,24 +81,24 @@ const Categories = () => {
                 >
                   {cat.name}
                 </div>
-              );
+              )
             }),
-          });
+          })
       })
-      .catch((err) => setError(true));
-  }, []);
+      .catch(err => setError(true))
+  }, [])
 
   useEffect(() => {
     if (success) {
       setTimeout(() => {
-        setSuccess(false);
-      }, 1400);
+        setSuccess(false)
+      }, 1400)
 
       setTimeout(() => {
-        navigate("/finished");
-      }, 2000);
+        navigate("/finished")
+      }, 2000)
     }
-  }, [success]);
+  }, [success])
 
   return (
     <div className="categories-wrapper">
@@ -148,8 +147,8 @@ const Categories = () => {
           </div>
           <div
             onClick={() => {
-              navigate("/question");
-              setSuccess(false);
+              navigate("/question")
+              setSuccess(false)
             }}
             className="btns"
           >
@@ -158,7 +157,7 @@ const Categories = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Categories;
+export default Categories

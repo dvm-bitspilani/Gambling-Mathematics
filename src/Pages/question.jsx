@@ -1,52 +1,52 @@
-import axios from "axios";
-import React, { useContext, useEffect, useRef, useState } from "react";
-import GlobalContext from "../globalContext";
-import baseURL from "../baseURL";
-import "../Styles/question.css";
-import { useNavigate } from "react-router-dom";
+import axios from "axios"
+import React, { useContext, useEffect, useRef, useState } from "react"
+import GlobalContext from "../globalContext"
+import "../Styles/question.css"
+import { useNavigate } from "react-router-dom"
+import baseURL from "../baseURL"
 
 const Question = () => {
-  const Ref = useRef(null);
-  const navigate = useNavigate();
+  const Ref = useRef(null)
+  const navigate = useNavigate()
 
-  const { user, setUser } = useContext(GlobalContext);
-  const [timer, setTimer] = useState("00:00:00");
+  const { user, setUser } = useContext(GlobalContext)
+  const [timer, setTimer] = useState("00:00:00")
 
   const [ques, setQues] = useState({
     question: "",
     options: [],
     qid: null,
-  });
+  })
 
   useEffect(() => {
-    console.log(ques);
-  }, [ques]);
+    console.log(ques)
+  }, [ques])
 
-  const [error, setError] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false)
+  const [success, setSuccess] = useState(false)
 
-  const getTimeRemaining = (e) => {
-    const total = Date.parse(e) - Date.parse(new Date());
+  const getTimeRemaining = e => {
+    const total = Date.parse(e) - Date.parse(new Date())
 
-    const seconds = Math.floor((total / 1000) % 60);
-    const minutes = Math.floor((total / 1000 / 60) % 60);
-    const hours = Math.floor((total / 1000 / 60 / 60) % 24);
+    const seconds = Math.floor((total / 1000) % 60)
+    const minutes = Math.floor((total / 1000 / 60) % 60)
+    const hours = Math.floor((total / 1000 / 60 / 60) % 24)
 
     return {
       total,
       hours,
       minutes,
       seconds,
-    };
-  };
+    }
+  }
 
   const startTimer = (t, e) => {
-    let { total, hours, minutes, seconds } = getTimeRemaining(e);
+    let { total, hours, minutes, seconds } = getTimeRemaining(e)
 
     if (total <= 0) {
       axios({
         method: "post",
-        url: `${baseURL.base}/gm_api/answer`,
+        url: `${baseURL.BASE}/answer`,
         headers: {
           Authorization: `Bearer ${
             user.token ?? JSON.parse(localStorage.user).token
@@ -55,10 +55,10 @@ const Question = () => {
         data: {
           question_id: t,
         },
-      });
+      })
 
-      clearInterval(Ref.current);
-      cancel();
+      clearInterval(Ref.current)
+      cancel()
     } else {
       setTimer(
         (hours > 9 ? hours : "0" + hours) +
@@ -66,63 +66,63 @@ const Question = () => {
           (minutes > 9 ? minutes : "0" + minutes) +
           ":" +
           (seconds > 9 ? seconds : "0" + seconds)
-      );
+      )
     }
-  };
+  }
 
   const clearTimer = (t, e) => {
-    setTimer("00:03:00");
-    if (Ref.current) clearInterval(Ref.current);
-    const id = setInterval(() => startTimer(t, e), 1000);
-    Ref.current = id;
-  };
+    setTimer("00:03:00")
+    if (Ref.current) clearInterval(Ref.current)
+    const id = setInterval(() => startTimer(t, e), 1000)
+    Ref.current = id
+  }
 
   const getDeadTime = () => {
-    let deadline = new Date();
-    deadline.setSeconds(deadline.getSeconds() + 180);
-    return deadline;
-  };
+    let deadline = new Date()
+    deadline.setSeconds(deadline.getSeconds() + 180)
+    return deadline
+  }
 
   const cancel = () => {
-    setError(true);
-    clearInterval(Ref.current);
+    setError(true)
+    clearInterval(Ref.current)
 
     setTimeout(() => {
-      navigate("/categories");
-    }, 600);
-  };
+      navigate("/categories")
+    }, 600)
+  }
 
   useEffect(() => {
-    document.title = "Gambling Maths | Answer Your Question";
+    document.title = "Gambling Maths | Answer Your Question"
 
     axios({
       method: "get",
-      url: `${baseURL.base}/gm_api/get_question`,
+      url: `${baseURL.BASE}/get_question`,
       headers: {
         Authorization: `Bearer ${
           user.token ?? JSON.parse(localStorage.user).token
         }`,
       },
     })
-      .then((res) => {
-        setUser({ ...user, points: res.data.points });
+      .then(res => {
+        setUser({ ...user, points: res.data.points })
         localStorage.setItem(
           "user",
           JSON.stringify({ ...user, points: res.data.points })
-        );
+        )
 
         setQues({
           question: res.data.question,
           options: res.data.options,
           qid: res.data.question_id,
-        });
+        })
 
-        clearTimer(res.data.question_id, getDeadTime());
+        clearTimer(res.data.question_id, getDeadTime())
       })
-      .catch((err) => {
-        setError(true);
-      });
-  }, []);
+      .catch(err => {
+        setError(true)
+      })
+  }, [])
 
   return (
     <div className="question-wrapper">
@@ -146,7 +146,7 @@ const Question = () => {
         </div>
 
         <div id="answers">
-          {ques?.options?.map((opt) => {
+          {ques?.options?.map(opt => {
             return (
               <div
                 key={opt.option_id}
@@ -155,7 +155,7 @@ const Question = () => {
                 onClick={() => {
                   axios({
                     method: "post",
-                    url: `${baseURL.base}/gm_api/answer`,
+                    url: `${baseURL.BASE}/answer`,
                     headers: {
                       Authorization: `Bearer ${
                         user.token ?? JSON.parse(localStorage.user).token
@@ -166,12 +166,12 @@ const Question = () => {
                       option_id: opt.option_id,
                     },
                   })
-                    .then((res) => {
+                    .then(res => {
                       setUser({
                         ...user,
                         category: null,
                         points: res.data.points,
-                      });
+                      })
 
                       localStorage.setItem(
                         "user",
@@ -180,22 +180,22 @@ const Question = () => {
                           category: null,
                           points: res.data.points,
                         })
-                      );
+                      )
 
-                      if (res.data.status === "correct") setSuccess(true);
-                      else if (res.data.status === "incorrect") setError(true);
-                      clearInterval(Ref.current);
+                      if (res.data.status === "correct") setSuccess(true)
+                      else if (res.data.status === "incorrect") setError(true)
+                      clearInterval(Ref.current)
 
                       setTimeout(() => {
-                        navigate("/categories");
-                      }, 600);
+                        navigate("/categories")
+                      }, 600)
                     })
-                    .catch((err) => cancel());
+                    .catch(err => cancel())
                 }}
               >
                 {opt.option_text}
               </div>
-            );
+            )
           }) ?? "Fetching Options.."}
         </div>
       </div>
@@ -221,8 +221,8 @@ const Question = () => {
           </div>
           <div
             onClick={() => {
-              navigate("/categories");
-              setError(false);
+              navigate("/categories")
+              setError(false)
             }}
             className="btns"
           >
@@ -242,8 +242,8 @@ const Question = () => {
           </div>
           <div
             onClick={() => {
-              navigate("/categories");
-              setSuccess(false);
+              navigate("/categories")
+              setSuccess(false)
             }}
             className="btns"
           >
@@ -252,7 +252,7 @@ const Question = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Question;
+export default Question

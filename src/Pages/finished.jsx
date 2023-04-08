@@ -1,15 +1,13 @@
-import React, { useContext, useEffect } from "react";
-import axios from "axios";
-import baseURL from "../baseURL";
-import "../Styles/login.css";
-import GlobalContext from "../globalContext";
+import React, { useContext, useEffect } from "react"
+import "../Styles/login.css"
+import GlobalContext from "../globalContext"
 
 const Finsihed = () => {
-  const { user, setUser } = useContext(GlobalContext);
+  const { user, setUser } = useContext(GlobalContext)
 
   useEffect(() => {
-    document.title = "Gambling Maths | Game Finished";
-  }, []);
+    document.title = "Gambling Maths | Game Finished"
+  }, [])
 
   return (
     <div id="login-wrapper">
@@ -31,7 +29,7 @@ const Finsihed = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Finsihed;
+export default Finsihed

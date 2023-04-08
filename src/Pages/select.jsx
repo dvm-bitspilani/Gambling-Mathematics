@@ -1,46 +1,46 @@
-import axios from "axios";
-import React, { useState, useContext, useEffect } from "react";
-import GlobalContext from "../globalContext";
-import baseURL from "../baseURL";
-import "../Styles/select.css";
-import { useNavigate } from "react-router-dom";
+import axios from "axios"
+import React, { useState, useContext, useEffect } from "react"
+import GlobalContext from "../globalContext"
+import "../Styles/select.css"
+import { useNavigate } from "react-router-dom"
+import baseURL from "../baseURL"
 
 const Select = () => {
-  const navigate = useNavigate();
-  const { user, setUser } = useContext(GlobalContext);
+  const navigate = useNavigate()
+  const { user, setUser } = useContext(GlobalContext)
 
-  const [error, setError] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false)
+  const [success, setSuccess] = useState(false)
 
-  const [maxPoints, setMaxPoints] = useState(0);
-  const [bet, setBet] = useState(200);
+  const [maxPoints, setMaxPoints] = useState(0)
+  const [bet, setBet] = useState(200)
 
   useEffect(() => {
-    document.title = "Gambling Maths | Place Your Bet";
+    document.title = "Gambling Maths | Place Your Bet"
 
     axios({
       method: "get",
-      url: `${baseURL.base}/gm_api/get_max_bet`,
+      url: `${baseURL.BASE}/get_max_bet`,
       headers: {
         Authorization: `Bearer ${
           user.token ?? JSON.parse(localStorage.user).token
         }`,
       },
-    }).then((res) => {
-      const POINTS = parseInt(res.data.max_bet);
-      setMaxPoints(POINTS);
+    }).then(res => {
+      const POINTS = parseInt(res.data.max_bet)
+      setMaxPoints(POINTS)
 
       if (POINTS < 200) {
         setError(
           "Your points are not enough to place more bets. Redirecting you to the results page."
-        );
+        )
 
         setTimeout(() => {
-          navigate("/finished");
-        }, 600);
+          navigate("/finished")
+        }, 600)
       }
-    });
-  }, []);
+    })
+  }, [])
 
   return (
     <div className="select-wrapper">
@@ -70,7 +70,7 @@ const Select = () => {
                 className="input-field"
                 id="myRange"
                 value={bet}
-                onChange={(e) => setBet(e.target.value)}
+                onChange={e => setBet(e.target.value)}
               />
             </div>
           </div>
@@ -91,11 +91,11 @@ const Select = () => {
               if (bet > maxPoints)
                 setError(
                   `An error occured while placing your bet. Please try again with a bet of ${maxPoints} points or less`
-                );
+                )
               else
                 axios({
                   method: "post",
-                  url: `${baseURL.base}/gm_api/place_bet/${user.category}`,
+                  url: `${baseURL.BASE}/place_bet/${user.category}`,
                   headers: {
                     Authorization: `Bearer ${
                       user.token ?? JSON.parse(localStorage.user).token
@@ -105,33 +105,33 @@ const Select = () => {
                     bet: bet,
                   },
                 })
-                  .then((res) => {
-                    setUser({ ...user, points: res.data.points });
+                  .then(res => {
+                    setUser({ ...user, points: res.data.points })
 
                     localStorage.setItem(
                       "user",
                       JSON.stringify({ ...user, points: res.data.points })
-                    );
+                    )
 
-                    setSuccess(true);
+                    setSuccess(true)
                     setTimeout(() => {
-                      navigate("/question");
-                    }, 600);
+                      navigate("/question")
+                    }, 600)
                   })
-                  .catch((err) => {
+                  .catch(err => {
                     if (err.response.status == 400)
                       setError(
                         "An error occured while placing your bet. Please try again with a bet of 200 points or more"
-                      );
+                      )
 
                     if (err.response.status == 403) {
                       setError(
                         "Current active category is not your selected category. Redirecting you to the categories."
-                      );
+                      )
 
-                      setTimeout(() => navigate("/categories"), 600);
+                      setTimeout(() => navigate("/categories"), 600)
                     }
-                  });
+                  })
             }}
             className="btns"
           >
@@ -149,8 +149,8 @@ const Select = () => {
           <div className="reg-par">{error}</div>
           <div
             onClick={() => {
-              maxPoints < 200 && navigate("/finished");
-              setError(false);
+              maxPoints < 200 && navigate("/finished")
+              setError(false)
             }}
             className="btns"
           >
@@ -171,8 +171,8 @@ const Select = () => {
           </div>
           <div
             onClick={() => {
-              navigate("/question");
-              setSuccess(false);
+              navigate("/question")
+              setSuccess(false)
             }}
             className="btns"
           >
@@ -181,7 +181,7 @@ const Select = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Select;
+export default Select

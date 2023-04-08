@@ -1,38 +1,38 @@
-import { useContext, useEffect, useState } from "react";
-import axios from "axios";
-import baseURL from "./baseURL";
-import "./Styles/login.css";
-import { useNavigate } from "react-router-dom";
-import GlobalContext from "./globalContext";
+import { useContext, useEffect, useState } from "react"
+import axios from "axios"
+import "./Styles/login.css"
+import { useNavigate } from "react-router-dom"
+import GlobalContext from "./globalContext"
+import baseURL from "./baseURL"
 
 function App() {
-  const navigate = useNavigate();
-  const [error, setError] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const navigate = useNavigate()
+  const [error, setError] = useState(false)
+  const [success, setSuccess] = useState(false)
 
-  const { user, setUser } = useContext(GlobalContext);
+  const { user, setUser } = useContext(GlobalContext)
 
   useEffect(() => {
-    document.title = "Gambling Maths | Login";
-  }, []);
+    document.title = "Gambling Maths | Login"
+  }, [])
 
   useEffect(() => {
     if (error)
       setTimeout(() => {
-        setError(false);
-      }, 1400);
-  }, [error]);
+        setError(false)
+      }, 1400)
+  }, [error])
 
   useEffect(() => {
     if (success)
       setTimeout(() => {
-        setSuccess(false);
+        setSuccess(false)
 
         setTimeout(() => {
-          navigate("/instructions");
-        }, 1000);
-      }, 1400);
-  }, [success]);
+          navigate("/instructions")
+        }, 1000)
+      }, 1400)
+  }, [success])
 
   return (
     <div id="login-wrapper">
@@ -44,26 +44,26 @@ function App() {
       <div id="right">
         <form
           id="login-form"
-          onSubmit={(e) => {
-            e.preventDefault();
+          onSubmit={e => {
+            e.preventDefault()
 
             axios({
               method: "post",
-              url: `${baseURL.base}/gm_api/login`,
+              url: `${baseURL.BASE}/login`,
               data: {
                 username: e.target.username.value,
                 password: e.target.password.value,
               },
             })
-              .then((res) => {
+              .then(res => {
                 if (res.data.message === "login") {
-                  setSuccess(true);
+                  setSuccess(true)
                   setUser({
                     name: res.data.name,
                     points: res.data.points,
                     token: res.data.token,
                     category: null,
-                  });
+                  })
 
                   localStorage.setItem(
                     "user",
@@ -73,14 +73,14 @@ function App() {
                       token: res.data.token,
                       category: null,
                     })
-                  );
+                  )
                 } else {
-                  setError(true);
+                  setError(true)
                 }
               })
-              .catch((err) => {
-                setError(true);
-              });
+              .catch(err => {
+                setError(true)
+              })
           }}
         >
           <div className="login-field-cont">
@@ -133,7 +133,7 @@ function App() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

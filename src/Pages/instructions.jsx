@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import rules from "../Asset/rules.png";
-import "../Styles/categories.css";
+import React, { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import rules from "../Asset/rules.png"
+import "../Styles/categories.css"
 
 const Instructions = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   useEffect(() => {
-    document.title = "Gambling Maths | General Instructions";
-  }, []);
+    document.title = "Gambling Maths | General Instructions"
+  }, [])
 
   return (
     <div className="instructions-wrapper">
@@ -61,14 +61,14 @@ const Instructions = () => {
         <div
           className="instructionsButton"
           onClick={() => {
-            navigate("/categories");
+            navigate("/categories")
           }}
         >
           Continue to Play
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Instructions;
+export default Instructions
