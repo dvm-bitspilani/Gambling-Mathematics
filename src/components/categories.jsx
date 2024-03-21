@@ -1,23 +1,22 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import GlobalContext from "../globalContext";
-import "../Styles/categories.css";
+import GlobalContext from "../contexts/GlobalContext";
+import "../style/categories.css";
 import baseURL from "../baseURL";
+import { useTitle } from "../utils/UseTitle";
 
 const Categories = () => {
-    const { user, setUser } = useContext(GlobalContext);
+    useTitle("View Your Categories");
+
     const navigate = useNavigate();
+    const { user, setUser } = useContext(GlobalContext);
+
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
-    const [categories, setCategories] = useState({
-        all: [],
-        shown: []
-    });
+    const [categories, setCategories] = useState({ all: [], shown: [] });
 
     useEffect(() => {
-        document.title = "Gambling Maths | View Your Categories";
-
         const fetchData = async () => {
             try {
                 const token = user.token ?? JSON.parse(localStorage.user).token;

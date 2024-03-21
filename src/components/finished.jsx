@@ -1,15 +1,15 @@
-import React, { useContext, useEffect } from "react";
-import "../Styles/login.css";
-import GlobalContext from "../globalContext";
+import React, { useContext } from "react";
+import "../style/login.css";
+import GlobalContext from "../contexts/GlobalContext";
+import { useTitle } from "../utils/UseTitle";
 
 const Finished = () => {
+    useTitle("Game Finished");
+
     const { user } = useContext(GlobalContext);
 
-    useEffect(() => {
-        document.title = "Gambling Maths | Game Finished";
-    }, []);
-
-    const finalPoints = user.points ?? JSON.parse(localStorage.user).points ?? "N/A";
+    const finalPoints =
+        user.points ?? JSON.parse(localStorage.user).points ?? "N/A";
 
     return (
         <div id="login-wrapper">

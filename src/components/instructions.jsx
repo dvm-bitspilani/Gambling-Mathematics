@@ -1,18 +1,14 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import rules from "../assets/rules.png";
-import "../Styles/categories.css";
+import "../style/categories.css";
+import { useTitle } from "../utils/UseTitle";
 
 const Instructions = () => {
+    useTitle("General Instructions");
+
     const navigate = useNavigate();
-
-    useEffect(() => {
-        document.title = "Gambling Maths | General Instructions";
-    }, []);
-
-    const handleClick = () => {
-        navigate("/categories");
-    };
+    const handleClick = () => navigate("/categories");
 
     return (
         <div className="instructions-wrapper">

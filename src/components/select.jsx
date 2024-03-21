@@ -1,11 +1,14 @@
 import axios from "axios";
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import GlobalContext from "../globalContext";
-import "../Styles/select.css";
+import GlobalContext from "../contexts/GlobalContext";
+import "../style/select.css";
 import baseURL from "../baseURL";
+import { useTitle } from "../utils/UseTitle";
 
 const Select = () => {
+    useTitle("Place Your Bet");
+
     const navigate = useNavigate();
     const { user, setUser } = useContext(GlobalContext);
 
@@ -15,7 +18,6 @@ const Select = () => {
     const [bet, setBet] = useState(200);
 
     useEffect(() => {
-        document.title = "Gambling Maths | Place Your Bet";
         axios
             .get(`${baseURL.BASE}/get_max_bet`, {
                 headers: {

@@ -1,11 +1,14 @@
 import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import GlobalContext from "../globalContext";
-import "../Styles/question.css";
+import GlobalContext from "../contexts/GlobalContext";
+import "../style/question.css";
 import { useNavigate } from "react-router-dom";
 import baseURL from "../baseURL";
+import { useTitle } from "../utils/UseTitle";
 
 const Question = () => {
+    useTitle("Answer Your Question");
+
     const Ref = useRef(null);
     const navigate = useNavigate();
 
@@ -93,8 +96,6 @@ const Question = () => {
     };
 
     useEffect(() => {
-        document.title = "Gambling Maths | Answer Your Question";
-
         axios({
             method: "get",
             url: `${baseURL.BASE}/get_question`,

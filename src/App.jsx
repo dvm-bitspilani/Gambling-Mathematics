@@ -1,19 +1,19 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import "./Styles/login.css";
+import "./style/login.css";
 import { useNavigate } from "react-router-dom";
-import GlobalContext from "./globalContext";
+import GlobalContext from "./contexts/GlobalContext";
 import baseURL from "./baseURL";
+import { useTitle } from "./utils/UseTitle";
 
 function App() {
+    useTitle("Login");
+
     const navigate = useNavigate();
-    const [error, setError] = useState(false);
-    const [success, setSuccess] = useState(false);
     const { setUser } = useContext(GlobalContext);
 
-    useEffect(() => {
-        document.title = "Gambling Maths | Login";
-    }, []);
+    const [error, setError] = useState(false);
+    const [success, setSuccess] = useState(false);
 
     useEffect(() => {
         const dismissError = () => {
