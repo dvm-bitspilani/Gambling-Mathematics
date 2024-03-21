@@ -1,12 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
+
 @font-face {
     font-family: "Forgotten Futurist";
-    src: url("../Font/Forgotten Futurist.ttf");
+    src: url("../fonts/Forgotten Futurist.ttf");
 }
 
 @font-face {
     font-family: "Pirulen";
-    src: url("../Font/Pirulen.otf");
+    src: url("../fonts/Pirulen.otf");
 }
 
 * {
@@ -17,7 +18,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: black;
-    background-image: url("../Asset/background.png");
+    background-image: url("../assets/background.png");
 }
 
 .question-wrapper {
@@ -305,4 +306,3 @@ body {
         padding: 10px 0;
     }
 }
-/*# sourceMappingURL=question.css.map */

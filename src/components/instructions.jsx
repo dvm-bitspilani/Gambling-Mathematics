@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import rules from "../Asset/rules.png";
+import rules from "../assets/rules.png";
 import "../Styles/categories.css";
 
 const Instructions = () => {
@@ -9,6 +9,10 @@ const Instructions = () => {
     useEffect(() => {
         document.title = "Gambling Maths | General Instructions";
     }, []);
+
+    const handleClick = () => {
+        navigate("/categories");
+    };
 
     return (
         <div className="instructions-wrapper">
@@ -61,15 +65,11 @@ const Instructions = () => {
                         The maximum number of you can bet in each round and its
                         corresponding multiplier is as follows.
                     </li>
-                    <img className="rules-img" src={rules} alt="RULES" />
                 </ul>
 
-                <div
-                    className="instructionsButton"
-                    onClick={() => {
-                        navigate("/categories");
-                    }}
-                >
+                <img className="rules-img" src={rules} alt="RULES" />
+
+                <div className="instructionsButton" onClick={handleClick}>
                     Continue to Play
                 </div>
             </div>

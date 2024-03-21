@@ -9,30 +9,64 @@ function App() {
     const navigate = useNavigate();
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
-
-    const { user, setUser } = useContext(GlobalContext);
+    const { setUser } = useContext(GlobalContext);
 
     useEffect(() => {
         document.title = "Gambling Maths | Login";
     }, []);
 
     useEffect(() => {
-        if (error)
-            setTimeout(() => {
-                setError(false);
-            }, 1400);
-    }, [error]);
-
-    useEffect(() => {
-        if (success)
-            setTimeout(() => {
-                setSuccess(false);
-
+        const dismissError = () => {
+            if (error) setTimeout(() => setError(false), 1400);
+        };
+        const dismissSuccess = () => {
+            if (success) {
                 setTimeout(() => {
+                    setSuccess(false);
                     navigate("/instructions");
-                }, 1000);
-            }, 1400);
-    }, [success]);
+                }, 1400);
+            }
+        };
+        dismissError();
+        dismissSuccess();
+    }, [error, success, navigate]);
+
+    const handleSubmit = e => {
+        e.preventDefault();
+        axios({
+            method: "post",
+            url: `${baseURL.BASE}/login`,
+            data: {
+                username: e.target.username.value,
+                password: e.target.password.value
+            }
+        })
+            .then(res => {
+                if (res.data.message === "login") {
+                    setSuccess(true);
+                    setUser({
+                        name: res.data.name,
+                        points: res.data.points,
+                        token: res.data.token,
+                        category: null
+                    });
+                    localStorage.setItem(
+                        "user",
+                        JSON.stringify({
+                            name: res.data.name,
+                            points: res.data.points,
+                            token: res.data.token,
+                            category: null
+                        })
+                    );
+                } else {
+                    setError(true);
+                }
+            })
+            .catch(() => {
+                setError(true);
+            });
+    };
 
     return (
         <div id="login-wrapper">
@@ -42,47 +76,7 @@ function App() {
             </div>
 
             <div id="right">
-                <form
-                    id="login-form"
-                    onSubmit={e => {
-                        e.preventDefault();
-
-                        axios({
-                            method: "post",
-                            url: `${baseURL.BASE}/login`,
-                            data: {
-                                username: e.target.username.value,
-                                password: e.target.password.value
-                            }
-                        })
-                            .then(res => {
-                                if (res.data.message === "login") {
-                                    setSuccess(true);
-                                    setUser({
-                                        name: res.data.name,
-                                        points: res.data.points,
-                                        token: res.data.token,
-                                        category: null
-                                    });
-
-                                    localStorage.setItem(
-                                        "user",
-                                        JSON.stringify({
-                                            name: res.data.name,
-                                            points: res.data.points,
-                                            token: res.data.token,
-                                            category: null
-                                        })
-                                    );
-                                } else {
-                                    setError(true);
-                                }
-                            })
-                            .catch(err => {
-                                setError(true);
-                            });
-                    }}
-                >
+                <form id="login-form" onSubmit={handleSubmit}>
                     <div className="login-field-cont">
                         <label htmlFor="username">Enter your username</label>
                         <input
@@ -109,10 +103,7 @@ function App() {
                 </form>
             </div>
 
-            <div
-                id="err-cont"
-                style={error ? { display: "flex" } : { display: "none" }}
-            >
+            <div id="err-cont" style={{ display: error ? "flex" : "none" }}>
                 <div id="err" className="glass">
                     <div id="err-head">ERROR</div>
                     <div className="reg-par">
@@ -122,10 +113,7 @@ function App() {
                 </div>
             </div>
 
-            <div
-                id="succ-cont"
-                style={success ? { display: "flex" } : { display: "none" }}
-            >
+            <div id="succ-cont" style={{ display: success ? "flex" : "none" }}>
                 <div id="succ" className="glass">
                     <div id="succ-head">SUCCESS</div>
                     <div className="reg-par">

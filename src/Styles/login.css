@@ -2,22 +2,22 @@
 
 @font-face {
     font-family: "Gilroy";
-    src: url("../Font/Gilroy-Light.otf");
+    src: url("../fonts/Gilroy-Light.otf");
 }
 
 @font-face {
     font-family: "Forgotten Futurist";
-    src: url("../Font/Forgotten Futurist.ttf");
+    src: url("../fonts/Forgotten Futurist.ttf");
 }
 
 @font-face {
     font-family: "Pirulen";
-    src: url("../Font/Pirulen.otf");
+    src: url("../fonts/Pirulen.otf");
 }
 
 @font-face {
     font-family: "SF Pro";
-    src: url("../Font/SF-Pro-Text-Regular.otf");
+    src: url("../fonts/SF-Pro-Text-Regular.otf");
 }
 
 body {
@@ -28,7 +28,7 @@ body {
     overflow: hidden;
     background-size: 100%;
     background-color: black !important;
-    background-image: url("../Asset/background.png") !important;
+    background-image: url("../assets/background.png") !important;
 }
 
 #login-wrapper {
