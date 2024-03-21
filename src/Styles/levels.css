@@ -1,243 +1,243 @@
 @font-face {
-  font-family: "Pirulen";
-  src: local("Pirulen"), url("../Font/Pirulen.otf") format("opentype");
-  font-weight: normal;
+    font-family: "Pirulen";
+    src: local("Pirulen"), url("../Font/Pirulen.otf") format("opentype");
+    font-weight: normal;
 }
 
 @font-face {
-  font-family: "Forgotten Futurist";
-  src: local("Forgotten Futurist"),
-    url("../Font/Forgotten Futurist.ttf") format("truetype");
-  font-weight: normal;
+    font-family: "Forgotten Futurist";
+    src: local("Forgotten Futurist"),
+        url("../Font/Forgotten Futurist.ttf") format("truetype");
+    font-weight: normal;
 }
 
 * {
-  padding: 0;
-  margin: 0;
-  color: white;
-  font-family: "Forgotten Futurist";
-  box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    color: white;
+    font-family: "Forgotten Futurist";
+    box-sizing: border-box;
 }
 
 body {
-  background-color: black;
-  background-image: url("/Asset/background.png");
-  background-size: cover;
+    background-color: black;
+    background-image: url("/Asset/background.png");
+    background-size: cover;
 }
 
 .heading,
 .content {
-  margin: 10vh 10vw;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    margin: 10vh 10vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .title {
-  font-family: "Pirulen";
-  font-size: 3.2rem;
+    font-family: "Pirulen";
+    font-size: 3.2rem;
 }
 
 .stash {
-  background: rgba(0, 0, 0, 0.09);
-  -webkit-backdrop-filter: blur(130px);
-  backdrop-filter: blur(130px);
-  border-radius: 15px;
-  display: flex;
-  gap: 1rem;
-  padding: 1rem 2rem;
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
-    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+    background: rgba(0, 0, 0, 0.09);
+    -webkit-backdrop-filter: blur(130px);
+    backdrop-filter: blur(130px);
+    border-radius: 15px;
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+        inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
 }
 
 .stashTitle {
-  letter-spacing: 0.15rem;
+    letter-spacing: 0.15rem;
 }
 
 .stashAmount {
-  font-weight: 700;
-  font-size: 2.6rem;
-  letter-spacing: 0.3rem;
-  text-align: right;
-  margin-left: 1rem;
+    font-weight: 700;
+    font-size: 2.6rem;
+    letter-spacing: 0.3rem;
+    text-align: right;
+    margin-left: 1rem;
 }
 
 .levels {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  margin-left: 10vw;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-left: 10vw;
 }
 
 .level {
-  width: 22vw;
-  cursor: pointer;
-  font-size: 1.8rem;
-  letter-spacing: 0.12em;
-  text-align: center;
-  padding: 1.4rem;
-  background: rgba(7, 9, 73, 0.09);
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
-    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
-  -webkit-backdrop-filter: blur(130px);
-  backdrop-filter: blur(130px);
-  border-radius: 15px;
+    width: 22vw;
+    cursor: pointer;
+    font-size: 1.8rem;
+    letter-spacing: 0.12em;
+    text-align: center;
+    padding: 1.4rem;
+    background: rgba(7, 9, 73, 0.09);
+    box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+        inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+    -webkit-backdrop-filter: blur(130px);
+    backdrop-filter: blur(130px);
+    border-radius: 15px;
 }
 
 .prompt {
-  width: 33vw;
-  font-size: 1.8rem;
-  letter-spacing: 0.12em;
+    width: 33vw;
+    font-size: 1.8rem;
+    letter-spacing: 0.12em;
 }
 
 #err-cont {
-  background-color: transparent;
-  position: absolute;
-  height: 100vh;
-  width: 100vw;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    background-color: transparent;
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .reg-par {
-  font-family: "Forgotten Futurist", sans-serif;
-  word-break: break-word;
-  font-size: 1.5rem;
-  color: white;
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
-  letter-spacing: 1.2px;
-  opacity: 0.8;
+    font-family: "Forgotten Futurist", sans-serif;
+    word-break: break-word;
+    font-size: 1.5rem;
+    color: white;
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content;
+    letter-spacing: 1.2px;
+    opacity: 0.8;
 }
 
 .glass {
-  padding: 1.5rem;
-  background: rgba(7, 9, 73, 0.09);
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
-    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
-  -webkit-backdrop-filter: blur(130px);
-  backdrop-filter: blur(130px);
-  border-radius: 15px;
+    padding: 1.5rem;
+    background: rgba(7, 9, 73, 0.09);
+    box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+        inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+    -webkit-backdrop-filter: blur(130px);
+    backdrop-filter: blur(130px);
+    border-radius: 15px;
 }
 
 #err {
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
-  height: -webkit-min-content;
-  height: -moz-min-content;
-  height: min-content;
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content;
+    height: -webkit-min-content;
+    height: -moz-min-content;
+    height: min-content;
 }
 
 #err .reg-par {
-  padding: 50px;
+    padding: 50px;
 }
 
 #err-head {
-  font-family: "Pirulen", sans-serif;
-  font-size: 2rem;
-  color: white;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+    font-family: "Pirulen", sans-serif;
+    font-size: 2rem;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 
 #err-head svg {
-  stroke: white;
-  fill: white;
-  height: 25px;
-  width: 25px;
+    stroke: white;
+    fill: white;
+    height: 25px;
+    width: 25px;
 }
 
 @media screen and (min-width: 1800px) {
-  * {
-    font-size: larger;
-  }
+    * {
+        font-size: larger;
+    }
 }
 
 @media screen and (max-width: 1500px) {
-  .level {
-    width: 25vw;
-  }
+    .level {
+        width: 25vw;
+    }
 
-  .title {
-    font-size: 3.5rem;
-  }
+    .title {
+        font-size: 3.5rem;
+    }
 }
 
 @media screen and (max-width: 1300px) {
-  * {
-    font-size: smaller;
-  }
+    * {
+        font-size: smaller;
+    }
 
-  .heading {
-    margin: 10vh 7vw;
-  }
+    .heading {
+        margin: 10vh 7vw;
+    }
 }
 
 @media screen and (max-width: 999px) {
-  .content {
-    flex-direction: column-reverse;
-  }
+    .content {
+        flex-direction: column-reverse;
+    }
 
-  .levels {
-    margin: 0;
-  }
+    .levels {
+        margin: 0;
+    }
 
-  .level {
-    width: 60vw;
-    font-size: 2rem;
-  }
+    .level {
+        width: 60vw;
+        font-size: 2rem;
+    }
 
-  .prompt {
-    width: 70vw;
-    font-size: 2rem;
-    text-align: center;
-    margin-bottom: 10vh;
-  }
+    .prompt {
+        width: 70vw;
+        font-size: 2rem;
+        text-align: center;
+        margin-bottom: 10vh;
+    }
 
-  .heading {
-    flex-direction: column;
-  }
+    .heading {
+        flex-direction: column;
+    }
 
-  .title {
-    font-size: 3.2rem;
-    margin-bottom: 10vh;
-  }
+    .title {
+        font-size: 3.2rem;
+        margin-bottom: 10vh;
+    }
 
-  .reg-par {
-    font-size: 1rem;
-    margin: auto;
-  }
+    .reg-par {
+        font-size: 1rem;
+        margin: auto;
+    }
 
-  #err .reg-par {
-    padding: 10px 0;
-  }
+    #err .reg-par {
+        padding: 10px 0;
+    }
 }
 
 @media screen and (max-width: 650px) {
-  .title {
-    font-size: 2.8rem;
-    text-align: center;
-  }
+    .title {
+        font-size: 2.8rem;
+        text-align: center;
+    }
 
-  .prompt {
-    width: 60vw;
-  }
+    .prompt {
+        width: 60vw;
+    }
 
-  .promptText {
-    font-size: 20px;
-  }
+    .promptText {
+        font-size: 20px;
+    }
 
-  .category {
-    font-size: 15px;
-  }
+    .category {
+        font-size: 15px;
+    }
 }
 /*# sourceMappingURL=levels.css.map */

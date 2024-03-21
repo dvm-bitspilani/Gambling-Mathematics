@@ -1,290 +1,290 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
 
 @font-face {
-  font-family: "Pirulen";
-  src: local("Pirulen"), url("../Font/Pirulen.otf") format("opentype");
-  font-weight: normal;
+    font-family: "Pirulen";
+    src: local("Pirulen"), url("../Font/Pirulen.otf") format("opentype");
+    font-weight: normal;
 }
 
 @font-face {
-  font-family: "Forgotten Futurist";
-  src: local("Forgotten Futurist"),
-    url("../Font/Forgotten Futurist.ttf") format("truetype");
-  font-weight: normal;
+    font-family: "Forgotten Futurist";
+    src: local("Forgotten Futurist"),
+        url("../Font/Forgotten Futurist.ttf") format("truetype");
+    font-weight: normal;
 }
 
 * {
-  padding: 0;
-  margin: 0;
-  color: white;
-  font-family: "Forgotten Futurist";
-  box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    color: white;
+    font-family: "Forgotten Futurist";
+    box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  background-color: black;
-  background-image: url("../Asset/background.png");
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    background-image: url("../Asset/background.png");
 }
 
 .instructions-wrapper,
 .categories-wrapper {
-  width: 100vw;
-  height: 100vh;
-  overflow-y: scroll;
-  display: flex;
-  flex-direction: column;
-  padding: 80px;
-  padding-bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    padding: 80px;
+    padding-bottom: 0;
 }
 
 .instructions {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin-bottom: 2rem;
 }
 
 .instructionsTitle {
-  font-size: 2rem;
-  font-family: "Pirulen";
+    font-size: 2rem;
+    font-family: "Pirulen";
 }
 
 .instructionsContent {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  font-size: 1.3rem;
-  letter-spacing: 0.1rem;
-  margin-left: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 1.3rem;
+    letter-spacing: 0.1rem;
+    margin-left: 2rem;
 }
 
 .title {
-  font-family: "Pirulen";
-  font-size: 3.2rem;
+    font-family: "Pirulen";
+    font-size: 3.2rem;
 }
 
 .stash {
-  background: rgba(0, 0, 0, 0.09);
-  -webkit-backdrop-filter: blur(130px);
-  backdrop-filter: blur(130px);
-  border-radius: 15px;
-  display: flex;
-  align-items: baseline;
-  width: max-content;
-  gap: 5px;
-  padding: 1rem 2rem;
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
-    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+    background: rgba(0, 0, 0, 0.09);
+    -webkit-backdrop-filter: blur(130px);
+    backdrop-filter: blur(130px);
+    border-radius: 15px;
+    display: flex;
+    align-items: baseline;
+    width: max-content;
+    gap: 5px;
+    padding: 1rem 2rem;
+    box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+        inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
 }
 
 .stashTitle {
-  font-size: 1.5rem;
+    font-size: 1.5rem;
 }
 
 .stashAmount {
-  font-weight: 700;
-  font-size: 2.6rem;
-  letter-spacing: 0.3rem;
-  text-align: right;
-  margin-left: 1rem;
+    font-weight: 700;
+    font-size: 2.6rem;
+    letter-spacing: 0.3rem;
+    text-align: right;
+    margin-left: 1rem;
 }
 
 .categories {
-  padding: 2rem 1rem;
-  display: grid;
-  grid-template-columns: auto auto auto;
-  gap: 3rem;
+    padding: 2rem 1rem;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 3rem;
 }
 
 .category {
-  text-align: center;
-  cursor: pointer;
-  padding: 1.5rem;
-  font-size: 1.5rem;
-  letter-spacing: 0.12em;
-  background: rgba(7, 9, 73, 0.09);
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
-    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
-  -webkit-backdrop-filter: blur(130px);
-  backdrop-filter: blur(130px);
-  border-radius: 15px;
+    text-align: center;
+    cursor: pointer;
+    padding: 1.5rem;
+    font-size: 1.5rem;
+    letter-spacing: 0.12em;
+    background: rgba(7, 9, 73, 0.09);
+    box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+        inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+    -webkit-backdrop-filter: blur(130px);
+    backdrop-filter: blur(130px);
+    border-radius: 15px;
 }
 
 .instructionsButton {
-  cursor: pointer;
-  font-weight: 700;
-  font-family: "Montserrat", sans-serif;
-  font-weight: 700;
-  font-size: 1.2rem;
-  background-color: white;
-  color: black;
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
-  border: 4px solid black;
-  outline: 1px solid rgb(255, 255, 255);
-  padding: 5px 20px;
-  transition: all 0.3s;
+    cursor: pointer;
+    font-weight: 700;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    background-color: white;
+    color: black;
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content;
+    border: 4px solid black;
+    outline: 1px solid rgb(255, 255, 255);
+    padding: 5px 20px;
+    transition: all 0.3s;
 }
 
 .instructionsButton:hover {
-  background-color: rgba(256, 256, 256, 0.7);
+    background-color: rgba(256, 256, 256, 0.7);
 }
 
 .rules-img {
-  width: 50vw;
+    width: 50vw;
 }
 
 #err-cont {
-  background-color: transparent;
-  position: absolute;
-  height: 100vh;
-  width: 100vw;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    background-color: transparent;
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .reg-par {
-  font-family: "Forgotten Futurist", sans-serif;
-  word-break: break-word;
-  font-size: 1.5rem;
-  color: white;
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
-  letter-spacing: 1.2px;
-  opacity: 0.8;
+    font-family: "Forgotten Futurist", sans-serif;
+    word-break: break-word;
+    font-size: 1.5rem;
+    color: white;
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content;
+    letter-spacing: 1.2px;
+    opacity: 0.8;
 }
 
 .glass {
-  padding: 1.5rem;
-  background: rgba(7, 9, 73, 0.09);
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
-    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
-  -webkit-backdrop-filter: blur(130px);
-  backdrop-filter: blur(130px);
-  border-radius: 15px;
+    padding: 1.5rem;
+    background: rgba(7, 9, 73, 0.09);
+    box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+        inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+    -webkit-backdrop-filter: blur(130px);
+    backdrop-filter: blur(130px);
+    border-radius: 15px;
 }
 
 #err {
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
-  height: -webkit-min-content;
-  height: -moz-min-content;
-  height: min-content;
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content;
+    height: -webkit-min-content;
+    height: -moz-min-content;
+    height: min-content;
 }
 
 #err .reg-par {
-  padding: 50px;
+    padding: 50px;
 }
 
 #err-head {
-  font-family: "Pirulen", sans-serif;
-  font-size: 2rem;
-  color: white;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+    font-family: "Pirulen", sans-serif;
+    font-size: 2rem;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 
 #err-head svg {
-  stroke: white;
-  fill: white;
-  height: 25px;
-  width: 25px;
+    stroke: white;
+    fill: white;
+    height: 25px;
+    width: 25px;
 }
 
 @media screen and (max-width: 1400px) {
-  * {
-    font-size: smaller;
-  }
+    * {
+        font-size: smaller;
+    }
 
-  .title {
-    font-size: 2.5rem;
-  }
+    .title {
+        font-size: 2.5rem;
+    }
 
-  .category {
-    width: 20vw;
-  }
+    .category {
+        width: 20vw;
+    }
 }
 
 @media screen and (max-width: 980px) {
-  .content {
-    flex-direction: column-reverse;
-  }
+    .content {
+        flex-direction: column-reverse;
+    }
 
-  .categories {
-    grid-template-columns: auto;
-    margin: 0 20vw;
-  }
+    .categories {
+        grid-template-columns: auto;
+        margin: 0 20vw;
+    }
 
-  .category {
-    width: 60vw;
-    justify-content: center;
-  }
+    .category {
+        width: 60vw;
+        justify-content: center;
+    }
 
-  .prompt {
-    width: 40vw;
-    text-align: center;
-    align-items: center;
-    margin-bottom: 10vh;
-  }
+    .prompt {
+        width: 40vw;
+        text-align: center;
+        align-items: center;
+        margin-bottom: 10vh;
+    }
 
-  #btn1 {
-    display: block;
-    justify-self: center;
-  }
+    #btn1 {
+        display: block;
+        justify-self: center;
+    }
 
-  #btn2 {
-    display: none;
-  }
+    #btn2 {
+        display: none;
+    }
 }
 
 @media screen and (max-width: 850px) {
-  .heading {
-    flex-direction: column;
-  }
+    .heading {
+        flex-direction: column;
+    }
 
-  .title {
-    font-size: 3rem;
-    margin-bottom: 10vh;
-  }
+    .title {
+        font-size: 3rem;
+        margin-bottom: 10vh;
+    }
 }
 
 @media screen and (max-width: 650px) {
-  .title {
-    font-size: 2.4rem;
-    text-align: center;
-  }
+    .title {
+        font-size: 2.4rem;
+        text-align: center;
+    }
 
-  .prompt {
-    width: 60vw;
-  }
+    .prompt {
+        width: 60vw;
+    }
 
-  .promptText {
-    font-size: 20px;
-  }
+    .promptText {
+        font-size: 20px;
+    }
 
-  .category {
-    font-size: 15px;
-  }
+    .category {
+        font-size: 15px;
+    }
 
-  .reg-par {
-    font-size: 1rem;
-    margin: auto;
-  }
+    .reg-par {
+        font-size: 1rem;
+        margin: auto;
+    }
 
-  #err .reg-par {
-    padding: 10px 0;
-  }
+    #err .reg-par {
+        padding: 10px 0;
+    }
 }
 /*# sourceMappingURL=categories.css.map */

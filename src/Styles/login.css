@@ -1,271 +1,271 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
 
 @font-face {
-  font-family: "Gilroy";
-  src: url("../Font/Gilroy-Light.otf");
+    font-family: "Gilroy";
+    src: url("../Font/Gilroy-Light.otf");
 }
 
 @font-face {
-  font-family: "Forgotten Futurist";
-  src: url("../Font/Forgotten Futurist.ttf");
+    font-family: "Forgotten Futurist";
+    src: url("../Font/Forgotten Futurist.ttf");
 }
 
 @font-face {
-  font-family: "Pirulen";
-  src: url("../Font/Pirulen.otf");
+    font-family: "Pirulen";
+    src: url("../Font/Pirulen.otf");
 }
 
 @font-face {
-  font-family: "SF Pro";
-  src: url("../Font/SF-Pro-Text-Regular.otf");
+    font-family: "SF Pro";
+    src: url("../Font/SF-Pro-Text-Regular.otf");
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-  background-size: 100%;
-  background-color: black !important;
-  background-image: url("../Asset/background.png") !important;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    background-size: 100%;
+    background-color: black !important;
+    background-image: url("../Asset/background.png") !important;
 }
 
 #login-wrapper {
-  padding: 100px;
-  display: flex;
-  gap: 100px;
+    padding: 100px;
+    display: flex;
+    gap: 100px;
 }
 
 #left {
-  align-self: center;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-auto-rows: -webkit-min-content;
-  grid-auto-rows: min-content;
-  grid-row-gap: 20px;
-  padding: 50px 50px 100px;
+    align-self: center;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: -webkit-min-content;
+    grid-auto-rows: min-content;
+    grid-row-gap: 20px;
+    padding: 50px 50px 100px;
 }
 
 #right {
-  align-self: center;
+    align-self: center;
 }
 
 #login-head {
-  font-family: "Pirulen", sans-serif;
-  font-size: 4rem;
-  color: white;
+    font-family: "Pirulen", sans-serif;
+    font-size: 4rem;
+    color: white;
 }
 
 .reg-par {
-  font-family: "Forgotten Futurist", sans-serif;
-  word-break: break-word;
-  font-size: 1.5rem;
-  color: white;
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
-  letter-spacing: 1.2px;
-  opacity: 0.8;
+    font-family: "Forgotten Futurist", sans-serif;
+    word-break: break-word;
+    font-size: 1.5rem;
+    color: white;
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content;
+    letter-spacing: 1.2px;
+    opacity: 0.8;
 }
 
 #login-form {
-  display: grid;
-  grid-template-columns: -webkit-min-content;
-  grid-template-columns: min-content;
-  grid-auto-rows: -webkit-min-content;
-  grid-auto-rows: min-content;
-  grid-row-gap: 20px;
-  justify-self: center;
-  justify-items: center;
+    display: grid;
+    grid-template-columns: -webkit-min-content;
+    grid-template-columns: min-content;
+    grid-auto-rows: -webkit-min-content;
+    grid-auto-rows: min-content;
+    grid-row-gap: 20px;
+    justify-self: center;
+    justify-items: center;
 }
 
 .login-field-cont {
-  position: relative;
+    position: relative;
 }
 
 .login-field-cont label {
-  position: absolute;
-  top: -9px;
-  left: 10px;
-  padding: 0px 3px;
-  font-family: "Gilroy", sans-serif;
-  font-size: 1rem;
-  color: white;
-  background-color: black;
+    position: absolute;
+    top: -9px;
+    left: 10px;
+    padding: 0px 3px;
+    font-family: "Gilroy", sans-serif;
+    font-size: 1rem;
+    color: white;
+    background-color: black;
 }
 
 .login-field {
-  display: block;
-  width: 30vw;
-  background-color: transparent;
-  padding: 16.5px 14px;
-  outline: none;
-  border: 1px solid white;
-  font-family: "Gilroy", sans-serif;
-  color: white;
-  font-size: 1.2rem;
-  font-weight: 500;
-  border-radius: 10px;
+    display: block;
+    width: 30vw;
+    background-color: transparent;
+    padding: 16.5px 14px;
+    outline: none;
+    border: 1px solid white;
+    font-family: "Gilroy", sans-serif;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 500;
+    border-radius: 10px;
 }
 
 .btn,
 .btn:visited {
-  font-family: "Montserrat", sans-serif;
-  font-weight: 700;
-  font-size: 1.2rem;
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
-  border: 4px solid black;
-  outline: 1px solid rgb(255, 255, 255);
-  padding: 10px 30px;
-  transition: all 300ms ease-in-out;
-  cursor: pointer;
-  background-color: #242424 !important;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content;
+    border: 4px solid black;
+    outline: 1px solid rgb(255, 255, 255);
+    padding: 10px 30px;
+    transition: all 300ms ease-in-out;
+    cursor: pointer;
+    background-color: #242424 !important;
 }
 
 .btn:hover,
 .btn:active {
-  opacity: 0.8;
-  transform: none !important;
-  border: 4px solid black !important;
+    opacity: 0.8;
+    transform: none !important;
+    border: 4px solid black !important;
 }
 
 .line {
-  height: 1px;
-  width: 140px;
-  background-color: white;
-  opacity: 0.6;
+    height: 1px;
+    width: 140px;
+    background-color: white;
+    opacity: 0.6;
 }
 
 #or-cont {
-  display: grid;
-  grid-template-columns: repeat(3, -webkit-min-content);
-  grid-template-columns: repeat(3, min-content);
-  grid-column-gap: 10px;
-  align-items: center;
+    display: grid;
+    grid-template-columns: repeat(3, -webkit-min-content);
+    grid-template-columns: repeat(3, min-content);
+    grid-column-gap: 10px;
+    align-items: center;
 }
 
 #par-alt {
-  font-family: "SF Pro", sans-serif;
-  color: white;
+    font-family: "SF Pro", sans-serif;
+    color: white;
 }
 
 #err-cont,
 #succ-cont {
-  background-color: transparent;
-  position: absolute;
-  height: 100vh;
-  width: 100vw;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    background-color: transparent;
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #err,
 #succ {
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
-  height: -webkit-min-content;
-  height: -moz-min-content;
-  height: min-content;
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content;
+    height: -webkit-min-content;
+    height: -moz-min-content;
+    height: min-content;
 }
 
 #err .reg-par,
 #succ .reg-par {
-  padding: 50px;
+    padding: 50px;
 }
 
 #err-head,
 #succ-head {
-  font-family: "Pirulen", sans-serif;
-  font-size: 2rem;
-  color: white;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+    font-family: "Pirulen", sans-serif;
+    font-size: 2rem;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .glass {
-  padding: 1.5rem;
-  background: rgba(7, 9, 73, 0.09);
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
-    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
-  -webkit-backdrop-filter: blur(130px);
-  backdrop-filter: blur(130px);
-  border-radius: 15px;
+    padding: 1.5rem;
+    background: rgba(7, 9, 73, 0.09);
+    box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+        inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+    -webkit-backdrop-filter: blur(130px);
+    backdrop-filter: blur(130px);
+    border-radius: 15px;
 }
 
 @media (max-width: 1100px) {
-  #login-head {
-    font-size: 2.9rem;
-  }
+    #login-head {
+        font-size: 2.9rem;
+    }
 
-  body {
-    grid-column-gap: 10px;
-  }
+    body {
+        grid-column-gap: 10px;
+    }
 }
 
 @media (max-width: 1000px) {
-  body {
-    grid-template-columns: 1fr;
-    grid-auto-rows: -webkit-max-content;
-    grid-auto-rows: max-content;
-  }
+    body {
+        grid-template-columns: 1fr;
+        grid-auto-rows: -webkit-max-content;
+        grid-auto-rows: max-content;
+    }
 
-  #left {
-    padding: 50px 10px;
-  }
+    #left {
+        padding: 50px 10px;
+    }
 
-  #right {
-    justify-self: center;
-    align-self: end;
-  }
+    #right {
+        justify-self: center;
+        align-self: end;
+    }
 
-  #login-head {
-    font-size: 2rem;
-    text-align: center;
-    margin: auto;
-    width: -webkit-min-content;
-    width: -moz-min-content;
-    width: min-content;
-  }
+    #login-head {
+        font-size: 2rem;
+        text-align: center;
+        margin: auto;
+        width: -webkit-min-content;
+        width: -moz-min-content;
+        width: min-content;
+    }
 
-  .login-field {
-    font-size: 1rem;
-  }
+    .login-field {
+        font-size: 1rem;
+    }
 
-  .btn {
-    font-size: 1rem;
-  }
+    .btn {
+        font-size: 1rem;
+    }
 
-  .line {
-    width: 100px;
-  }
+    .line {
+        width: 100px;
+    }
 
-  #google-logo {
-    height: 22px;
-    width: 22px;
-  }
+    #google-logo {
+        height: 22px;
+        width: 22px;
+    }
 
-  .reg-par {
-    font-size: 1rem;
-    margin: auto;
-  }
+    .reg-par {
+        font-size: 1rem;
+        margin: auto;
+    }
 
-  .login-field {
-    width: 70vw;
-  }
+    .login-field {
+        width: 70vw;
+    }
 
-  #err .reg-par,
-  #succ .reg-par {
-    padding: 10px 0;
-  }
+    #err .reg-par,
+    #succ .reg-par {
+        padding: 10px 0;
+    }
 }

@@ -1,451 +1,451 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
 
 @font-face {
-  font-family: "Pirulen";
-  src: local("Pirulen"), url("/fonts/Pirulen.otf") format("opentype");
-  font-weight: normal;
+    font-family: "Pirulen";
+    src: local("Pirulen"), url("/fonts/Pirulen.otf") format("opentype");
+    font-weight: normal;
 }
 
 @font-face {
-  font-family: "Forgotten Futurist";
-  src: local("Forgotten Futurist"),
-    url("/fonts/Forgotten Futurist.ttf") format("truetype");
-  font-weight: normal;
+    font-family: "Forgotten Futurist";
+    src: local("Forgotten Futurist"),
+        url("/fonts/Forgotten Futurist.ttf") format("truetype");
+    font-weight: normal;
 }
 
 * {
-  padding: 0;
-  margin: 0;
-  /* color: white; */
-  font-family: "Forgotten Futurist";
-  box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    /* color: white; */
+    font-family: "Forgotten Futurist";
+    box-sizing: border-box;
 }
 
 body {
-  color: white;
-  background-color: black;
-  background-image: url("/Asset/background.png");
-  background-size: cover;
+    color: white;
+    background-color: black;
+    background-image: url("/Asset/background.png");
+    background-size: cover;
 }
 
 .heading {
-  margin: 10vh 10vw;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    margin: 10vh 10vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .title {
-  font-family: "Pirulen";
-  font-size: 3.2rem;
+    font-family: "Pirulen";
+    font-size: 3.2rem;
 }
 
 .pictures {
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  gap: 9em;
-  margin-top: -2em;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    gap: 9em;
+    margin-top: -2em;
 }
 
 .pictures div {
-  width: 14em;
-  height: 14em;
-  background-color: #c4c4c4;
-  border-radius: 50%;
-  position: relative;
+    width: 14em;
+    height: 14em;
+    background-color: #c4c4c4;
+    border-radius: 50%;
+    position: relative;
 }
 
 .first {
-  position: relative;
-  border: 8px solid #fae100;
-  margin-top: 4em;
+    position: relative;
+    border: 8px solid #fae100;
+    margin-top: 4em;
 }
 
 .first::before {
-  content: url("../Asset/Vector.png");
-  position: absolute;
-  top: -65px;
-  left: 69px;
+    content: url("../Asset/Vector.png");
+    position: absolute;
+    top: -65px;
+    left: 69px;
 }
 
 .first::after {
-  position: absolute;
-  content: "1";
-  padding: 8px 18px;
-  bottom: -20px;
-  left: 84px;
-  border-radius: 50%;
-  background-color: #fae100;
-  color: black;
-  font-weight: 900;
-  font-size: 1.5rem;
+    position: absolute;
+    content: "1";
+    padding: 8px 18px;
+    bottom: -20px;
+    left: 84px;
+    border-radius: 50%;
+    background-color: #fae100;
+    color: black;
+    font-weight: 900;
+    font-size: 1.5rem;
 }
 
 .second {
-  position: relative;
-  border: 4px solid #ff0000;
-  margin-top: 10em;
+    position: relative;
+    border: 4px solid #ff0000;
+    margin-top: 10em;
 }
 
 .second::after {
-  position: absolute;
-  content: "2";
-  padding: 8px 18px;
-  bottom: -30px;
-  left: 84px;
-  border-radius: 50%;
-  background-color: #ff0000;
-  font-weight: 900;
-  font-size: 1.5rem;
+    position: absolute;
+    content: "2";
+    padding: 8px 18px;
+    bottom: -30px;
+    left: 84px;
+    border-radius: 50%;
+    background-color: #ff0000;
+    font-weight: 900;
+    font-size: 1.5rem;
 }
 
 .third {
-  position: relative;
-  margin-top: 12em;
+    position: relative;
+    margin-top: 12em;
 }
 
 .third::after {
-  position: absolute;
-  content: "3";
-  padding: 8px 18px;
-  bottom: -30px;
-  left: 84px;
-  border-radius: 50%;
-  background-color: #ffffff;
-  color: black;
-  font-weight: 900;
-  font-size: 1.5rem;
+    position: absolute;
+    content: "3";
+    padding: 8px 18px;
+    bottom: -30px;
+    left: 84px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    color: black;
+    font-weight: 900;
+    font-size: 1.5rem;
 }
 
 .pictures div div {
-  position: absolute;
-  top: 0;
-  background-color: white;
+    position: absolute;
+    top: 0;
+    background-color: white;
 }
 
 .ranks {
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  align-items: center;
-  font-size: 3em;
-  margin-top: 2em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: center;
+    font-size: 3em;
+    margin-top: 2em;
 }
 
 .ranks div div {
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
-}
-
-.ranks div {
-  display: flex;
-  width: 50%;
-  justify-content: space-between;
-}
-
-.current {
-  font-family: "Montserrat", sans-serif;
-  font-weight: 700;
-  font-size: 2rem;
-  background-color: white;
-  color: black;
-  border: 4px solid black;
-  outline-offset: 0.2em;
-  letter-spacing: 0.2rem;
-  outline: 1px solid rgb(255, 255, 255);
-  padding: 15px 40px;
-}
-
-.other {
-  background: rgba(0, 0, 0, 0.09);
-  -webkit-backdrop-filter: blur(130px);
-  backdrop-filter: blur(130px);
-  border-radius: 15px;
-  gap: 1rem;
-  font-size: 2rem;
-  letter-spacing: 0.2rem;
-  padding: 2rem 3rem;
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
-    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
-}
-
-.rules {
-  position: fixed;
-  bottom: 1%;
-  right: 2%;
-  font-size: 2em;
-}
-
-.rules a {
-  text-decoration: underline;
-  color: white;
-}
-
-#err-cont {
-  background-color: transparent;
-  position: absolute;
-  height: 100vh;
-  width: 100vw;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.reg-par {
-  font-family: "Forgotten Futurist", sans-serif;
-  word-break: break-word;
-  font-size: 1.5rem;
-  color: white;
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
-  letter-spacing: 1.2px;
-  opacity: 0.8;
-}
-
-.glass {
-  padding: 1.5rem;
-  background: rgba(7, 9, 73, 0.09);
-  box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
-    inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
-  -webkit-backdrop-filter: blur(130px);
-  backdrop-filter: blur(130px);
-  border-radius: 15px;
-}
-
-#err {
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
-  height: -webkit-min-content;
-  height: -moz-min-content;
-  height: min-content;
-}
-
-#err .reg-par {
-  padding: 50px;
-}
-
-#err-head {
-  font-family: "Pirulen", sans-serif;
-  font-size: 2rem;
-  color: white;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
-#err-head svg {
-  stroke: white;
-  fill: white;
-  height: 25px;
-  width: 25px;
-}
-
-@media (max-width: 1600px) {
-  .betNumber {
-    font-size: 7em;
-  }
-
-  .betSelect {
-    margin-left: 2em;
-  }
-}
-
-@media (max-width: 1300px) {
-  .title {
-    font-size: 2.4em;
-  }
-
-  .betNumber {
-    font-size: 4em;
-  }
-
-  .betSelect {
-    font-size: 1.2em;
-  }
-
-  .btn {
-    font-size: 0.8em;
-  }
-}
-
-@media (max-width: 900px) {
-  .heading {
-    flex-direction: column;
-  }
-
-  .pictures {
-    gap: 0;
-  }
-
-  .pictures .first {
-    width: 150px;
-    height: 150px;
-  }
-
-  .first::after {
-    left: 42px;
-  }
-
-  .first::before {
-    left: 28px;
-  }
-
-  .pictures .second {
-    width: 150px;
-    height: 150px;
-  }
-
-  .second::after {
-    left: 42px;
-  }
-
-  .pictures .third {
-    width: 150px;
-    height: 150px;
-  }
-
-  .third::after {
-    left: 42px;
-  }
-
-  .current {
-    width: 90vw;
-    padding: 10px 8px;
-    font-size: 1.3rem;
-    justify-content: space-around;
-  }
-
-  .left {
     width: -webkit-max-content;
     width: -moz-max-content;
     width: max-content;
-  }
+}
 
-  .other {
+.ranks div {
+    display: flex;
+    width: 50%;
+    justify-content: space-between;
+}
+
+.current {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    background-color: white;
+    color: black;
+    border: 4px solid black;
+    outline-offset: 0.2em;
+    letter-spacing: 0.2rem;
+    outline: 1px solid rgb(255, 255, 255);
+    padding: 15px 40px;
+}
+
+.other {
+    background: rgba(0, 0, 0, 0.09);
+    -webkit-backdrop-filter: blur(130px);
+    backdrop-filter: blur(130px);
+    border-radius: 15px;
+    gap: 1rem;
+    font-size: 2rem;
+    letter-spacing: 0.2rem;
+    padding: 2rem 3rem;
+    box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+        inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+}
+
+.rules {
+    position: fixed;
+    bottom: 1%;
+    right: 2%;
+    font-size: 2em;
+}
+
+.rules a {
+    text-decoration: underline;
+    color: white;
+}
+
+#err-cont {
+    background-color: transparent;
+    position: absolute;
+    height: 100vh;
     width: 100vw;
-    padding: 10px 8px;
-    font-size: 1.3rem;
-  }
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-  .title {
-    margin-bottom: 2em;
-    font-size: 1.7em;
-  }
+.reg-par {
+    font-family: "Forgotten Futurist", sans-serif;
+    word-break: break-word;
+    font-size: 1.5rem;
+    color: white;
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content;
+    letter-spacing: 1.2px;
+    opacity: 0.8;
+}
 
-  .stash {
-    margin-left: -2em;
-  }
+.glass {
+    padding: 1.5rem;
+    background: rgba(7, 9, 73, 0.09);
+    box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+        inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+    -webkit-backdrop-filter: blur(130px);
+    backdrop-filter: blur(130px);
+    border-radius: 15px;
+}
 
-  .content {
-    flex-direction: column-reverse;
-    margin-top: 5em;
-  }
+#err {
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content;
+    height: -webkit-min-content;
+    height: -moz-min-content;
+    height: min-content;
+}
 
-  .sliderHere {
-    width: 150%;
-  }
+#err .reg-par {
+    padding: 50px;
+}
 
-  .number {
-    width: 100%;
-    margin-left: -1em;
-    font-size: 0.8em;
-  }
+#err-head {
+    font-family: "Pirulen", sans-serif;
+    font-size: 2rem;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
 
-  .end1 {
-    width: 15px;
-    height: 15px;
-    top: 0.8em;
-  }
+#err-head svg {
+    stroke: white;
+    fill: white;
+    height: 25px;
+    width: 25px;
+}
 
-  .end2 {
-    width: 15px;
-    height: 15px;
-    top: 0.8em;
-  }
+@media (max-width: 1600px) {
+    .betNumber {
+        font-size: 7em;
+    }
 
-  .desc {
-    margin-left: -6em;
-  }
+    .betSelect {
+        margin-left: 2em;
+    }
+}
 
-  .betSelect {
-    margin-left: -1em;
-    font-size: 0.9em;
-  }
+@media (max-width: 1300px) {
+    .title {
+        font-size: 2.4em;
+    }
 
-  .ranks div {
-    width: 80%;
-  }
+    .betNumber {
+        font-size: 4em;
+    }
 
-  .rules {
-    display: none;
-  }
+    .betSelect {
+        font-size: 1.2em;
+    }
 
-  .current {
-    padding: 1em;
-  }
+    .btn {
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 900px) {
+    .heading {
+        flex-direction: column;
+    }
+
+    .pictures {
+        gap: 0;
+    }
+
+    .pictures .first {
+        width: 150px;
+        height: 150px;
+    }
+
+    .first::after {
+        left: 42px;
+    }
+
+    .first::before {
+        left: 28px;
+    }
+
+    .pictures .second {
+        width: 150px;
+        height: 150px;
+    }
+
+    .second::after {
+        left: 42px;
+    }
+
+    .pictures .third {
+        width: 150px;
+        height: 150px;
+    }
+
+    .third::after {
+        left: 42px;
+    }
+
+    .current {
+        width: 90vw;
+        padding: 10px 8px;
+        font-size: 1.3rem;
+        justify-content: space-around;
+    }
+
+    .left {
+        width: -webkit-max-content;
+        width: -moz-max-content;
+        width: max-content;
+    }
+
+    .other {
+        width: 100vw;
+        padding: 10px 8px;
+        font-size: 1.3rem;
+    }
+
+    .title {
+        margin-bottom: 2em;
+        font-size: 1.7em;
+    }
+
+    .stash {
+        margin-left: -2em;
+    }
+
+    .content {
+        flex-direction: column-reverse;
+        margin-top: 5em;
+    }
+
+    .sliderHere {
+        width: 150%;
+    }
+
+    .number {
+        width: 100%;
+        margin-left: -1em;
+        font-size: 0.8em;
+    }
+
+    .end1 {
+        width: 15px;
+        height: 15px;
+        top: 0.8em;
+    }
+
+    .end2 {
+        width: 15px;
+        height: 15px;
+        top: 0.8em;
+    }
+
+    .desc {
+        margin-left: -6em;
+    }
+
+    .betSelect {
+        margin-left: -1em;
+        font-size: 0.9em;
+    }
+
+    .ranks div {
+        width: 80%;
+    }
+
+    .rules {
+        display: none;
+    }
+
+    .current {
+        padding: 1em;
+    }
 }
 
 @media (max-width: 900px) and (max-width: 450px) {
-  .pictures .first {
-    width: 100px;
-    height: 100px;
-  }
+    .pictures .first {
+        width: 100px;
+        height: 100px;
+    }
 
-  .first::after {
-    left: 24px;
-  }
+    .first::after {
+        left: 24px;
+    }
 
-  .first::before {
-    left: 8px;
-  }
+    .first::before {
+        left: 8px;
+    }
 
-  .ranks {
-    gap: 0.4em;
-  }
+    .ranks {
+        gap: 0.4em;
+    }
 
-  .pictures .second {
-    width: 100px;
-    height: 100px;
-  }
+    .pictures .second {
+        width: 100px;
+        height: 100px;
+    }
 
-  .second::after {
-    left: 24px;
-  }
+    .second::after {
+        left: 24px;
+    }
 
-  .pictures .third {
-    width: 100px;
-    height: 100px;
-  }
+    .pictures .third {
+        width: 100px;
+        height: 100px;
+    }
 
-  .third::after {
-    left: 24px;
-    /* font-size: 0.4em; */
-  }
+    .third::after {
+        left: 24px;
+        /* font-size: 0.4em; */
+    }
 
-  .current {
-    margin-bottom: 1.5em;
-  }
+    .current {
+        margin-bottom: 1.5em;
+    }
 }
 
 @media (max-width: 900px) {
-  .reg-par {
-    font-size: 1rem;
-    margin: auto;
-  }
+    .reg-par {
+        font-size: 1rem;
+        margin: auto;
+    }
 }
 
 @media (max-width: 900px) {
-  #err .reg-par {
-    padding: 10px 0;
-  }
+    #err .reg-par {
+        padding: 10px 0;
+    }
 }
 /*# sourceMappingURL=leader.css.map */

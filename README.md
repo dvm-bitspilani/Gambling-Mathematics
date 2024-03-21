@@ -11,16 +11,16 @@ The game involved users selecting a category and placing a bet on whether they w
 The project was built using ReactJS and integrates with backend-fetched randomised data through APIs provided. <br />
 The file structure of the project is as follows:
 
-- `public`: This directory contains the public assets of the project.
-- `src`: This directory contains the source code of the project.
-- `.gitignore`: This file specifies files and directories that should be ignored by Git.
-- `.prettierrc.json`: This file specifies the Prettier configuration.
-- `README.md`: This file contains the information about the project.
-- `index.html`: This file is the entry point for the ReactJS application.
-- `package-lock.json`: This file specifies the exact version of each installed npm package.
-- `package.json`: This file contains the metadata of the project and lists the dependencies.
-- `vite.config.js`: This file contains the configuration for the Vite build tool.
-- `yarn.lock`: This file specifies the exact version of each installed Yarn package.
+-   `public`: This directory contains the public assets of the project.
+-   `src`: This directory contains the source code of the project.
+-   `.gitignore`: This file specifies files and directories that should be ignored by Git.
+-   `.prettierrc.json`: This file specifies the Prettier configuration.
+-   `README.md`: This file contains the information about the project.
+-   `index.html`: This file is the entry point for the ReactJS application.
+-   `package-lock.json`: This file specifies the exact version of each installed npm package.
+-   `package.json`: This file contains the metadata of the project and lists the dependencies.
+-   `vite.config.js`: This file contains the configuration for the Vite build tool.
+-   `yarn.lock`: This file specifies the exact version of each installed Yarn package.
 
 ## Workflow
 
