@@ -1,70 +1,49 @@
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
+import "./styles/login.css";
+import URL from "./urls";
 import axios from "axios";
-import "./style/login.css";
 import { useNavigate } from "react-router-dom";
-import GlobalContext from "./contexts/GlobalContext";
-import baseURL from "./baseURL";
+import { useUser } from "./contexts/UserContext";
 import { useTitle } from "./utils/UseTitle";
+import Alert from "./components/Alert";
 
 function App() {
     useTitle("Login");
 
     const navigate = useNavigate();
-    const { setUser } = useContext(GlobalContext);
+    const { updateUser } = useUser();
 
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
 
-    useEffect(() => {
-        const dismissError = () => {
-            if (error) setTimeout(() => setError(false), 1400);
-        };
-        const dismissSuccess = () => {
-            if (success) {
-                setTimeout(() => {
-                    setSuccess(false);
-                    navigate("/instructions");
-                }, 1400);
-            }
-        };
-        dismissError();
-        dismissSuccess();
-    }, [error, success, navigate]);
-
     const handleSubmit = e => {
         e.preventDefault();
+
+        if (!e || !e.target || !e.target.username || !e.target.password) {
+            setError(true);
+            return;
+        }
+
+        const { username, password } = e.target;
+
         axios({
-            method: "post",
-            url: `${baseURL.BASE}/login`,
-            data: {
-                username: e.target.username.value,
-                password: e.target.password.value
-            }
+            method: "POST",
+            url: `${URL.API_BASE}${URL.API_LOGIN}`,
+            data: { username: username.value, password: password.value }
         })
             .then(res => {
-                if (res.data.message === "login") {
+                const { message, name, points, token } = res.data;
+
+                if (message === "login") {
                     setSuccess(true);
-                    setUser({
-                        name: res.data.name,
-                        points: res.data.points,
-                        token: res.data.token,
-                        category: null
-                    });
-                    localStorage.setItem(
-                        "user",
-                        JSON.stringify({
-                            name: res.data.name,
-                            points: res.data.points,
-                            token: res.data.token,
-                            category: null
-                        })
-                    );
-                } else {
-                    setError(true);
-                }
+                    updateUser({ name, points, token });
+
+                    setTimeout(() => navigate(URL.INSTRUCTIONS), 2000);
+                } else setError(true);
             })
-            .catch(() => {
+            .catch(err => {
                 setError(true);
+                console.error(err);
             });
     };
 
@@ -103,24 +82,19 @@ function App() {
                 </form>
             </div>
 
-            <div id="err-cont" style={{ display: error ? "flex" : "none" }}>
-                <div id="err" className="glass">
-                    <div id="err-head">ERROR</div>
-                    <div className="reg-par">
-                        Your credentials could not be verified. Please try
-                        again.
-                    </div>
-                </div>
-            </div>
+            <Alert
+                isOpen={error}
+                setIsOpen={setError}
+                title="ERROR"
+                message="An error occurred. Please try again."
+            />
 
-            <div id="succ-cont" style={{ display: success ? "flex" : "none" }}>
-                <div id="succ" className="glass">
-                    <div id="succ-head">SUCCESS</div>
-                    <div className="reg-par">
-                        Login successful. You will be redirected to the game.
-                    </div>
-                </div>
-            </div>
+            <Alert
+                isOpen={success}
+                setIsOpen={setSuccess}
+                title="SUCCESS"
+                message="Login successful. Redirecting you to the game."
+            />
         </div>
     );
 }

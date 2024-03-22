@@ -1,6 +1,6 @@
 # Gambling Mathematics
 
-This project was developed by the Department of Visual Media (DVM) for the APOGEE 2023 Technical Fest of BITS Pilani. It was used for a Math-based quiz conducted by the Mathematics Association.
+This project was developed by the Department of Visual Media (DVM) for the APOGEE 2024 Technical Fest of BITS Pilani. It was used for a Math-based quiz conducted by the Mathematics Association.
 
 ## Overview
 

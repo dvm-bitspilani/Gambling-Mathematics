@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
-import "../style/login.css";
-import GlobalContext from "../contexts/GlobalContext";
+import "../styles/login.css";
+import UserContext from "../contexts/UserContext";
 import { useTitle } from "../utils/UseTitle";
 
 const Finished = () => {
     useTitle("Game Finished");
 
-    const { user } = useContext(GlobalContext);
+    const { user } = useContext(UserContext);
 
     const finalPoints =
         user.points ?? JSON.parse(localStorage.user).points ?? "N/A";

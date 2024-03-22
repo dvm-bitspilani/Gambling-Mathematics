@@ -1,16 +1,16 @@
 import axios from "axios";
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import GlobalContext from "../contexts/GlobalContext";
-import "../style/select.css";
-import baseURL from "../baseURL";
+import UserContext from "../contexts/UserContext";
+import "../styles/select.css";
+import baseURL from "../urls";
 import { useTitle } from "../utils/UseTitle";
 
 const Select = () => {
     useTitle("Place Your Bet");
 
     const navigate = useNavigate();
-    const { user, setUser } = useContext(GlobalContext);
+    const { user, setUser } = useContext(UserContext);
 
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
@@ -34,7 +34,7 @@ const Select = () => {
                     setError(
                         "Your points are not enough to place more bets. Redirecting you to the results page."
                     );
-                    setTimeout(() => navigate("/finished"), 600);
+                    setTimeout(() => navigate(URL.FINISHED), 600);
                 }
             })
             .catch(err => {
@@ -142,7 +142,7 @@ const Select = () => {
                             className="btns"
                             onClick={() => {
                                 setError(null);
-                                maxPoints < 200 && navigate("/finished");
+                                maxPoints < 200 && navigate(URL.FINISHED);
                             }}
                         >
                             Continue

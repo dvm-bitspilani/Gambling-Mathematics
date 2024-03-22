@@ -1,9 +1,9 @@
 import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import GlobalContext from "../contexts/GlobalContext";
-import "../style/question.css";
+import UserContext from "../contexts/UserContext";
+import "../styles/question.css";
 import { useNavigate } from "react-router-dom";
-import baseURL from "../baseURL";
+import baseURL from "../urls";
 import { useTitle } from "../utils/UseTitle";
 
 const Question = () => {
@@ -12,7 +12,7 @@ const Question = () => {
     const Ref = useRef(null);
     const navigate = useNavigate();
 
-    const { user, setUser } = useContext(GlobalContext);
+    const { user, setUser } = useContext(UserContext);
     const [timer, setTimer] = useState("00:00:00");
 
     const [ques, setQues] = useState({
@@ -48,7 +48,7 @@ const Question = () => {
 
         if (total <= 0) {
             axios({
-                method: "post",
+                method: "POST",
                 url: `${baseURL.BASE}/answer`,
                 headers: {
                     Authorization: `Bearer ${
@@ -97,7 +97,7 @@ const Question = () => {
 
     useEffect(() => {
         axios({
-            method: "get",
+            method: "GET",
             url: `${baseURL.BASE}/get_question`,
             headers: {
                 Authorization: `Bearer ${
@@ -161,7 +161,7 @@ const Question = () => {
                                 className="answer glass"
                                 onClick={() => {
                                     axios({
-                                        method: "post",
+                                        method: "POST",
                                         url: `${baseURL.BASE}/answer`,
                                         headers: {
                                             Authorization: `Bearer ${
