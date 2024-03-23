@@ -1,7 +1,13 @@
 import { useEffect } from "react";
 
-export const useTitle = title => {
+const defaultTitle = "Gambling Maths";
+
+const useTitle = (title = "") => {
     useEffect(() => {
-        document.title = `Gambling Maths | ${title}`;
+        document.title = title ? `${defaultTitle} | ${title}` : defaultTitle;
+
+        return () => (document.title = defaultTitle);
     }, [title]);
 };
+
+export default useTitle;

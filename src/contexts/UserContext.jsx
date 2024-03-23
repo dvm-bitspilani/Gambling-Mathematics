@@ -6,18 +6,30 @@ const initUser = { name: null, points: null, token: null, category: null };
 const UserContext = createContext();
 
 export const useUser = () => {
-    const { user, updateUser } = useContext(UserContext);
-    return { user, updateUser };
+    const context = useContext(UserContext);
+    if (!context) {
+        throw new Error("useUser must be used within a UserContextProvider");
+    }
+    return context;
 };
 
 const UserContextProvider = ({ children }) => {
     const [user, setUser] = useState(() => {
-        const storedUser = JSON.parse(Cookies.get("gm_user"));
-        return storedUser || initUser;
+        try {
+            const storedUserCookie = Cookies.get("gm_user");
+            return storedUserCookie ? JSON.parse(storedUserCookie) : initUser;
+        } catch (error) {
+            console.error("Error retrieving user from cookies:", error);
+            return initUser;
+        }
     });
 
     useEffect(() => {
-        Cookies.set("gm_user", JSON.stringify(user), { expires: 365 });
+        try {
+            Cookies.set("gm_user", JSON.stringify(user), { expires: 365 });
+        } catch (error) {
+            console.error("Error setting user cookie:", error);
+        }
     }, [user]);
 
     const updateUser = newData => {

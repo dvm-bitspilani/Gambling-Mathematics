@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles/login.css";
 import URL from "./urls";
 import axios from "axios";
@@ -11,40 +11,52 @@ function App() {
     useTitle("Login");
 
     const navigate = useNavigate();
-    const { updateUser } = useUser();
+    const { user, updateUser } = useUser();
 
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
 
+    useEffect(() => {
+        if (user.token) {
+            navigate(URL.INSTRUCTIONS);
+        }
+    }, [user, navigate]);
+
     const handleSubmit = e => {
         e.preventDefault();
 
-        if (!e || !e.target || !e.target.username || !e.target.password) {
+        const { username, password } = e.target;
+
+        if (!username.value || !password.value) {
             setError(true);
             return;
         }
-
-        const { username, password } = e.target;
 
         axios({
             method: "POST",
             url: `${URL.API_BASE}${URL.API_LOGIN}`,
             data: { username: username.value, password: password.value }
         })
-            .then(res => {
-                const { message, name, points, token } = res.data;
+            .then(handleLoginSuccess)
+            .catch(handleLoginError);
+    };
 
-                if (message === "login") {
-                    setSuccess(true);
-                    updateUser({ name, points, token });
+    const handleLoginSuccess = res => {
+        const { message, name, points, token } = res.data;
 
-                    setTimeout(() => navigate(URL.INSTRUCTIONS), 2000);
-                } else setError(true);
-            })
-            .catch(err => {
-                setError(true);
-                console.error(err);
-            });
+        if (message === "login") {
+            setSuccess(true);
+            updateUser({ name, points, token });
+
+            setTimeout(() => navigate(URL.INSTRUCTIONS), 2000);
+        } else {
+            setError(true);
+        }
+    };
+
+    const handleLoginError = err => {
+        setError(true);
+        console.error(err);
     };
 
     return (
