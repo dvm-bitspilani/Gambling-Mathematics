@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../contexts/UserContext";
 import "../styles/categories.css";
@@ -99,8 +99,6 @@ const Categories = () => {
                 setIsOpen={setSuccess}
                 title="SUCCESS"
                 message="Congratulations! You have completed all the categories and hence the game."
-                buttonText="Continue"
-                onClick={() => navigate("/question")}
             />
         </div>
     );

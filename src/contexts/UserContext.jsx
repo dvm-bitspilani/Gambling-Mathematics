@@ -1,11 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
+import Cookies from "js-cookie";
 
-const initUser = {
-    name: null,
-    points: null,
-    token: null,
-    category: null
-};
+const initUser = { name: null, points: null, token: null, category: null };
 
 const UserContext = createContext();
 
@@ -16,12 +12,12 @@ export const useUser = () => {
 
 const UserContextProvider = ({ children }) => {
     const [user, setUser] = useState(() => {
-        const storedUser = JSON.parse(localStorage.getItem("gm_user"));
+        const storedUser = JSON.parse(Cookies.get("gm_user"));
         return storedUser || initUser;
     });
 
     useEffect(() => {
-        localStorage.setItem("gm_user", JSON.stringify(user));
+        Cookies.set("gm_user", JSON.stringify(user), { expires: 365 });
     }, [user]);
 
     const updateUser = newData => {
