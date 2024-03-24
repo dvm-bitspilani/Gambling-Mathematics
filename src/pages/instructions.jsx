@@ -4,8 +4,10 @@ import rules from "../assets/rules.png";
 import "../styles/categories.css";
 import { useTitle } from "../utils/UseTitle";
 import URL from "../urls";
+import { useVerifyAuth } from "../utils/useAuth";
 
 const Instructions = () => {
+    useVerifyAuth();
     useTitle("General Instructions");
 
     const navigate = useNavigate();

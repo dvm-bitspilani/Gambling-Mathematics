@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./styles/login.css";
 import URL from "./urls";
 import axios from "axios";
@@ -6,21 +6,17 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "./contexts/UserContext";
 import { useTitle } from "./utils/UseTitle";
 import Alert from "./components/Alert";
+import { useAuthRedirect } from "./utils/useAuth";
 
 function App() {
+    useAuthRedirect();
     useTitle("Login");
 
     const navigate = useNavigate();
-    const { user, updateUser } = useUser();
+    const { updateUser } = useUser();
 
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
-
-    useEffect(() => {
-        if (user.token) {
-            navigate(URL.INSTRUCTIONS);
-        }
-    }, [user, navigate]);
 
     const handleSubmit = e => {
         e.preventDefault();
