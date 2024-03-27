@@ -10,4 +10,4 @@ const useTitle = (title = "") => {
     }, [title]);
 };
 
-export default useTitle;
+export { useTitle };

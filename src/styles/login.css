@@ -181,7 +181,8 @@ body {
 .glass {
     padding: 1.5rem;
     background: rgba(7, 9, 73, 0.09);
-    box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+    box-shadow:
+        inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
         inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
     -webkit-backdrop-filter: blur(130px);
     backdrop-filter: blur(130px);

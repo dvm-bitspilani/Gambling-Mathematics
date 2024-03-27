@@ -1,12 +1,15 @@
 @font-face {
     font-family: "Pirulen";
-    src: local("Pirulen"), url("../fonts/Pirulen.otf") format("opentype");
+    src:
+        local("Pirulen"),
+        url("../fonts/Pirulen.otf") format("opentype");
     font-weight: normal;
 }
 
 @font-face {
     font-family: "Forgotten Futurist";
-    src: local("Forgotten Futurist"),
+    src:
+        local("Forgotten Futurist"),
         url("../fonts/Forgotten Futurist.ttf") format("truetype");
     font-weight: normal;
 }
@@ -46,7 +49,8 @@ body {
     display: flex;
     gap: 1rem;
     padding: 1rem 2rem;
-    box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+    box-shadow:
+        inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
         inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
 }
 
@@ -77,7 +81,8 @@ body {
     text-align: center;
     padding: 1.4rem;
     background: rgba(7, 9, 73, 0.09);
-    box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+    box-shadow:
+        inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
         inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
     -webkit-backdrop-filter: blur(130px);
     backdrop-filter: blur(130px);
@@ -119,7 +124,8 @@ body {
 .glass {
     padding: 1.5rem;
     background: rgba(7, 9, 73, 0.09);
-    box-shadow: inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+    box-shadow:
+        inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
         inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
     -webkit-backdrop-filter: blur(130px);
     backdrop-filter: blur(130px);

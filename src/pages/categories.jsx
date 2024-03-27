@@ -2,70 +2,92 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../contexts/UserContext";
 import "../styles/categories.css";
-import { useTitle } from "../utils/UseTitle";
-import URL from "../urls";
+import { useTitle } from "../utils/useDocument";
 import axios from "axios";
 import Alert from "../components/Alert";
+import { useURL } from "../utils/useData";
 
 const Categories = () => {
     useTitle("View Your Categories");
 
+    const URL = useURL();
     const navigate = useNavigate();
     const { user, updateUser } = useUser();
 
-    const [error, setError] = useState(false);
-    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState({ status: false, message: "" });
+    const [success, setSuccess] = useState({ status: false, message: "" });
     const [categories, setCategories] = useState({ all: [], shown: [] });
 
     useEffect(() => {
-        axios({
-            method: "GET",
-            url: `${URL.API_BASE}${URL.CATEGORY}`,
-            headers: { Authorization: `Bearer ${user.token}` }
-        })
-            .then(res => {
-                const { completed_categories, all_categories } = res.data;
-
-                const completed_ids = completed_categories.map(cat => cat.id);
-
-                const return_value = all_categories.filter(
-                    cat => !completed_ids.includes(cat.id)
+        const fetchCategories = async () => {
+            try {
+                const res = await axios.get(
+                    `${URL.API_BASE}${URL.API_CATEGORY}`,
+                    {
+                        headers: { Authorization: `Bearer ${user.token}` }
+                    }
                 );
 
-                if (return_value.length === 0) {
-                    setSuccess(true);
+                const { completed_categories: done, all_categories: all } =
+                    res.data;
+
+                const completed = done ? done.map(cat => cat.id) : [];
+
+                const visible = all
+                    ? all.filter(cat => !completed.includes(cat.id))
+                    : [];
+
+                if (visible.length === 0) {
+                    setSuccess({
+                        status: true,
+                        message:
+                            "All categories completed! Redirecting you to finish."
+                    });
 
                     setTimeout(() => navigate(URL.FINISHED), 2000);
                 } else {
                     setCategories({
-                        all: res.data.all_categories,
-                        shown: return_value
+                        all: all,
+                        shown: visible
                     });
                 }
-            })
-            .catch(err => {
-                setError(true);
+            } catch (err) {
+                setError({
+                    status: true,
+                    message: "Failed to fetch categories. Refresh the page."
+                });
                 console.error(err);
-            });
-    }, [user.token]);
+            }
+        };
 
-    const locate = async cat => {
-        await axios({
-            method: "POST",
-            url: `${URL.BASE}${URL.CATEGORY}`,
-            data: { category: cat.name },
-            headers: { Authorization: `Bearer ${user.token}` }
-        })
-            .then(res => {
-                console.log(res);
-            })
-            .catch(err => {
-                setError(true);
-                console.error(err);
+        fetchCategories();
+    }, [user.token, URL.API_BASE, URL.API_CATEGORY, navigate]);
+
+    const locateCategory = async cat => {
+        try {
+            await axios.post(
+                `${URL.API_BASE}${URL.API_CATEGORY}`,
+                { category: cat.name },
+                {
+                    headers: { Authorization: `Bearer ${user.token}` }
+                }
+            );
+
+            updateUser({ category: cat.id });
+
+            setSuccess({
+                status: true,
+                message: `Selected ${cat.name}. Redirecting you to the questions.`
             });
 
-        updateUser({ category: cat.id });
-        navigate(URL.SELECT);
+            setTimeout(() => navigate(URL.QUESTION), 600);
+        } catch (err) {
+            setError({
+                status: true,
+                message: "Failed to find this category. Try again."
+            });
+            console.error(err);
+        }
     };
 
     return (
@@ -81,7 +103,7 @@ const Categories = () => {
                         <div
                             key={cat.id}
                             className="category"
-                            onClick={() => locate(cat)}
+                            onClick={() => locateCategory(cat)}
                         >
                             {cat.name}
                         </div>
@@ -89,16 +111,16 @@ const Categories = () => {
                 </div>
             </div>
             <Alert
-                isOpen={error}
-                setIsOpen={setError}
+                isOpen={error.status}
+                setIsOpen={value => setError({ status: value, message: "" })}
                 title="ERROR"
-                message="An error occurred while fetching categories. Please try again later."
+                message={error.message}
             />
             <Alert
-                isOpen={success}
-                setIsOpen={setSuccess}
+                isOpen={success.status}
+                setIsOpen={value => setSuccess({ status: value, message: "" })}
                 title="SUCCESS"
-                message="Congratulations! You have completed all the categories and hence the game."
+                message={success.message}
             />
         </div>
     );

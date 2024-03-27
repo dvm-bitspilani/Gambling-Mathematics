@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import "../styles/login.css";
 import UserContext from "../contexts/UserContext";
-import { useTitle } from "../utils/UseTitle";
+import { useTitle } from "../utils/useDocument";
 
 const Finished = () => {
     useTitle("Game Finished");

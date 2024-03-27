@@ -1,6 +1,5 @@
 import React from "react";
 import { Routes, BrowserRouter as Router, Route } from "react-router-dom";
-import URL from "./urls";
 
 import App from "./App";
 import Instructions from "./pages/instructions";
@@ -8,8 +7,11 @@ import Select from "./pages/select";
 import Categories from "./pages/categories";
 import Question from "./pages/question";
 import Finished from "./pages/finished";
+import { useURL } from "./utils/useData";
 
 const AppRoutes = () => {
+    const URL = useURL();
+
     return (
         <Router basename={URL.HOME}>
             <Routes>

@@ -3,15 +3,16 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import UserContext from "../contexts/UserContext";
 import "../styles/question.css";
 import { useNavigate } from "react-router-dom";
-import baseURL from "../urls";
-import { useTitle } from "../utils/UseTitle";
+import { useTitle } from "../utils/useDocument";
+import { useURL } from "../utils/useData";
 
 const Question = () => {
     useTitle("Answer Your Question");
 
-    const Ref = useRef(null);
+    const URL = useURL();
     const navigate = useNavigate();
 
+    const Ref = useRef(null);
     const { user, setUser } = useContext(UserContext);
     const [timer, setTimer] = useState("00:00:00");
 
@@ -49,7 +50,7 @@ const Question = () => {
         if (total <= 0) {
             axios({
                 method: "POST",
-                url: `${baseURL.BASE}/answer`,
+                url: `${URL.BASE}/answer`,
                 headers: {
                     Authorization: `Bearer ${
                         user.token ?? JSON.parse(localStorage.user).token
@@ -98,7 +99,7 @@ const Question = () => {
     useEffect(() => {
         axios({
             method: "GET",
-            url: `${baseURL.BASE}/get_question`,
+            url: `${URL.BASE}/get_question`,
             headers: {
                 Authorization: `Bearer ${
                     user.token ?? JSON.parse(localStorage.user).token
@@ -162,7 +163,7 @@ const Question = () => {
                                 onClick={() => {
                                     axios({
                                         method: "POST",
-                                        url: `${baseURL.BASE}/answer`,
+                                        url: `${URL.BASE}/answer`,
                                         headers: {
                                             Authorization: `Bearer ${
                                                 user.token ??

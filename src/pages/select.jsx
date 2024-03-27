@@ -3,12 +3,13 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../contexts/UserContext";
 import "../styles/select.css";
-import baseURL from "../urls";
-import { useTitle } from "../utils/UseTitle";
+import { useTitle } from "../utils/useDocument";
+import { useURL } from "../utils/useData";
 
 const Select = () => {
     useTitle("Place Your Bet");
 
+    const URL = useURL();
     const navigate = useNavigate();
     const { user, setUser } = useContext(UserContext);
 
@@ -19,7 +20,7 @@ const Select = () => {
 
     useEffect(() => {
         axios
-            .get(`${baseURL.BASE}/get_max_bet`, {
+            .get(`${URL.BASE}/get_max_bet`, {
                 headers: {
                     Authorization: `Bearer ${
                         user.token ?? JSON.parse(localStorage.user).token
@@ -51,7 +52,7 @@ const Select = () => {
         } else {
             axios
                 .post(
-                    `${baseURL.BASE}/place_bet/${user.category}`,
+                    `${URL.BASE}/place_bet/${user.category}`,
                     { bet: bet },
                     {
                         headers: {

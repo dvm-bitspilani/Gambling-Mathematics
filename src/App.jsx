@@ -1,57 +1,72 @@
 import React, { useState } from "react";
 import "./styles/login.css";
-import URL from "./urls";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "./contexts/UserContext";
-import { useTitle } from "./utils/UseTitle";
+import { useTitle } from "./utils/useDocument";
 import Alert from "./components/Alert";
-import { useAuthRedirect } from "./utils/useAuth";
+import { useRedirect } from "./utils/useAuth";
+import { useURL } from "./utils/useData";
 
 function App() {
-    useAuthRedirect();
+    useRedirect();
     useTitle("Login");
 
+    const URL = useURL();
     const navigate = useNavigate();
     const { updateUser } = useUser();
 
-    const [error, setError] = useState(false);
-    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState({ status: false, message: "" });
+    const [success, setSuccess] = useState({ status: false, message: "" });
 
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
         e.preventDefault();
 
         const { username, password } = e.target;
 
         if (!username.value || !password.value) {
-            setError(true);
+            setError({
+                status: true,
+                message: "Login failed. Please fill all the fields."
+            });
             return;
         }
 
-        axios({
-            method: "POST",
-            url: `${URL.API_BASE}${URL.API_LOGIN}`,
-            data: { username: username.value, password: password.value }
-        })
-            .then(handleLoginSuccess)
-            .catch(handleLoginError);
+        try {
+            const res = await axios.post(`${URL.API_BASE}${URL.API_LOGIN}`, {
+                username: username.value,
+                password: password.value
+            });
+            handleLoginSuccess(res.data);
+        } catch (err) {
+            handleLoginError(err);
+        }
     };
 
-    const handleLoginSuccess = res => {
-        const { message, name, points, token } = res.data;
+    const handleLoginSuccess = data => {
+        const { message, name, points, token } = data;
 
         if (message === "login") {
-            setSuccess(true);
+            setSuccess({
+                status: true,
+                message: "Login successful. Redirecting you to instructions."
+            });
             updateUser({ name, points, token });
 
             setTimeout(() => navigate(URL.INSTRUCTIONS), 2000);
         } else {
-            setError(true);
+            setError({
+                status: true,
+                message: "Login failed. Invalid credentials."
+            });
         }
     };
 
     const handleLoginError = err => {
-        setError(true);
+        setError({
+            status: true,
+            message: "Login failed. Please try again later."
+        });
         console.error(err);
     };
 
@@ -91,17 +106,17 @@ function App() {
             </div>
 
             <Alert
-                isOpen={error}
-                setIsOpen={setError}
+                isOpen={error.status}
+                setIsOpen={value => setError({ status: value, message: "" })}
                 title="ERROR"
-                message="An error occurred. Please try again."
+                message={error.message}
             />
 
             <Alert
-                isOpen={success}
-                setIsOpen={setSuccess}
+                isOpen={success.status}
+                setIsOpen={value => setSuccess({ status: value, message: "" })}
                 title="SUCCESS"
-                message="Login successful. Redirecting you to the game."
+                message={success.message}
             />
         </div>
     );
