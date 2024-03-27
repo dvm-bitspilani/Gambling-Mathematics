@@ -1,90 +1,92 @@
-import axios from "axios";
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import UserContext from "../contexts/UserContext";
 import "../styles/select.css";
 import { useTitle } from "../utils/useDocument";
 import { useURL } from "../utils/useData";
+import useAlert from "../utils/useAlert";
+import useFetch from "../utils/useFetch";
+import { useUser } from "../contexts/UserContext";
+import { useVerifyAuth } from "../utils/useAuth";
 
 const Select = () => {
+    useVerifyAuth();
     useTitle("Place Your Bet");
 
     const URL = useURL();
     const navigate = useNavigate();
-    const { user, setUser } = useContext(UserContext);
+    const { user, updateUser } = useUser();
+    const { setErrorText, setSuccessText } = useAlert();
 
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(false);
-    const [maxPoints, setMaxPoints] = useState(0);
     const [bet, setBet] = useState(200);
+    const [maxPoints, setMaxPoints] = useState(0);
 
     useEffect(() => {
-        axios
-            .get(`${URL.BASE}/get_max_bet`, {
-                headers: {
-                    Authorization: `Bearer ${
-                        user.token ?? JSON.parse(localStorage.user).token
-                    }`
-                }
-            })
-            .then(res => {
-                const POINTS = parseInt(res.data.max_bet);
-                setMaxPoints(POINTS);
+        const fetchData = async () => {
+            try {
+                const { data, error } = await useFetch(
+                    `${URL.API_BASE}${URL.API_MAX_BET}`,
+                    "get",
+                    null,
+                    { Authorization: `Bearer ${user.token}` }
+                );
 
-                if (POINTS < 200) {
-                    setError(
+                if (error) {
+                    setErrorText(
+                        "An error occurred while fetching maximum bet."
+                    );
+                    console.error("Error fetching max bet:", error);
+                    return;
+                }
+
+                const points = parseInt(data.max_bet);
+                setMaxPoints(points);
+
+                if (points < 200) {
+                    setErrorText(
                         "Your points are not enough to place more bets. Redirecting you to the results page."
                     );
-                    setTimeout(() => navigate(URL.FINISHED), 600);
+                    setTimeout(() => navigate(URL.FINISHED), 1200);
                 }
-            })
-            .catch(err => {
+            } catch (err) {
+                setErrorText("An error occurred while fetching maximum bet.");
                 console.error("Error fetching max bet:", err);
-                setError("An error occurred while fetching maximum bet.");
-            });
-    }, []);
+            }
+        };
 
-    const handleBetSelection = () => {
-        if (bet > maxPoints) {
-            setError(
-                `An error occurred while placing your bet. Please try again with a bet of ${maxPoints} points or less`
+        fetchData();
+    }, [URL.API_BASE, URL.API_MAX_BET, user.token, setErrorText, navigate]);
+
+    const handleBetSelection = async () => {
+        try {
+            if (bet > maxPoints) {
+                setErrorText(
+                    `An error occurred while placing your bet. Please try again with a bet of ${maxPoints} points or less`
+                );
+                return;
+            }
+
+            const { data, error } = await useFetch(
+                `${URL.API_BASE}${URL.API_PLACE_BET}/${user.category}`,
+                "post",
+                { bet: bet },
+                { Authorization: `Bearer ${user.token}` }
             );
-        } else {
-            axios
-                .post(
-                    `${URL.BASE}/place_bet/${user.category}`,
-                    { bet: bet },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${
-                                user.token ??
-                                JSON.parse(localStorage.user).token
-                            }`
-                        }
-                    }
-                )
-                .then(res => {
-                    setUser({ ...user, points: res.data.points });
-                    localStorage.setItem(
-                        "user",
-                        JSON.stringify({ ...user, points: res.data.points })
-                    );
-                    setSuccess(true);
-                    setTimeout(() => navigate("/question"), 600);
-                })
-                .catch(err => {
-                    if (err.response.status === 400) {
-                        setError(
-                            "An error occurred while placing your bet. Please try again with a bet of 200 points or more"
-                        );
-                    }
-                    if (err.response.status === 403) {
-                        setError(
-                            "Current active category is not your selected category. Redirecting you to the categories."
-                        );
-                        setTimeout(() => navigate("/categories"), 600);
-                    }
-                });
+
+            if (error) {
+                setErrorText(
+                    "An error occurred while placing your bet. Please try again."
+                );
+                return;
+            }
+
+            updateUser({ points: data.points });
+            setSuccessText(
+                "Your bet has been placed successfully. You will be redirected to the questions page."
+            );
+            setTimeout(() => navigate("/question"), 1200);
+        } catch (err) {
+            setErrorText("An error occurred while placing your bet.");
+            console.error("Error placing bet:", err);
         }
     };
 
@@ -100,11 +102,7 @@ const Select = () => {
                 <div className="title">GAMBLING MATHS</div>
                 <div className="stash">
                     <div className="stashTitle">Betting Stash</div>
-                    <div className="stashAmount">
-                        {user.points ??
-                            JSON.parse(localStorage.user).points ??
-                            "N/A"}
-                    </div>
+                    <div className="stashAmount">{user.points ?? "N/A"}</div>
                 </div>
             </div>
             <div className="content">
@@ -134,43 +132,6 @@ const Select = () => {
                     </div>
                 </div>
             </div>
-            {error && (
-                <div id="err-cont" style={{ display: "flex" }}>
-                    <div id="err" className="glass">
-                        <div id="err-head">ERROR</div>
-                        <div className="reg-par">{error}</div>
-                        <div
-                            className="btns"
-                            onClick={() => {
-                                setError(null);
-                                maxPoints < 200 && navigate(URL.FINISHED);
-                            }}
-                        >
-                            Continue
-                        </div>
-                    </div>
-                </div>
-            )}
-            {success && (
-                <div id="succ-cont" style={{ display: "flex" }}>
-                    <div id="succ" className="glass">
-                        <div id="succ-head">SUCCESS</div>
-                        <div className="reg-par">
-                            Your bet has been placed successfully. You will be
-                            redirected to the questions page.
-                        </div>
-                        <div
-                            className="btns"
-                            onClick={() => {
-                                navigate("/question");
-                                setSuccess(false);
-                            }}
-                        >
-                            Continue
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

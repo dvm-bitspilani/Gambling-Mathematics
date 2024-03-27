@@ -10,7 +10,9 @@ const useURL = () => {
 
         API_BASE: "https://test.bits-apogee.org/2024/main/gm_api",
         API_LOGIN: "/login",
-        API_CATEGORY: "/category"
+        API_CATEGORY: "/category",
+        API_MAX_BET: "/get_max_bet",
+        API_PLACE_BET: "/place_bet"
     };
 
     return URL;

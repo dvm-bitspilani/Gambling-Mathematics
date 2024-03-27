@@ -17,61 +17,59 @@ const Categories = () => {
     const { user, updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
 
+    const [loading, setLoading] = useState(true);
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {
-        const { data, error } = useFetch(
-            `${URL.API_BASE}${URL.API_CATEGORY}`,
-            "get",
-            null,
-            {
-                Authorization: `Bearer ${user.token}`
+        const fetchData = async () => {
+            const { data, loading, error } = await useFetch(
+                `${URL.API_BASE}${URL.API_CATEGORY}`,
+                "get",
+                null,
+                { Authorization: `Bearer ${user.token}` }
+            );
+
+            setLoading(loading);
+
+            if (data) {
+                const { answered_categories: done, all_categories: all } = data;
+
+                const completed = done?.map(cat => cat.id) ?? [];
+                const shown =
+                    all?.filter(cat => !completed.includes(cat.id)) ?? [];
+
+                if (shown.length === 0) {
+                    setSuccessText(
+                        "All categories completed! Redirecting you to finish."
+                    );
+                    setTimeout(() => navigate(URL.FINISHED), 1200);
+                }
+
+                setCategories(shown);
             }
-        );
 
-        if (data) {
-            const { answered_categories: done, all_categories: all } = data;
-
-            const completed = done?.map(cat => cat.id) ?? [];
-            const shown = all?.filter(cat => !completed.includes(cat.id)) ?? [];
-
-            if (shown.length === 0) {
-                setSuccessText(
-                    "All categories completed! Redirecting you to finish."
-                );
-                setTimeout(() => navigate(URL.FINISHED), 600);
+            if (error) {
+                setErrorText("Failed to fetch categories. Refresh the page.");
+                console.error(error);
             }
+        };
 
-            setCategories(shown);
-        }
-
-        if (error) {
-            setErrorText("Failed to fetch categories. Refresh the page.");
-            console.error(error);
-        }
-    }, [
-        user.token,
-        URL.API_BASE,
-        URL.API_CATEGORY,
-        navigate,
-        setErrorText,
-        setSuccessText
-    ]);
+        fetchData();
+    }, [URL.API_BASE, URL.API_CATEGORY, user.token]);
 
     const handleLocate = async cat => {
         try {
-            await axios.post(
+            await useFetch(
                 `${URL.API_BASE}${URL.API_CATEGORY}`,
+                "post",
                 { category: cat.name },
-                { headers: { Authorization: `Bearer ${user.token}` } }
+                { Authorization: `Bearer ${user.token}` }
             );
 
             updateUser({ category: cat.id });
 
-            setSuccessText(
-                `Selected ${cat.name}. Redirecting you to the questions.`
-            );
-            setTimeout(() => navigate(URL.QUESTION), 600);
+            setSuccessText(`Selected ${cat.name}. Redirecting you to the bet.`);
+            setTimeout(() => navigate(URL.SELECT), 1200);
         } catch (err) {
             setErrorText("Failed to find this category. Try again.");
             console.error(err);
@@ -86,17 +84,23 @@ const Categories = () => {
                 <div className="stashAmount">{user.points ?? "N/A"}</div>
             </div>
             <div className="content">
-                <div className="categories">
-                    {categories?.map(cat => (
-                        <div
-                            key={cat.id}
-                            className="category"
-                            onClick={() => handleLocate(cat)}
-                        >
-                            {cat.name}
-                        </div>
-                    ))}
-                </div>
+                {loading ? (
+                    <div className="loading"> Loading categories.</div>
+                ) : categories?.length > 0 ? (
+                    <div className="categories">
+                        {categories?.map(cat => (
+                            <div
+                                key={cat.id}
+                                className="category"
+                                onClick={() => handleLocate(cat)}
+                            >
+                                {cat.name}
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="loading">No categories available.</div>
+                )}
             </div>
         </div>
     );

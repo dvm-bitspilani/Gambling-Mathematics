@@ -226,6 +226,10 @@ body {
     margin: 0;
 }
 
+.loading {
+    font-size: 1.2rem;
+}
+
 @media screen and (max-width: 1400px) {
     * {
         font-size: smaller;

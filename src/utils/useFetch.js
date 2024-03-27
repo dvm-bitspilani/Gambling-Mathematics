@@ -8,9 +8,10 @@ const useFetch = async (url, method = "get", data = null, headers = {}) => {
             data,
             headers
         });
-        return { data: response.data, error: null };
+
+        return { data: response.data, error: null, loading: false };
     } catch (error) {
-        return { data: null, error };
+        return { data: null, error, loading: false };
     }
 };
 

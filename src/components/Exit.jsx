@@ -4,7 +4,7 @@ import { useURL } from "../utils/useData";
 import { useUser } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 
-const Home = () => {
+const Exit = () => {
     const URL = useURL();
     const { logoutUser } = useUser();
     const navigate = useNavigate();
@@ -21,4 +21,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Exit;

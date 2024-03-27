@@ -8,7 +8,7 @@ import Categories from "./pages/categories";
 import Question from "./pages/question";
 import Finished from "./pages/finished";
 import { useURL } from "./utils/useData";
-import Home from "./components/Home";
+import Exit from "./components/Exit";
 
 const AppRoutes = () => {
     const URL = useURL();
@@ -28,7 +28,7 @@ const AppRoutes = () => {
                 <Route path={URL.FINISHED} element={<Finished />} />
                 <Route path="*" element={<App />} />
             </Routes>
-            {path !== URL.HOME ? <Home /> : null}
+            {path !== URL.HOME ? <Exit /> : null}
         </Router>
     );
 };
