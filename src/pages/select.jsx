@@ -18,49 +18,12 @@ const Select = () => {
     const { setErrorText, setSuccessText } = useAlert();
 
     const [bet, setBet] = useState(200);
-    const [maxPoints, setMaxPoints] = useState(0);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const { data, error } = await useFetch(
-                    `${URL.API_BASE}${URL.API_MAX_BET}`,
-                    "get",
-                    null,
-                    { Authorization: `Bearer ${user.token}` }
-                );
-
-                if (error) {
-                    setErrorText(
-                        "An error occurred while fetching maximum bet."
-                    );
-                    console.error("Error fetching max bet:", error);
-                    return;
-                }
-
-                const points = parseInt(data.max_bet);
-                setMaxPoints(points);
-
-                if (points < 200) {
-                    setErrorText(
-                        "Your points are not enough to place more bets. Redirecting you to the results page."
-                    );
-                    setTimeout(() => navigate(URL.FINISHED), 1200);
-                }
-            } catch (err) {
-                setErrorText("An error occurred while fetching maximum bet.");
-                console.error("Error fetching max bet:", err);
-            }
-        };
-
-        fetchData();
-    }, [URL.API_BASE, URL.API_MAX_BET, user.token, setErrorText, navigate]);
 
     const handleBetSelection = async () => {
         try {
-            if (bet > maxPoints) {
+            if (!bet) {
                 setErrorText(
-                    `An error occurred while placing your bet. Please try again with a bet of ${maxPoints} points or less`
+                    "Please enter the number of points you want to bet."
                 );
                 return;
             }
@@ -73,13 +36,27 @@ const Select = () => {
             );
 
             if (error) {
-                setErrorText(
-                    "An error occurred while placing your bet. Please try again."
-                );
+                if (error.code === 403) {
+                    setErrorText(
+                        "You have selected a different category. Redirecting you back to the category selection page."
+                    );
+                    setTimeout(() => navigate(URL.CATEGORY), 1200);
+                } else if (error.code === 406) {
+                    setErrorText(
+                        "You have already placed a bet. Redirecting you to the questions page."
+                    );
+                    setTimeout(() => navigate(URL.QUESTION), 1200);
+                } else {
+                    setErrorText(
+                        "An error occurred while placing your bet. Please try again."
+                    );
+                }
+
                 return;
             }
 
             updateUser({ points: data.points });
+
             setSuccessText(
                 "Your bet has been placed successfully. You will be redirected to the questions page."
             );

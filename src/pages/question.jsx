@@ -1,6 +1,6 @@
 import axios from "axios";
-import React, { useContext, useEffect, useRef, useState } from "react";
-import UserContext from "../contexts/UserContext";
+import React, { useEffect, useRef, useState } from "react";
+import { useUser } from "../contexts/UserContext";
 import "../styles/question.css";
 import { useNavigate } from "react-router-dom";
 import { useTitle } from "../utils/useDocument";
@@ -13,21 +13,10 @@ const Question = () => {
     const navigate = useNavigate();
 
     const Ref = useRef(null);
-    const { user, setUser } = useContext(UserContext);
+    const { user, updateUser } = useUser();
     const [timer, setTimer] = useState("00:00:00");
 
-    const [ques, setQues] = useState({
-        question: "",
-        options: [],
-        qid: null
-    });
-
-    useEffect(() => {
-        console.log(ques);
-    }, [ques]);
-
-    const [error, setError] = useState(false);
-    const [success, setSuccess] = useState(false);
+    const [ques, setQues] = useState({ question: "", options: [], qid: null });
 
     const getTimeRemaining = e => {
         const total = Date.parse(e) - Date.parse(new Date());
@@ -50,11 +39,9 @@ const Question = () => {
         if (total <= 0) {
             axios({
                 method: "POST",
-                url: `${URL.BASE}/answer`,
+                url: `${URL.API_BASE}${URL.API_ANSWER}`,
                 headers: {
-                    Authorization: `Bearer ${
-                        user.token ?? JSON.parse(localStorage.user).token
-                    }`
+                    Authorization: `Bearer ${user.token}`
                 },
                 data: {
                     question_id: t
@@ -88,30 +75,24 @@ const Question = () => {
     };
 
     const cancel = () => {
-        setError(true);
         clearInterval(Ref.current);
 
-        setTimeout(() => {
-            navigate("/categories");
-        }, 600);
+        setErrorText(
+            "You could not pick the correct answer. Redirecting you back to categories."
+        );
+        setTimeout(() => navigate(URL.CATEGORIES), 1200);
     };
 
     useEffect(() => {
         axios({
             method: "GET",
-            url: `${URL.BASE}/get_question`,
+            url: `${URL.API_BASE}${URL.API_GET_QUESTION}`,
             headers: {
-                Authorization: `Bearer ${
-                    user.token ?? JSON.parse(localStorage.user).token
-                }`
+                Authorization: `Bearer ${user.token}`
             }
         })
             .then(res => {
-                setUser({ ...user, points: res.data.points });
-                localStorage.setItem(
-                    "user",
-                    JSON.stringify({ ...user, points: res.data.points })
-                );
+                updateUser({ points: res.data.points });
 
                 setQues({
                     question: res.data.question,
@@ -122,7 +103,10 @@ const Question = () => {
                 clearTimer(res.data.question_id, getDeadTime());
             })
             .catch(err => {
-                setError(true);
+                setErrorText(
+                    "You could not pick the correct answer. Redirecting you back to categories."
+                );
+                setTimeout(() => navigate(URL.CATEGORIES), 1200);
             });
     }, []);
 
@@ -132,11 +116,7 @@ const Question = () => {
                 GAMBLING MATHS
                 <div className="stash">
                     <div className="stashTitle">Betting Stash</div>
-                    <div className="stashAmount">
-                        {user.points ??
-                            JSON.parse(localStorage.user).points ??
-                            "N/A"}
-                    </div>
+                    <div className="stashAmount">{user.points ?? "N/A"}</div>
                 </div>
             </div>
 
@@ -163,13 +143,9 @@ const Question = () => {
                                 onClick={() => {
                                     axios({
                                         method: "POST",
-                                        url: `${URL.BASE}/answer`,
+                                        url: `${URL.API_BASE}${URL.API_ANSWER}`,
                                         headers: {
-                                            Authorization: `Bearer ${
-                                                user.token ??
-                                                JSON.parse(localStorage.user)
-                                                    .token
-                                            }`
+                                            Authorization: `Bearer ${user.token}`
                                         },
                                         data: {
                                             question_id: ques.qid,
@@ -177,32 +153,38 @@ const Question = () => {
                                         }
                                     })
                                         .then(res => {
-                                            setUser({
-                                                ...user,
+                                            updateUser({
                                                 category: null,
                                                 points: res.data.points
                                             });
 
-                                            localStorage.setItem(
-                                                "user",
-                                                JSON.stringify({
-                                                    ...user,
-                                                    category: null,
-                                                    points: res.data.points
-                                                })
-                                            );
-
-                                            if (res.data.status === "correct")
-                                                setSuccess(true);
-                                            else if (
+                                            if (res.data.status === "correct") {
+                                                setSuccessText(
+                                                    "You picked the correct answer. Redirecting you back to categories."
+                                                );
+                                                setTimeout(
+                                                    () =>
+                                                        navigate(
+                                                            URL.CATEGORIES
+                                                        ),
+                                                    1200
+                                                );
+                                            } else if (
                                                 res.data.status === "incorrect"
-                                            )
-                                                setError(true);
-                                            clearInterval(Ref.current);
+                                            ) {
+                                                setErrorText(
+                                                    "You could not pick the correct answer. Redirecting you back to categories."
+                                                );
+                                                setTimeout(
+                                                    () =>
+                                                        navigate(
+                                                            URL.CATEGORIES
+                                                        ),
+                                                    1200
+                                                );
+                                            }
 
-                                            setTimeout(() => {
-                                                navigate("/categories");
-                                            }, 600);
+                                            clearInterval(Ref.current);
                                         })
                                         .catch(err => cancel());
                                 }}
@@ -221,50 +203,6 @@ const Question = () => {
                     </div>
                     <div className="num" id="timer">
                         {timer}
-                    </div>
-                </div>
-            </div>
-
-            <div
-                id="err-cont"
-                style={error ? { display: "flex" } : { display: "none" }}
-            >
-                <div id="err" className="glass">
-                    <div id="err-head">FAILURE</div>
-                    <div className="reg-par">
-                        You could not pick the correct answer. Redirecting you
-                        back to categories.
-                    </div>
-                    <div
-                        onClick={() => {
-                            navigate("/categories");
-                            setError(false);
-                        }}
-                        className="btns"
-                    >
-                        Continue
-                    </div>
-                </div>
-            </div>
-
-            <div
-                id="succ-cont"
-                style={success ? { display: "flex" } : { display: "none" }}
-            >
-                <div id="succ" className="glass">
-                    <div id="succ-head">SUCCESS</div>
-                    <div className="reg-par">
-                        You picked the correct answer. Redirecting you back to
-                        categories.
-                    </div>
-                    <div
-                        onClick={() => {
-                            navigate("/categories");
-                            setSuccess(false);
-                        }}
-                        className="btns"
-                    >
-                        Continue
                     </div>
                 </div>
             </div>

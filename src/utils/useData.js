@@ -12,7 +12,9 @@ const useURL = () => {
         API_LOGIN: "/login",
         API_CATEGORY: "/category",
         API_MAX_BET: "/get_max_bet",
-        API_PLACE_BET: "/place_bet"
+        API_PLACE_BET: "/place_bet",
+        API_GET_QUESTION: "/get_question",
+        API_ANSWER: "/answer"
     };
 
     return URL;
