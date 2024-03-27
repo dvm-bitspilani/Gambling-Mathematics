@@ -8,9 +8,14 @@ import Categories from "./pages/categories";
 import Question from "./pages/question";
 import Finished from "./pages/finished";
 import { useURL } from "./utils/useData";
+import Home from "./components/Home";
 
 const AppRoutes = () => {
     const URL = useURL();
+    const path =
+        window.location.pathname === URL.BASE
+            ? URL.HOME
+            : window.location.pathname;
 
     return (
         <Router basename={URL.HOME}>
@@ -23,6 +28,7 @@ const AppRoutes = () => {
                 <Route path={URL.FINISHED} element={<Finished />} />
                 <Route path="*" element={<App />} />
             </Routes>
+            {path !== URL.HOME ? <Home /> : null}
         </Router>
     );
 };

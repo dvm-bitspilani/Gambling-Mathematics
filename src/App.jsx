@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import "./styles/login.css";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "./contexts/UserContext";
 import { useTitle } from "./utils/useDocument";
-import Alert from "./components/Alert";
 import { useRedirect } from "./utils/useAuth";
 import { useURL } from "./utils/useData";
+import useFetch from "./utils/useFetch";
+import useAlert from "./utils/useAlert";
 
 function App() {
     useRedirect();
@@ -15,9 +15,7 @@ function App() {
     const URL = useURL();
     const navigate = useNavigate();
     const { updateUser } = useUser();
-
-    const [error, setError] = useState({ status: false, message: "" });
-    const [success, setSuccess] = useState({ status: false, message: "" });
+    const { setErrorText, setSuccessText } = useAlert();
 
     const handleSubmit = async e => {
         e.preventDefault();
@@ -25,19 +23,19 @@ function App() {
         const { username, password } = e.target;
 
         if (!username.value || !password.value) {
-            setError({
-                status: true,
-                message: "Login failed. Please fill all the fields."
-            });
+            setErrorText("Login failed. Please fill all the fields.");
             return;
         }
 
         try {
-            const res = await axios.post(`${URL.API_BASE}${URL.API_LOGIN}`, {
-                username: username.value,
-                password: password.value
-            });
-            handleLoginSuccess(res.data);
+            const { data, error } = await useFetch(
+                `${URL.API_BASE}${URL.API_LOGIN}`,
+                "post",
+                { username: username.value, password: password.value }
+            );
+
+            if (error) handleLoginError(error);
+            else handleLoginSuccess(data);
         } catch (err) {
             handleLoginError(err);
         }
@@ -47,26 +45,19 @@ function App() {
         const { message, name, points, token } = data;
 
         if (message === "login") {
-            setSuccess({
-                status: true,
-                message: "Login successful. Redirecting you to instructions."
-            });
+            setSuccessText(
+                "Login successful. Redirecting you to instructions."
+            );
             updateUser({ name, points, token });
 
             setTimeout(() => navigate(URL.INSTRUCTIONS), 2000);
         } else {
-            setError({
-                status: true,
-                message: "Login failed. Invalid credentials."
-            });
+            setErrorText("Login failed. Invalid credentials.");
         }
     };
 
     const handleLoginError = err => {
-        setError({
-            status: true,
-            message: "Login failed. Please try again later."
-        });
+        setErrorText("Login failed. Please try again later.");
         console.error(err);
     };
 
@@ -104,20 +95,6 @@ function App() {
                     </button>
                 </form>
             </div>
-
-            <Alert
-                isOpen={error.status}
-                setIsOpen={value => setError({ status: value, message: "" })}
-                title="ERROR"
-                message={error.message}
-            />
-
-            <Alert
-                isOpen={success.status}
-                setIsOpen={value => setSuccess({ status: value, message: "" })}
-                title="SUCCESS"
-                message={success.message}
-            />
         </div>
     );
 }

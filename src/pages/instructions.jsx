@@ -5,7 +5,6 @@ import "../styles/categories.css";
 import { useTitle } from "../utils/useDocument";
 import { useVerifyAuth } from "../utils/useAuth";
 import { useInstructions, useURL } from "../utils/useData";
-import Home from "../components/Home";
 
 const Instructions = () => {
     useVerifyAuth();
@@ -21,8 +20,6 @@ const Instructions = () => {
 
     return (
         <div className="instructions-wrapper">
-            <Home />
-
             <div style={{ textAlign: "center" }} className="title">
                 GAMBLING MATHS
             </div>

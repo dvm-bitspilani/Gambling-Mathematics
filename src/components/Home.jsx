@@ -16,7 +16,7 @@ const Home = () => {
 
     return (
         <div className="instructionsButton topLeft" onClick={handleClick}>
-            Home
+            Exit Game
         </div>
     );
 };
