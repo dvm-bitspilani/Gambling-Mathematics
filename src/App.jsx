@@ -1,19 +1,17 @@
 import React from "react";
 import "./styles/login.css";
-import { useNavigate } from "react-router-dom";
 import { useUser } from "./contexts/UserContext";
 import { useTitle } from "./utils/useDocument";
 import { useRedirect } from "./utils/useAuth";
 import { useURL } from "./utils/useData";
 import useFetch from "./utils/useFetch";
-import useAlert from "./utils/useAlert";
+import { useAlert } from "./contexts/AlertContext";
 
 function App() {
     useRedirect();
     useTitle("Login");
 
     const URL = useURL();
-    const navigate = useNavigate();
     const { updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
 
@@ -46,11 +44,10 @@ function App() {
 
         if (message === "login") {
             setSuccessText(
-                "Login successful. Redirecting you to instructions."
+                "Login successful. Redirecting you to instructions.",
+                URL.INSTRUCTIONS
             );
             updateUser({ name, points, token });
-
-            setTimeout(() => navigate(URL.INSTRUCTIONS), 2000);
         } else {
             setErrorText("Login failed. Invalid credentials.");
         }

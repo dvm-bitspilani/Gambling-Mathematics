@@ -1,6 +1,6 @@
 import React from "react";
 import Modal from "react-modal";
-import useAlert from "../utils/useAlert";
+import { useAlert } from "../contexts/AlertContext";
 
 const customModalStyles = {
     overlay: {
@@ -18,20 +18,17 @@ const customModalStyles = {
 
 const Alert = () => {
     const { error, success, clearAll } = useAlert();
+    const modal = error.status ? error : success;
 
     return (
         <Modal
-            isOpen={error.status || success.status}
+            isOpen={modal.status}
             onRequestClose={clearAll}
             style={customModalStyles}
         >
             <div id="err" className="glass">
-                <div id="err-head">
-                    {error.status ? error.title : success.title}
-                </div>
-                <div className="reg-par">
-                    {error.status ? error.message : success.message}
-                </div>
+                <div id="err-head">{modal.title}</div>
+                <div className="reg-par">{modal.message}</div>
             </div>
         </Modal>
     );

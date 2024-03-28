@@ -12,10 +12,9 @@ import Exit from "./components/Exit";
 
 const AppRoutes = () => {
     const URL = useURL();
-    const path =
-        window.location.pathname === URL.BASE
-            ? URL.HOME
-            : window.location.pathname;
+
+    const pathName = window.location.pathname;
+    const path = pathName === URL.BASE ? URL.HOME : pathName;
 
     return (
         <Router basename={URL.HOME}>
@@ -28,6 +27,7 @@ const AppRoutes = () => {
                 <Route path={URL.FINISHED} element={<Finished />} />
                 <Route path="*" element={<App />} />
             </Routes>
+
             {path !== URL.HOME ? <Exit /> : null}
         </Router>
     );

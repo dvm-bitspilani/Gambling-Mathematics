@@ -201,13 +201,44 @@ body {
     letter-spacing: 0.12em;
 }
 
-.desc {
+.desc,
+.level-selector {
     width: max-content;
     margin-top: 1rem;
     letter-spacing: 0.12em;
     font-size: 0.9rem;
     font-weight: 400;
     line-height: 1.4rem;
+}
+
+.level-selector {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.level-selector button {
+    text-align: center;
+    cursor: pointer;
+    appearance: none;
+    border: none;
+    outline: none;
+    background: rgba(7, 9, 73, 0.09);
+    box-shadow:
+        inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
+        inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
+    -webkit-backdrop-filter: blur(130px);
+    backdrop-filter: blur(130px);
+}
+
+.level-selector button:hover {
+    background: rgba(7, 9, 73, 0.3);
+}
+
+.level-selector button.selected {
+    background: rgba(7, 9, 73, 0.5);
 }
 
 #err-cont {

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useUser } from "../contexts/UserContext";
 import "../styles/categories.css";
 import { useTitle } from "../utils/useDocument";
 import { useURL } from "../utils/useData";
-import useAlert from "../utils/useAlert";
+import { useAlert } from "../contexts/AlertContext";
 import useFetch from "../utils/useFetch";
 import { useVerifyAuth } from "../utils/useAuth";
 
@@ -13,7 +12,6 @@ const Categories = () => {
     useTitle("View Your Categories");
 
     const URL = useURL();
-    const navigate = useNavigate();
     const { user, updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
 
@@ -40,9 +38,9 @@ const Categories = () => {
 
                 if (shown.length === 0) {
                     setSuccessText(
-                        "All categories completed! Redirecting you to finish."
+                        "All categories completed! Redirecting you to finish.",
+                        URL.FINISHED
                     );
-                    setTimeout(() => navigate(URL.FINISHED), 1200);
                 }
 
                 setCategories(shown);
@@ -68,8 +66,10 @@ const Categories = () => {
 
             updateUser({ category: cat.id });
 
-            setSuccessText(`Selected ${cat.name}. Redirecting you to the bet.`);
-            setTimeout(() => navigate(URL.SELECT), 1200);
+            setSuccessText(
+                `Selected ${cat.name}. Redirecting you to the bet.`,
+                URL.SELECT
+            );
         } catch (err) {
             setErrorText("Failed to find this category. Try again.");
             console.error(err);

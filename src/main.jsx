@@ -6,13 +6,16 @@ import Modal from "react-modal";
 import UserContextProvider from "./contexts/UserContext";
 import AppRoutes from "./AppRoutes";
 import Alert from "./components/Alert";
+import AlertContextProvider from "./contexts/AlertContext";
 
 Modal.setAppElement("#root");
 const rootElement = document.getElementById("root");
 
 ReactDOM.createRoot(rootElement).render(
     <UserContextProvider>
-        <Alert />
-        <AppRoutes />
+        <AlertContextProvider>
+            <Alert />
+            <AppRoutes />
+        </AlertContextProvider>
     </UserContextProvider>
 );

@@ -2,29 +2,29 @@ import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { useUser } from "../contexts/UserContext";
 import "../styles/question.css";
-import { useNavigate } from "react-router-dom";
 import { useTitle } from "../utils/useDocument";
 import { useURL } from "../utils/useData";
+import useFetch from "../utils/useFetch";
+import { useAlert } from "../contexts/AlertContext";
+import { useVerifyAuth } from "../utils/useAuth";
 
 const Question = () => {
+    useVerifyAuth();
     useTitle("Answer Your Question");
 
     const URL = useURL();
-    const navigate = useNavigate();
 
     const Ref = useRef(null);
     const { user, updateUser } = useUser();
+    const { setErrorText, setSuccessText } = useAlert();
     const [timer, setTimer] = useState("00:00:00");
+    const [ques, setQues] = useState({ question: "", options: [], id: null });
 
-    const [ques, setQues] = useState({ question: "", options: [], qid: null });
-
-    const getTimeRemaining = e => {
-        const total = Date.parse(e) - Date.parse(new Date());
-
+    const getTimeRemaining = endTime => {
+        const total = Date.parse(endTime) - Date.parse(new Date());
         const seconds = Math.floor((total / 1000) % 60);
         const minutes = Math.floor((total / 1000 / 60) % 60);
         const hours = Math.floor((total / 1000 / 60 / 60) % 24);
-
         return {
             total,
             hours,
@@ -33,39 +33,101 @@ const Question = () => {
         };
     };
 
-    const startTimer = (t, e) => {
-        let { total, hours, minutes, seconds } = getTimeRemaining(e);
+    const startTimer = endTime => {
+        const id = setInterval(() => {
+            const { total, hours, minutes, seconds } =
+                getTimeRemaining(endTime);
+            if (total <= 0) {
+                clearInterval(id);
+                handleTimeout();
+            } else {
+                setTimer(
+                    (hours > 9 ? hours : "0" + hours) +
+                        ":" +
+                        (minutes > 9 ? minutes : "0" + minutes) +
+                        ":" +
+                        (seconds > 9 ? seconds : "0" + seconds)
+                );
+            }
+        }, 1000);
+        Ref.current = id;
+    };
 
-        if (total <= 0) {
-            axios({
-                method: "POST",
-                url: `${URL.API_BASE}${URL.API_ANSWER}`,
-                headers: {
-                    Authorization: `Bearer ${user.token}`
-                },
-                data: {
-                    question_id: t
-                }
-            });
+    const handleTimeout = () => {
+        clearInterval(Ref.current);
+        setErrorText(
+            "You could not pick the correct answer. Redirecting you back to categories.",
+            URL.CATEGORIES
+        );
+    };
 
-            clearInterval(Ref.current);
-            cancel();
-        } else {
-            setTimer(
-                (hours > 9 ? hours : "0" + hours) +
-                    ":" +
-                    (minutes > 9 ? minutes : "0" + minutes) +
-                    ":" +
-                    (seconds > 9 ? seconds : "0" + seconds)
+    const fetchData = async () => {
+        try {
+            const { data, error } = await useFetch(
+                `${URL.API_BASE}${URL.API_GET_QUESTION}`,
+                "get",
+                { level: user.level },
+                { Authorization: `Bearer ${user.token}` }
             );
+
+            if (error) {
+                setErrorText(
+                    "An error occurred while fetching the question. Please try again."
+                );
+                return;
+            }
+
+            const { points, question, options, question_id } = data;
+
+            updateUser({ points });
+            setQues({ question, options, id: question_id });
+
+            startTimer(getDeadTime());
+        } catch (error) {
+            setErrorText(
+                "An error occurred while fetching the question. Please try again."
+            );
+            console.log(error);
         }
     };
 
-    const clearTimer = (t, e) => {
-        setTimer("00:03:00");
-        if (Ref.current) clearInterval(Ref.current);
-        const id = setInterval(() => startTimer(t, e), 1000);
-        Ref.current = id;
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const handleAnswer = async opt => {
+        clearInterval(Ref.current);
+
+        axios({
+            method: "post",
+            url: `${URL.API_BASE}${URL.API_ANSWER}`,
+            headers: {
+                Authorization: `Bearer ${user.token}`
+            },
+            data: {
+                question_id: ques.id,
+                option_id: opt.option_id
+            }
+        })
+            .then(res => {
+                updateUser({
+                    category: null,
+                    points: res.data.points
+                });
+
+                if (res.data.status === "correct") {
+                    setSuccessText(
+                        "You picked the correct answer. Redirecting you back to categories.",
+                        URL.CATEGORIES
+                    );
+                } else if (res.data.status === "incorrect") {
+                    setErrorText(
+                        "You could not pick the correct answer. Redirecting you back to categories.",
+                        URL.CATEGORIES
+                    );
+                }
+            })
+            .catch(err => handleTimeout());
     };
 
     const getDeadTime = () => {
@@ -73,42 +135,6 @@ const Question = () => {
         deadline.setSeconds(deadline.getSeconds() + 180);
         return deadline;
     };
-
-    const cancel = () => {
-        clearInterval(Ref.current);
-
-        setErrorText(
-            "You could not pick the correct answer. Redirecting you back to categories."
-        );
-        setTimeout(() => navigate(URL.CATEGORIES), 1200);
-    };
-
-    useEffect(() => {
-        axios({
-            method: "GET",
-            url: `${URL.API_BASE}${URL.API_GET_QUESTION}`,
-            headers: {
-                Authorization: `Bearer ${user.token}`
-            }
-        })
-            .then(res => {
-                updateUser({ points: res.data.points });
-
-                setQues({
-                    question: res.data.question,
-                    options: res.data.options,
-                    qid: res.data.question_id
-                });
-
-                clearTimer(res.data.question_id, getDeadTime());
-            })
-            .catch(err => {
-                setErrorText(
-                    "You could not pick the correct answer. Redirecting you back to categories."
-                );
-                setTimeout(() => navigate(URL.CATEGORIES), 1200);
-            });
-    }, []);
 
     return (
         <div className="question-wrapper">
@@ -140,54 +166,7 @@ const Question = () => {
                                 key={opt.option_id}
                                 id={opt.option_id}
                                 className="answer glass"
-                                onClick={() => {
-                                    axios({
-                                        method: "POST",
-                                        url: `${URL.API_BASE}${URL.API_ANSWER}`,
-                                        headers: {
-                                            Authorization: `Bearer ${user.token}`
-                                        },
-                                        data: {
-                                            question_id: ques.qid,
-                                            option_id: opt.option_id
-                                        }
-                                    })
-                                        .then(res => {
-                                            updateUser({
-                                                category: null,
-                                                points: res.data.points
-                                            });
-
-                                            if (res.data.status === "correct") {
-                                                setSuccessText(
-                                                    "You picked the correct answer. Redirecting you back to categories."
-                                                );
-                                                setTimeout(
-                                                    () =>
-                                                        navigate(
-                                                            URL.CATEGORIES
-                                                        ),
-                                                    1200
-                                                );
-                                            } else if (
-                                                res.data.status === "incorrect"
-                                            ) {
-                                                setErrorText(
-                                                    "You could not pick the correct answer. Redirecting you back to categories."
-                                                );
-                                                setTimeout(
-                                                    () =>
-                                                        navigate(
-                                                            URL.CATEGORIES
-                                                        ),
-                                                    1200
-                                                );
-                                            }
-
-                                            clearInterval(Ref.current);
-                                        })
-                                        .catch(err => cancel());
-                                }}
+                                onClick={() => handleAnswer(opt)}
                             >
                                 {opt.option_text}
                             </div>

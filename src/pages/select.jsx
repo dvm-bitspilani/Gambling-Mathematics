@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import "../styles/select.css";
 import { useTitle } from "../utils/useDocument";
 import { useURL } from "../utils/useData";
-import useAlert from "../utils/useAlert";
+import { useAlert } from "../contexts/AlertContext";
 import useFetch from "../utils/useFetch";
 import { useUser } from "../contexts/UserContext";
 import { useVerifyAuth } from "../utils/useAuth";
@@ -13,17 +12,33 @@ const Select = () => {
     useTitle("Place Your Bet");
 
     const URL = useURL();
-    const navigate = useNavigate();
     const { user, updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
 
     const [bet, setBet] = useState(200);
+    const [selectedLevel, setSelectedLevel] = useState("H");
+
+    useEffect(() => {
+        updateUser({ level: selectedLevel });
+    }, [selectedLevel]);
 
     const handleBetSelection = async () => {
         try {
             if (!bet) {
                 setErrorText(
                     "Please enter the number of points you want to bet."
+                );
+                return;
+            }
+
+            if (!["E", "M", "H"].includes(selectedLevel)) {
+                setErrorText("Please select a level.");
+                return;
+            }
+
+            if (bet > user.points) {
+                setErrorText(
+                    "You do not have enough points to place this bet."
                 );
                 return;
             }
@@ -36,16 +51,18 @@ const Select = () => {
             );
 
             if (error) {
-                if (error.code === 403) {
+                const { status } = error.response;
+
+                if (status === 403) {
                     setErrorText(
-                        "You have selected a different category. Redirecting you back to the category selection page."
+                        "You have selected a different category. Redirecting you back to the category selection page.",
+                        URL.CATEGORIES
                     );
-                    setTimeout(() => navigate(URL.CATEGORY), 1200);
-                } else if (error.code === 406) {
+                } else if (status === 406) {
                     setErrorText(
-                        "You have already placed a bet. Redirecting you to the questions page."
+                        "You have already placed a bet. Redirecting you to the questions page.",
+                        URL.QUESTION
                     );
-                    setTimeout(() => navigate(URL.QUESTION), 1200);
                 } else {
                     setErrorText(
                         "An error occurred while placing your bet. Please try again."
@@ -58,9 +75,9 @@ const Select = () => {
             updateUser({ points: data.points });
 
             setSuccessText(
-                "Your bet has been placed successfully. You will be redirected to the questions page."
+                "Your bet has been placed successfully. You will be redirected to the questions page.",
+                URL.QUESTION
             );
-            setTimeout(() => navigate("/question"), 1200);
         } catch (err) {
             setErrorText("An error occurred while placing your bet.");
             console.error("Error placing bet:", err);
@@ -97,6 +114,24 @@ const Select = () => {
                     </div>
                     <div className="desc">
                         Enter the number of points you want to bet. <br />
+                    </div>
+                    <div className="level-selector">
+                        <span>Select Level: </span>
+                        {[
+                            { level: "E", text: "Easy" },
+                            { level: "M", text: "Medium" },
+                            { level: "H", text: "Hard" }
+                        ].map(({ level, text }) => (
+                            <button
+                                key={level}
+                                onClick={() => setSelectedLevel(level)}
+                                className={
+                                    selectedLevel === level ? "selected" : ""
+                                }
+                            >
+                                {text}
+                            </button>
+                        ))}
                     </div>
                 </div>
                 <div className="betSelect">
