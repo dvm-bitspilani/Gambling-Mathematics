@@ -1,65 +1,26 @@
-import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
-import { useUser } from "../contexts/UserContext";
+import React, { useEffect, useState } from "react";
 import "../styles/question.css";
-import { useTitle } from "../utils/useDocument";
+import { useUser } from "../contexts/UserContext";
+import { useTitle } from "../utils/useHead";
 import { useURL } from "../utils/useData";
 import useFetch from "../utils/useFetch";
 import { useAlert } from "../contexts/AlertContext";
 import { useVerifyAuth } from "../utils/useAuth";
+import { useTimer } from "../contexts/TimerContext";
 
 const Question = () => {
     useVerifyAuth();
     useTitle("Answer Your Question");
-
     const URL = useURL();
-
-    const Ref = useRef(null);
     const { user, updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
-    const [timer, setTimer] = useState("00:00:00");
-    const [ques, setQues] = useState({ question: "", options: [], id: null });
+    const { timer, startTimer, handleTimeout } = useTimer();
 
-    const getTimeRemaining = endTime => {
-        const total = Date.parse(endTime) - Date.parse(new Date());
-        const seconds = Math.floor((total / 1000) % 60);
-        const minutes = Math.floor((total / 1000 / 60) % 60);
-        const hours = Math.floor((total / 1000 / 60 / 60) % 24);
-        return {
-            total,
-            hours,
-            minutes,
-            seconds
-        };
-    };
+    const [question, setQuestion] = useState({ q: "", o: [], id: null });
 
-    const startTimer = endTime => {
-        const id = setInterval(() => {
-            const { total, hours, minutes, seconds } =
-                getTimeRemaining(endTime);
-            if (total <= 0) {
-                clearInterval(id);
-                handleTimeout();
-            } else {
-                setTimer(
-                    (hours > 9 ? hours : "0" + hours) +
-                        ":" +
-                        (minutes > 9 ? minutes : "0" + minutes) +
-                        ":" +
-                        (seconds > 9 ? seconds : "0" + seconds)
-                );
-            }
-        }, 1000);
-        Ref.current = id;
-    };
-
-    const handleTimeout = () => {
-        clearInterval(Ref.current);
-        setErrorText(
-            "You could not pick the correct answer. Redirecting you back to categories.",
-            URL.CATEGORIES
-        );
-    };
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     const fetchData = async () => {
         try {
@@ -71,69 +32,66 @@ const Question = () => {
             );
 
             if (error) {
-                setErrorText(
-                    "An error occurred while fetching the question. Please try again."
-                );
+                handleFetchError();
                 return;
             }
 
             const { points, question, options, question_id } = data;
 
             updateUser({ points });
-            setQues({ question, options, id: question_id });
+            setQuestion({ q: question, o: options, id: question_id });
 
-            startTimer(getDeadTime());
+            startTimer(3, 0);
         } catch (error) {
-            setErrorText(
-                "An error occurred while fetching the question. Please try again."
-            );
+            handleFetchError();
             console.log(error);
         }
     };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    const handleAnswer = async opt => {
-        clearInterval(Ref.current);
-
-        axios({
-            method: "post",
-            url: `${URL.API_BASE}${URL.API_ANSWER}`,
-            headers: {
-                Authorization: `Bearer ${user.token}`
-            },
-            data: {
-                question_id: ques.id,
-                option_id: opt.option_id
-            }
-        })
-            .then(res => {
-                updateUser({
-                    category: null,
-                    points: res.data.points
-                });
-
-                if (res.data.status === "correct") {
-                    setSuccessText(
-                        "You picked the correct answer. Redirecting you back to categories.",
-                        URL.CATEGORIES
-                    );
-                } else if (res.data.status === "incorrect") {
-                    setErrorText(
-                        "You could not pick the correct answer. Redirecting you back to categories.",
-                        URL.CATEGORIES
-                    );
-                }
-            })
-            .catch(err => handleTimeout());
+    const handleFetchError = () => {
+        setErrorText(
+            "An error occurred while fetching the question. Please try again."
+        );
     };
 
-    const getDeadTime = () => {
-        let deadline = new Date();
-        deadline.setSeconds(deadline.getSeconds() + 180);
-        return deadline;
+    const handleAnswer = async opt => {
+        clearInterval(timer);
+
+        try {
+            const { data, error } = await useFetch(
+                `${URL.API_BASE}${URL.API_ANSWER}`,
+                "post",
+                { question_id: question.id, option_id: opt.option_id },
+                { Authorization: `Bearer ${user.token}` }
+            );
+
+            if (error) {
+                handleError();
+                return;
+            }
+
+            updateUser({ category: null, points: data.points });
+
+            if (data.status === "correct") {
+                setSuccessText(
+                    "You picked the correct answer. Redirecting you back to categories.",
+                    URL.CATEGORIES
+                );
+            } else if (data.status === "incorrect") {
+                handleError();
+            }
+        } catch (err) {
+            handleError();
+            console.log(err);
+        }
+    };
+
+    const handleError = () => {
+        handleTimeout();
+        setErrorText(
+            "You could not pick the correct answer. Redirecting you back to categories.",
+            URL.CATEGORIES
+        );
     };
 
     return (
@@ -145,40 +103,35 @@ const Question = () => {
                     <div className="stashAmount">{user.points ?? "N/A"}</div>
                 </div>
             </div>
-
             <div id="left">
                 <div className="reg-par" id="question">
-                    {ques?.question ? (
+                    {question?.q ? (
                         <img
-                            src={ques.question}
-                            alt={ques.question}
+                            src={question.q}
+                            alt={question.q}
                             className="ques-img"
                         />
                     ) : (
                         "Fetching Question.."
                     )}
                 </div>
-
                 <div id="answers">
-                    {ques?.options?.map(opt => {
-                        return (
-                            <div
-                                key={opt.option_id}
-                                id={opt.option_id}
-                                className="answer glass"
-                                onClick={() => handleAnswer(opt)}
-                            >
-                                {opt.option_text}
-                            </div>
-                        );
-                    }) ?? "Fetching Options.."}
+                    {question?.o?.map(opt => (
+                        <div
+                            key={opt.option_id}
+                            id={opt.option_id}
+                            className="answer glass"
+                            onClick={() => handleAnswer(opt)}
+                        >
+                            {opt.option_text}
+                        </div>
+                    )) ?? "Fetching Options.."}
                 </div>
             </div>
-
             <div id="right">
                 <div id="right-grid">
-                    <div className="reg-par">
-                        Answer before the timer runs out
+                    <div className="reg-par" style={{ textAlign: "center" }}>
+                        Your Remaining Time:
                     </div>
                     <div className="num" id="timer">
                         {timer}

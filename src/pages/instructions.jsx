@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import rules from "../assets/rules.png";
 import "../styles/categories.css";
-import { useTitle } from "../utils/useDocument";
+import { useTitle } from "../utils/useHead";
 import { useVerifyAuth } from "../utils/useAuth";
 import { useInstructions, useURL } from "../utils/useData";
 

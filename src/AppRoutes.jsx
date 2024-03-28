@@ -9,26 +9,28 @@ import Question from "./pages/question";
 import Finished from "./pages/finished";
 import { useURL } from "./utils/useData";
 import Exit from "./components/Exit";
+import Alert from "./components/Alert";
+import AlertContextProvider from "./contexts/AlertContext";
 
 const AppRoutes = () => {
     const URL = useURL();
 
-    const pathName = window.location.pathname;
-    const path = pathName === URL.BASE ? URL.HOME : pathName;
-
     return (
         <Router basename={URL.HOME}>
-            <Routes>
-                <Route path={URL.BASE} element={<App />} />
-                <Route path={URL.INSTRUCTIONS} element={<Instructions />} />
-                <Route path={URL.SELECT} element={<Select />} />
-                <Route path={URL.CATEGORIES} element={<Categories />} />
-                <Route path={URL.QUESTION} element={<Question />} />
-                <Route path={URL.FINISHED} element={<Finished />} />
-                <Route path="*" element={<App />} />
-            </Routes>
+            <AlertContextProvider>
+                <Exit />
+                <Alert />
 
-            {path !== URL.HOME ? <Exit /> : null}
+                <Routes>
+                    <Route path={URL.BASE} element={<App />} />
+                    <Route path={URL.INSTRUCTIONS} element={<Instructions />} />
+                    <Route path={URL.SELECT} element={<Select />} />
+                    <Route path={URL.CATEGORIES} element={<Categories />} />
+                    <Route path={URL.QUESTION} element={<Question />} />
+                    <Route path={URL.FINISHED} element={<Finished />} />
+                    <Route path="*" element={<App />} />
+                </Routes>
+            </AlertContextProvider>
         </Router>
     );
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../styles/select.css";
-import { useTitle } from "../utils/useDocument";
+import { useTitle } from "../utils/useHead";
 import { useURL } from "../utils/useData";
 import { useAlert } from "../contexts/AlertContext";
 import useFetch from "../utils/useFetch";
@@ -43,7 +43,7 @@ const Select = () => {
                 return;
             }
 
-            const { data, error } = await useFetch(
+            const { error } = await useFetch(
                 `${URL.API_BASE}${URL.API_PLACE_BET}/${user.category}`,
                 "post",
                 { bet: bet },
@@ -71,8 +71,6 @@ const Select = () => {
 
                 return;
             }
-
-            updateUser({ points: data.points });
 
             setSuccessText(
                 "Your bet has been placed successfully. You will be redirected to the questions page.",

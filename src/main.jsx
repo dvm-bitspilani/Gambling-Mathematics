@@ -5,17 +5,15 @@ import "./styles/main.css";
 import Modal from "react-modal";
 import UserContextProvider from "./contexts/UserContext";
 import AppRoutes from "./AppRoutes";
-import Alert from "./components/Alert";
-import AlertContextProvider from "./contexts/AlertContext";
+import TimerContextProvider from "./contexts/TimerContext";
 
 Modal.setAppElement("#root");
 const rootElement = document.getElementById("root");
 
 ReactDOM.createRoot(rootElement).render(
     <UserContextProvider>
-        <AlertContextProvider>
-            <Alert />
+        <TimerContextProvider>
             <AppRoutes />
-        </AlertContextProvider>
+        </TimerContextProvider>
     </UserContextProvider>
 );

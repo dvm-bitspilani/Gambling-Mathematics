@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useUser } from "../contexts/UserContext";
 import "../styles/categories.css";
-import { useTitle } from "../utils/useDocument";
+import { useTitle } from "../utils/useHead";
 import { useURL } from "../utils/useData";
 import { useAlert } from "../contexts/AlertContext";
 import useFetch from "../utils/useFetch";

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { usePathName } from "../utils/useHead";
 
 const initialState = { status: false, message: "", title: "" };
 
@@ -25,13 +26,17 @@ const AlertContextProvider = ({ children }) => {
 
     const handleLink = link => {
         if (link) {
-            setTimeout(() => {
-                navigate(link);
-                setTimeout(() => clearAll(), 1000);
-            }, 2000);
-        } else {
-            setTimeout(() => clearAll(), 3000);
-        }
+            setTimeout(() => navigate(link), 2000);
+
+            const checkPathInterval = setInterval(() => {
+                const path = usePathName();
+
+                if (path === link) {
+                    clearInterval(checkPathInterval);
+                    clearAll();
+                }
+            }, 1000);
+        } else clearAll(3000);
     };
 
     const setErrorText = (message, link) => {
@@ -48,17 +53,12 @@ const AlertContextProvider = ({ children }) => {
         handleLink(link);
     };
 
-    const clearAll = () => {
-        setError(initialState);
-        setSuccess(initialState);
+    const clearAll = (delay = 0) => {
+        setTimeout(() => {
+            setError(initialState);
+            setSuccess(initialState);
+        }, delay);
     };
-
-    // useEffect(() => {
-    //     if (error.status || success.status) {
-    //         const timer = setTimeout(() => clearAll(), 3000);
-    //         return () => clearTimeout(timer);
-    //     }
-    // }, [error, success]);
 
     const contextValue = {
         error,

@@ -10,4 +10,8 @@ const useTitle = (title = "") => {
     }, [title]);
 };
 
-export { useTitle };
+const usePathName = () => {
+    return window?.location?.pathname?.replace(/\/gamblingmaths/g, "");
+};
+
+export { useTitle, usePathName };

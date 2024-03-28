@@ -1,7 +1,7 @@
 import React from "react";
 import "./styles/login.css";
 import { useUser } from "./contexts/UserContext";
-import { useTitle } from "./utils/useDocument";
+import { useTitle } from "./utils/useHead";
 import { useRedirect } from "./utils/useAuth";
 import { useURL } from "./utils/useData";
 import useFetch from "./utils/useFetch";

@@ -38,7 +38,7 @@ body {
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
-    padding: 80px;
+    padding: 60px 80px;
     padding-bottom: 0;
 }
 
@@ -46,7 +46,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 30px;
-    margin-bottom: 2rem;
+    margin: 2rem 0;
 }
 
 .instructionsTitle {
