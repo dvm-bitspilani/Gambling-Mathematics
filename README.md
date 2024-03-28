@@ -1,26 +1,14 @@
 # Gambling Mathematics
 
-This project was developed by the Department of Visual Media (DVM) for the APOGEE 2024 Technical Fest of BITS Pilani. It was used for a Math-based quiz conducted by the Mathematics Association.
+Gambling Mathematics is a project developed by the Department of Visual Media (DVM) for the APOGEE 2024 Technical Fest of BITS Pilani. It was utilized for a Math-based quiz conducted by the Mathematics Association.
 
 ## Overview
 
-The game involved users selecting a category and placing a bet on whether they would answer its question correctly or not. If they answered correctly, they received more points, otherwise, they lost points. The game would repeat until the user had exhausted all their points or completed all the categories.
+In this game, users select a category and place a bet on whether they will answer its corresponding question correctly. Based on their answer, they either gain points or lose them. The game continues until the user runs out of points or completes all the available categories.
 
 ## Tech Stack
 
-The project was built using ReactJS and integrates with backend-fetched randomised data through APIs provided. <br />
-The file structure of the project is as follows:
-
--   `public`: This directory contains the public assets of the project.
--   `src`: This directory contains the source code of the project.
--   `.gitignore`: This file specifies files and directories that should be ignored by Git.
--   `.prettierrc.json`: This file specifies the Prettier configuration.
--   `README.md`: This file contains the information about the project.
--   `index.html`: This file is the entry point for the ReactJS application.
--   `package-lock.json`: This file specifies the exact version of each installed npm package.
--   `package.json`: This file contains the metadata of the project and lists the dependencies.
--   `vite.config.js`: This file contains the configuration for the Vite build tool.
--   `yarn.lock`: This file specifies the exact version of each installed Yarn package.
+The project is built using ReactJS and integrates with backend-fetched randomized data through provided APIs.
 
 ## Workflow
 
@@ -28,35 +16,35 @@ The file structure of the project is as follows:
 2. User places a bet on whether they will answer the question correctly or not.
 3. A question related to the selected category is displayed.
 4. User answers the question.
-5. If the answer is correct, the user gains points. Otherwise, they lose points.
+5. If the answer is correct, the user gains points; otherwise, they lose points.
 6. Steps 2-5 repeat until the user has exhausted all their points or completed all the categories.
 
 ## Getting Started
 
-To run the application, follow the below instructions:
+To run the application, follow these instructions:
 
-Clone this repository using the following command:
+1. Clone this repository using:
 
 ```bash
-git clone https://github.com/<username>/Gambling-Mathematics.git
+git clone https://github.com/bit-by-bits/Gambling-Mathematics
 ```
 
-Navigate to the project directory using the following command:
+2. Navigate to the project directory:
 
 ```bash
 cd Gambling-Mathematics
 ```
 
-Install the necessary dependencies using the following command:
+3. Install the necessary dependencies:
 
-```node
-npm install
+```bash
+yarn install
 ```
 
-Run the application using the following command:
+4. Run the application:
 
-```node
-npm start
+```bash
+yarn dev
 ```
 
 This command will start the development server and open the application in the default browser.
@@ -67,4 +55,4 @@ Contributions to this project are welcome. Please open an issue or submit a pull
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
