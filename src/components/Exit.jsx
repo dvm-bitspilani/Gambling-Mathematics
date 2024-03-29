@@ -6,10 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { usePathName } from "../utils/useHead";
 
 const Exit = () => {
+    const navigate = useNavigate();
+
     const URL = useURL();
     const { logoutUser } = useUser();
     const pathName = usePathName();
-    const navigate = useNavigate();
 
     const handleClick = () => {
         logoutUser();

@@ -10,9 +10,10 @@ const Instructions = () => {
     useVerifyAuth();
     useTitle("General Instructions");
 
+    const navigate = useNavigate();
+
     const URL = useURL();
     const instructions = useInstructions();
-    const navigate = useNavigate();
 
     const handleClick = () => {
         navigate(URL.CATEGORIES);

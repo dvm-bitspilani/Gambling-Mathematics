@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../styles/select.css";
 import { useTitle } from "../utils/useHead";
-import { useURL } from "../utils/useData";
+import { useLevels, useURL } from "../utils/useData";
 import { useAlert } from "../contexts/AlertContext";
 import { postBet } from "../utils/useFetch";
 import { useUser } from "../contexts/UserContext";
@@ -12,17 +12,12 @@ const Select = () => {
     useTitle("Place Your Bet");
 
     const URL = useURL();
+    const levels = useLevels();
     const { user, updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
 
     const [bet, setBet] = useState(200);
     const [selectedLevel, setSelectedLevel] = useState("H");
-
-    const levels = [
-        { level: "E", text: "Easy" },
-        { level: "M", text: "Medium" },
-        { level: "H", text: "Hard" }
-    ];
 
     useEffect(() => {
         updateUser({ level: selectedLevel });

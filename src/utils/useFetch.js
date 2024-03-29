@@ -17,44 +17,29 @@ const useFetch = async (url, method = "get", data, headers) => {
     }
 };
 
-const useGet = async (endpoint, data, addToken = true, headers) => {
+const useGet = async (endpoint, data) => {
     const URL = useURL();
     const { user } = useUser();
 
-    let finalUrl = `${URL.API_BASE}${URL[endpoint]}`;
+    const apiURL = `${URL.API_BASE}${URL[endpoint]}`;
+    const headers = { Authorization: `Bearer ${user.token}` };
 
-    if (addToken) {
-        headers = { ...headers, Authorization: `Bearer ${user.token}` };
-    }
-
-    return await useFetch(finalUrl, "get", data, headers);
+    return await useFetch(apiURL, "get", data, headers);
 };
 
-const usePost = async (
-    endpoint,
-    data,
-    addToken = true,
-    headers,
-    addLink = ""
-) => {
+const usePost = async (endpoint, data, addLink = null, addToken = true) => {
     const URL = useURL();
     const { user } = useUser();
 
-    let finalUrl = `${URL.API_BASE}${URL[endpoint]}`;
+    const apiURL =
+        `${URL.API_BASE}${URL[endpoint]}` + addLink ? `/${user[addLink]}` : ``;
+    const headers = addToken ? { Authorization: `Bearer ${user.token}` } : {};
 
-    if (addToken) {
-        headers = { ...headers, Authorization: `Bearer ${user.token}` };
-    }
-
-    if (addLink !== "") {
-        finalUrl += `/${user[addLink]}`;
-    }
-
-    return await useFetch(finalUrl, "post", data, headers);
+    return await useFetch(apiURL, "post", data, headers);
 };
 
 const postLogin = async (username, password) => {
-    return await usePost("API_LOGIN", { username, password }, false);
+    return await usePost("API_LOGIN", { username, password }, null, false);
 };
 
 const getCategories = async () => {
@@ -66,7 +51,7 @@ const postCategory = async category => {
 };
 
 const postBet = async bet => {
-    return await usePost("API_PLACE_BET", { bet }, true, {}, "category");
+    return await usePost("API_PLACE_BET", { bet }, "category");
 };
 
 const getQuestion = async () => {

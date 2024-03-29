@@ -21,7 +21,7 @@ const useURL = () => {
 };
 
 const useInstructions = () => {
-    const instructionList = [
+    const instructions = [
         "A team can attempt only once.",
         "You will be given 1000 coins initially.",
         "There are 8 categories. You will choose a category and bet some amount of coins.",
@@ -36,7 +36,17 @@ const useInstructions = () => {
         "The maximum number of you can bet in each round and its corresponding multiplier is as follows."
     ];
 
-    return instructionList;
+    return instructions;
 };
 
-export { useURL, useInstructions };
+const useLevels = () => {
+    const levels = [
+        { level: "E", text: "Easy" },
+        { level: "M", text: "Medium" },
+        { level: "H", text: "Hard" }
+    ];
+
+    return levels;
+};
+
+export { useURL, useInstructions, useLevels };
