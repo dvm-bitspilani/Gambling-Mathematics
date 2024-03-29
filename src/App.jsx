@@ -4,8 +4,8 @@ import { useUser } from "./contexts/UserContext";
 import { useTitle } from "./utils/useHead";
 import { useRedirect } from "./utils/useAuth";
 import { useURL } from "./utils/useData";
-import useFetch from "./utils/useFetch";
 import { useAlert } from "./contexts/AlertContext";
+import { postLogin } from "./utils/useFetch";
 
 function App() {
     useRedirect();
@@ -26,10 +26,9 @@ function App() {
         }
 
         try {
-            const { data, error } = await useFetch(
-                `${URL.API_BASE}${URL.API_LOGIN}`,
-                "post",
-                { username: username.value, password: password.value }
+            const { data, error } = await postLogin(
+                username.value,
+                password.value
             );
 
             if (error) handleLoginError(error);

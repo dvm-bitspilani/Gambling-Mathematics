@@ -4,8 +4,8 @@ import "../styles/categories.css";
 import { useTitle } from "../utils/useHead";
 import { useURL } from "../utils/useData";
 import { useAlert } from "../contexts/AlertContext";
-import useFetch from "../utils/useFetch";
 import { useVerifyAuth } from "../utils/useAuth";
+import { getCategories, postCategory } from "../utils/useFetch";
 
 const Categories = () => {
     useVerifyAuth();
@@ -20,21 +20,15 @@ const Categories = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const { data, loading, error } = await useFetch(
-                `${URL.API_BASE}${URL.API_CATEGORY}`,
-                "get",
-                null,
-                { Authorization: `Bearer ${user.token}` }
-            );
+            const { data, loading, error } = await getCategories();
 
             setLoading(loading);
 
             if (data) {
                 const { answered_categories: done, all_categories: all } = data;
 
-                const completed = done?.map(cat => cat.id) ?? [];
-                const shown =
-                    all?.filter(cat => !completed.includes(cat.id)) ?? [];
+                const completed = done?.map(c => c.id) ?? [];
+                const shown = all?.filter(c => !completed.includes(c.id)) ?? [];
 
                 if (shown.length === 0) {
                     setSuccessText(
@@ -53,21 +47,16 @@ const Categories = () => {
         };
 
         fetchData();
-    }, [URL.API_BASE, URL.API_CATEGORY, user.token]);
+    }, [URL.API_BASE, URL.API_CATEGORY]);
 
-    const handleLocate = async cat => {
+    const handleLocate = async category => {
         try {
-            await useFetch(
-                `${URL.API_BASE}${URL.API_CATEGORY}`,
-                "post",
-                { category: cat.name },
-                { Authorization: `Bearer ${user.token}` }
-            );
+            await postCategory(category.name);
 
-            updateUser({ category: cat.id });
+            updateUser({ category: category.id });
 
             setSuccessText(
-                `Selected ${cat.name}. Redirecting you to the bet.`,
+                `Selected ${category.name}. Redirecting you to the bet.`,
                 URL.SELECT
             );
         } catch (err) {
@@ -88,13 +77,13 @@ const Categories = () => {
                     <div className="loading"> Loading categories.</div>
                 ) : categories?.length > 0 ? (
                     <div className="categories">
-                        {categories?.map(cat => (
+                        {categories?.map(category => (
                             <div
-                                key={cat.id}
+                                key={category.id}
                                 className="category"
-                                onClick={() => handleLocate(cat)}
+                                onClick={() => handleLocate(category)}
                             >
-                                {cat.name}
+                                {category.name}
                             </div>
                         ))}
                     </div>

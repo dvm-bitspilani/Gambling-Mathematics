@@ -3,14 +3,15 @@ import "../styles/question.css";
 import { useUser } from "../contexts/UserContext";
 import { useTitle } from "../utils/useHead";
 import { useURL } from "../utils/useData";
-import useFetch from "../utils/useFetch";
 import { useAlert } from "../contexts/AlertContext";
 import { useVerifyAuth } from "../utils/useAuth";
 import { useTimer } from "../contexts/TimerContext";
+import { getQuestion, postAnswer } from "../utils/useFetch";
 
 const Question = () => {
     useVerifyAuth();
     useTitle("Answer Your Question");
+
     const URL = useURL();
     const { user, updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
@@ -18,18 +19,11 @@ const Question = () => {
 
     const [question, setQuestion] = useState({ q: "", o: [], id: null });
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+    useEffect(() => fetchData(), []);
 
     const fetchData = async () => {
         try {
-            const { data, error } = await useFetch(
-                `${URL.API_BASE}${URL.API_GET_QUESTION}`,
-                "get",
-                { level: user.level },
-                { Authorization: `Bearer ${user.token}` }
-            );
+            const { data, error } = await getQuestion();
 
             if (error) {
                 handleFetchError();
@@ -58,11 +52,9 @@ const Question = () => {
         clearInterval(timer);
 
         try {
-            const { data, error } = await useFetch(
-                `${URL.API_BASE}${URL.API_ANSWER}`,
-                "post",
-                { question_id: question.id, option_id: opt.option_id },
-                { Authorization: `Bearer ${user.token}` }
+            const { data, error } = await postAnswer(
+                question.id,
+                opt.option_id
             );
 
             if (error) {

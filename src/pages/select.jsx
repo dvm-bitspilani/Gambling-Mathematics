@@ -3,7 +3,7 @@ import "../styles/select.css";
 import { useTitle } from "../utils/useHead";
 import { useURL } from "../utils/useData";
 import { useAlert } from "../contexts/AlertContext";
-import useFetch from "../utils/useFetch";
+import { postBet } from "../utils/useFetch";
 import { useUser } from "../contexts/UserContext";
 import { useVerifyAuth } from "../utils/useAuth";
 
@@ -17,6 +17,12 @@ const Select = () => {
 
     const [bet, setBet] = useState(200);
     const [selectedLevel, setSelectedLevel] = useState("H");
+
+    const levels = [
+        { level: "E", text: "Easy" },
+        { level: "M", text: "Medium" },
+        { level: "H", text: "Hard" }
+    ];
 
     useEffect(() => {
         updateUser({ level: selectedLevel });
@@ -32,7 +38,7 @@ const Select = () => {
             }
 
             if (!["E", "M", "H"].includes(selectedLevel)) {
-                setErrorText("Please select a level.");
+                setErrorText("Please select a level first.");
                 return;
             }
 
@@ -43,12 +49,7 @@ const Select = () => {
                 return;
             }
 
-            const { error } = await useFetch(
-                `${URL.API_BASE}${URL.API_PLACE_BET}/${user.category}`,
-                "post",
-                { bet: bet },
-                { Authorization: `Bearer ${user.token}` }
-            );
+            const { error } = await postBet(bet);
 
             if (error) {
                 const { status } = error.response;
@@ -115,11 +116,7 @@ const Select = () => {
                     </div>
                     <div className="level-selector">
                         <span>Select Level: </span>
-                        {[
-                            { level: "E", text: "Easy" },
-                            { level: "M", text: "Medium" },
-                            { level: "H", text: "Hard" }
-                        ].map(({ level, text }) => (
+                        {levels.map(({ level, text }) => (
                             <button
                                 key={level}
                                 onClick={() => setSelectedLevel(level)}
