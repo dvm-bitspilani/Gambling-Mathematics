@@ -28,7 +28,7 @@ const Question = () => {
     // Fetch Data Function
     const fetchData = async () => {
         try {
-            const { data, error } = await getQuestion();
+            const { data, error } = await getQuestion(user.token, user.level);
 
             if (error) {
                 handleFetchError();
@@ -61,7 +61,8 @@ const Question = () => {
         try {
             const { data, error } = await postAnswer(
                 question.id,
-                opt.option_id
+                opt.option_id,
+                user.token
             );
 
             if (error) {

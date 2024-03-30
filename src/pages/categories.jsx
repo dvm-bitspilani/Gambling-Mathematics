@@ -23,7 +23,9 @@ const Categories = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const { data, loading, error } = await getCategories();
+                const { data, loading, error } = await getCategories(
+                    user.token
+                );
 
                 setLoading(loading);
 
@@ -57,12 +59,12 @@ const Categories = () => {
         };
 
         fetchData();
-    }, [URL.API_BASE, URL.API_CATEGORY, setErrorText, setSuccessText]);
+    }, [user.token]);
 
     // Handlers
     const handleLocate = async category => {
         try {
-            await postCategory(category.name);
+            await postCategory(category.name, user.token);
 
             updateUser({ category: category.id });
 

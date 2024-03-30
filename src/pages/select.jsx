@@ -52,7 +52,7 @@ const Select = () => {
                 return;
             }
 
-            const { error } = await postBet(bet);
+            const { error } = await postBet(bet, user.token, user.category);
 
             if (error) {
                 handlePostBetError(error.response.status);

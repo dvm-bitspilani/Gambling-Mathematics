@@ -1,8 +1,7 @@
 import axios from "axios";
 import { useURL } from "./useData";
-import { useUser } from "../contexts/UserContext";
 
-const useFetch = async (url, method = "get", data, headers) => {
+const useFetch = async (url, method, data, headers) => {
     try {
         const response = await axios({
             method,
@@ -17,23 +16,20 @@ const useFetch = async (url, method = "get", data, headers) => {
     }
 };
 
-const useGet = async (endpoint, data) => {
+const useGet = async (endpoint, userToken, addLink) => {
     const URL = useURL();
-    const { user } = useUser();
+    const apiURL =
+        `${URL.API_BASE}${URL[endpoint]}` + (addLink ? `/${addLink}` : "");
+    const headers = userToken ? { Authorization: `Bearer ${userToken}` } : {};
 
-    const apiURL = `${URL.API_BASE}${URL[endpoint]}`;
-    const headers = { Authorization: `Bearer ${user.token}` };
-
-    return await useFetch(apiURL, "get", data, headers);
+    return await useFetch(apiURL, "get", null, headers);
 };
 
-const usePost = async (endpoint, data, addLink = null, addToken = true) => {
+const usePost = async (endpoint, data, userToken, addLink) => {
     const URL = useURL();
-    const { user } = useUser();
-
     const apiURL =
-        `${URL.API_BASE}${URL[endpoint]}` + addLink ? `/${user[addLink]}` : ``;
-    const headers = addToken ? { Authorization: `Bearer ${user.token}` } : {};
+        `${URL.API_BASE}${URL[endpoint]}` + (addLink ? `/${addLink}` : "");
+    const headers = userToken ? { Authorization: `Bearer ${userToken}` } : {};
 
     return await useFetch(apiURL, "post", data, headers);
 };
@@ -42,25 +38,24 @@ const postLogin = async (username, password) => {
     return await usePost("API_LOGIN", { username, password }, null, false);
 };
 
-const getCategories = async () => {
-    return await useGet("API_CATEGORY", {});
+const getCategories = async userToken => {
+    return await useGet("API_CATEGORY", userToken);
 };
 
-const postCategory = async category => {
-    return await usePost("API_CATEGORY", { category });
+const postCategory = async (category, userToken) => {
+    return await usePost("API_CATEGORY", { category }, userToken);
 };
 
-const postBet = async bet => {
-    return await usePost("API_PLACE_BET", { bet }, "category");
+const postBet = async (bet, userToken, userCategory) => {
+    return await usePost("API_PLACE_BET", { bet }, userToken, userCategory);
 };
 
-const getQuestion = async () => {
-    const { user } = useUser();
-    return await useGet("API_GET_QUESTION", { level: user.level });
+const getQuestion = async (userToken, userLevel) => {
+    return await useGet("API_GET_QUESTION", userToken, userLevel);
 };
 
-const postAnswer = async (question_id, option_id) => {
-    return await usePost("API_ANSWER", { question_id, option_id });
+const postAnswer = async (question_id, option_id, userToken) => {
+    return await usePost("API_ANSWER", { question_id, option_id }, userToken);
 };
 
 export {
