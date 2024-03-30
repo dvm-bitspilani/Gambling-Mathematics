@@ -8,47 +8,58 @@ import { useVerifyAuth } from "../utils/useAuth";
 import { getCategories, postCategory } from "../utils/useFetch";
 
 const Categories = () => {
+    // Hooks
     useVerifyAuth();
     useTitle("View Your Categories");
-
-    const URL = useURL();
     const { user, updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
+    const URL = useURL();
 
+    // State
     const [loading, setLoading] = useState(true);
     const [categories, setCategories] = useState([]);
 
+    // Effects
     useEffect(() => {
         const fetchData = async () => {
-            const { data, loading, error } = await getCategories();
+            try {
+                const { data, loading, error } = await getCategories();
 
-            setLoading(loading);
+                setLoading(loading);
 
-            if (data) {
-                const { answered_categories: done, all_categories: all } = data;
+                if (data) {
+                    const { answered_categories: done, all_categories: all } =
+                        data;
 
-                const completed = done?.map(c => c.id) ?? [];
-                const shown = all?.filter(c => !completed.includes(c.id)) ?? [];
+                    const completed = done?.map(c => c.id) ?? [];
+                    const shown =
+                        all?.filter(c => !completed.includes(c.id)) ?? [];
 
-                if (shown.length === 0) {
-                    setSuccessText(
-                        "All categories completed! Redirecting you to finish.",
-                        URL.FINISHED
-                    );
+                    if (shown.length === 0) {
+                        setSuccessText(
+                            "All categories completed! Redirecting you to finish.",
+                            URL.FINISHED
+                        );
+                    }
+
+                    setCategories(shown);
                 }
 
-                setCategories(shown);
-            }
-
-            if (error) {
-                setErrorText("Failed to fetch categories. Refresh the page.");
-                console.error(error);
+                if (error) {
+                    setErrorText(
+                        "Failed to fetch categories. Refresh the page."
+                    );
+                    console.error(error);
+                }
+            } catch (err) {
+                console.error(err);
             }
         };
 
         fetchData();
-    }, [URL.API_BASE, URL.API_CATEGORY]);
+    }, [URL.API_BASE, URL.API_CATEGORY, setErrorText, setSuccessText]);
 
+    // Handlers
     const handleLocate = async category => {
         try {
             await postCategory(category.name);
@@ -65,6 +76,7 @@ const Categories = () => {
         }
     };
 
+    // JSX
     return (
         <div className="categories-wrapper">
             <div className="title">GAMBLING MATHS</div>

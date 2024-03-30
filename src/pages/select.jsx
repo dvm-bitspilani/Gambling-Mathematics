@@ -8,27 +8,35 @@ import { useUser } from "../contexts/UserContext";
 import { useVerifyAuth } from "../utils/useAuth";
 
 const Select = () => {
+    // Hooks
     useVerifyAuth();
     useTitle("Place Your Bet");
-
     const URL = useURL();
     const levels = useLevels();
     const { user, updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
 
+    // State
     const [bet, setBet] = useState(200);
     const [selectedLevel, setSelectedLevel] = useState("H");
 
+    // Effects
     useEffect(() => {
         updateUser({ level: selectedLevel });
     }, [selectedLevel]);
 
+    // Event Handlers
     const handleBetSelection = async () => {
         try {
             if (!bet) {
                 setErrorText(
                     "Please enter the number of points you want to bet."
                 );
+                return;
+            }
+
+            if (bet < 200) {
+                setErrorText("Minimum bet is 200 points.");
                 return;
             }
 
@@ -47,24 +55,7 @@ const Select = () => {
             const { error } = await postBet(bet);
 
             if (error) {
-                const { status } = error.response;
-
-                if (status === 403) {
-                    setErrorText(
-                        "You have selected a different category. Redirecting you back to the category selection page.",
-                        URL.CATEGORIES
-                    );
-                } else if (status === 406) {
-                    setErrorText(
-                        "You have already placed a bet. Redirecting you to the questions page.",
-                        URL.QUESTION
-                    );
-                } else {
-                    setErrorText(
-                        "An error occurred while placing your bet. Please try again."
-                    );
-                }
-
+                handlePostBetError(error.response.status);
                 return;
             }
 
@@ -78,6 +69,25 @@ const Select = () => {
         }
     };
 
+    const handlePostBetError = status => {
+        if (status === 403) {
+            setErrorText(
+                "You have selected a different category. Redirecting you back to the category selection page.",
+                URL.CATEGORIES
+            );
+        } else if (status === 406) {
+            setErrorText(
+                "You have already placed a bet. Redirecting you to the questions page.",
+                URL.QUESTION
+            );
+        } else {
+            setErrorText(
+                "An error occurred while placing your bet. Please try again."
+            );
+        }
+    };
+
+    // JSX
     return (
         <div className="select-wrapper">
             <div

@@ -7,18 +7,18 @@ import { useURL } from "./utils/useData";
 import { useAlert } from "./contexts/AlertContext";
 import { postLogin } from "./utils/useFetch";
 
-function App() {
+const App = () => {
+    // Hooks
     useRedirect();
     useTitle("Login");
-
-    const URL = useURL();
     const { updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
+    const URL = useURL();
 
+    // Event Handlers
     const handleSubmit = async e => {
         e.preventDefault();
-
-        const { username, password } = e.target;
+        const { username, password } = e.target.elements;
 
         if (!username.value || !password.value) {
             setErrorText("Login failed. Please fill all the fields.");
@@ -31,8 +31,11 @@ function App() {
                 password.value
             );
 
-            if (error) handleLoginError(error);
-            else handleLoginSuccess(data);
+            if (error) {
+                handleLoginError(error);
+            } else {
+                handleLoginSuccess(data);
+            }
         } catch (err) {
             handleLoginError(err);
         }
@@ -57,6 +60,7 @@ function App() {
         console.error(err);
     };
 
+    // JSX
     return (
         <div id="login-wrapper">
             <div id="left">
@@ -93,6 +97,6 @@ function App() {
             </div>
         </div>
     );
-}
+};
 
 export default App;

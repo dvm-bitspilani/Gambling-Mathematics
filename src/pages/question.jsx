@@ -9,18 +9,23 @@ import { useTimer } from "../contexts/TimerContext";
 import { getQuestion, postAnswer } from "../utils/useFetch";
 
 const Question = () => {
+    // Hooks
     useVerifyAuth();
     useTitle("Answer Your Question");
-
-    const URL = useURL();
     const { user, updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
     const { timer, startTimer, handleTimeout } = useTimer();
+    const URL = useURL();
 
+    // State
     const [question, setQuestion] = useState({ q: "", o: [], id: null });
 
-    useEffect(() => fetchData(), []);
+    // Effects
+    useEffect(() => {
+        fetchData();
+    }, []);
 
+    // Fetch Data Function
     const fetchData = async () => {
         try {
             const { data, error } = await getQuestion();
@@ -42,12 +47,14 @@ const Question = () => {
         }
     };
 
+    // Handle Fetch Error Function
     const handleFetchError = () => {
         setErrorText(
             "An error occurred while fetching the question. Please try again."
         );
     };
 
+    // Handle Answer Function
     const handleAnswer = async opt => {
         clearInterval(timer);
 
@@ -78,6 +85,7 @@ const Question = () => {
         }
     };
 
+    // Handle Error Function
     const handleError = () => {
         handleTimeout();
         setErrorText(
@@ -86,6 +94,7 @@ const Question = () => {
         );
     };
 
+    // JSX
     return (
         <div className="question-wrapper">
             <div id="question-head">
