@@ -140,18 +140,15 @@ body {
     letter-spacing: 2px;
     opacity: 0.8;
 }
-
 .num {
-    width: -webkit-max-content;
-    width: -moz-max-content;
-    width: max-content;
-    padding: 5px 60px;
+    width: 120px;
+    padding: 5px 10px;
     margin: 0;
     font-family: "Forgotten Futurist", sans-serif;
     font-size: 2rem;
     font-weight: 900;
     color: white;
-    text-align: left;
+    text-align: center;
     letter-spacing: 5px;
 }
 

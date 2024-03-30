@@ -25,6 +25,12 @@ const Question = () => {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        if (timer === "00:00:00") {
+            handleError();
+        }
+    }, [timer]);
+
     // Fetch Data Function
     const fetchData = async () => {
         try {

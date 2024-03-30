@@ -4,7 +4,7 @@
     font-family: "Pirulen";
     src:
         local("Pirulen"),
-        url("/fonts/Pirulen.otf") format("opentype");
+        url("../fonts/Pirulen.otf") format("opentype");
     font-weight: normal;
 }
 
@@ -12,155 +12,172 @@
     font-family: "Forgotten Futurist";
     src:
         local("Forgotten Futurist"),
-        url("/fonts/Forgotten Futurist.ttf") format("truetype");
+        url("../fonts/Forgotten Futurist.ttf") format("truetype");
     font-weight: normal;
 }
 
-* {
-    padding: 0;
-    margin: 0;
-    font-family: "Forgotten Futurist";
-    box-sizing: border-box;
+.leaderboard-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 80px;
 }
 
-body {
-    color: white;
-    background-color: black;
-    background-image: url("/assets/background.png");
-    background-size: cover;
-}
-
-.heading {
-    margin: 10vh 10vw;
+.leader-heading {
+    margin: 20px 50px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.title {
+.leader-title {
     font-family: "Pirulen";
     font-size: 3.2rem;
 }
 
-.pictures {
+.leader-subtitle {
+    font-size: 2rem;
+    color: #c4c4c4;
+}
+
+.leader-pictures {
     display: flex;
     width: 100%;
     justify-content: center;
-    gap: 9em;
-    margin-top: -2em;
+    gap: 9rem;
+    margin-top: -2rem;
 }
 
-.pictures div {
-    width: 14em;
-    height: 14em;
+.leader-pictures div {
+    width: 14rem;
+    height: 14rem;
     background-color: #c4c4c4;
     border-radius: 50%;
     position: relative;
 }
 
-.first {
+.leader-first,
+.leader-second,
+.leader-third {
     position: relative;
-    border: 8px solid #fae100;
-    margin-top: 4em;
+    margin-top: 4rem;
 }
 
-.first::before {
-    content: url("../assets/vector.png");
+.leader-first::before,
+.leader-first::after,
+.leader-second::after,
+.leader-third::after {
     position: absolute;
-    top: -65px;
-    left: 69px;
-}
-
-.first::after {
-    position: absolute;
-    content: "1";
-    padding: 8px 18px;
-    bottom: -20px;
-    left: 84px;
     border-radius: 50%;
-    background-color: #fae100;
-    color: black;
     font-weight: 900;
     font-size: 1.5rem;
 }
 
-.second {
-    position: relative;
-    border: 4px solid #ff0000;
-    margin-top: 10em;
+.leader-first {
+    border: 8px solid #fae100;
 }
 
-.second::after {
-    position: absolute;
+.leader-first::before {
+    content: url("../assets/vector.png");
+    top: -65px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.leader-first::after {
+    content: "1";
+    padding: 8px 20px;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fae100;
+    color: black;
+}
+
+.leader-second {
+    border: 4px solid #ff0000;
+}
+
+.leader-second::after {
     content: "2";
     padding: 8px 18px;
     bottom: -30px;
-    left: 84px;
-    border-radius: 50%;
+    left: 50%;
+    transform: translateX(-50%);
     background-color: #ff0000;
-    font-weight: 900;
-    font-size: 1.5rem;
 }
 
-.third {
-    position: relative;
-    margin-top: 12em;
+.leader-second,
+.leader-third {
+    margin-top: 8rem;
 }
 
-.third::after {
-    position: absolute;
+.leader-third::after {
     content: "3";
     padding: 8px 18px;
     bottom: -30px;
-    left: 84px;
-    border-radius: 50%;
+    left: 50%;
+    transform: translateX(-50%);
     background-color: #ffffff;
     color: black;
-    font-weight: 900;
-    font-size: 1.5rem;
 }
 
-.pictures div div {
+.leader-pictures div div {
     position: absolute;
     top: 0;
     background-color: white;
 }
 
-.ranks {
+.leader-ranks {
     display: flex;
     flex-direction: column;
-    gap: 1em;
+    gap: 1rem;
     align-items: center;
-    font-size: 3em;
-    margin-top: 2em;
+    font-size: 3rem;
+    margin-top: 2rem;
 }
 
-.ranks div div {
+.leader-rank:first-child {
+    margin-bottom: 100px;
+}
+
+.leader-ranks div div {
     width: -webkit-max-content;
     width: -moz-max-content;
     width: max-content;
 }
 
-.ranks div {
+.leader-ranks div {
     display: flex;
     width: 50%;
     justify-content: space-between;
 }
 
-.current {
+.leader-card {
+    padding: 0.6em 1.2em;
+    border-radius: 0.9375rem;
+    background: rgba(7, 9, 73, 0.09);
+    box-shadow:
+        0px 1px 23.461px 0px rgba(107, 100, 154, 0.3) inset,
+        0px 1px 52.136px 0px rgba(179, 171, 226, 0.2) inset;
+    backdrop-filter: blur(65px);
+}
+
+.leader-current {
     font-family: "Montserrat", sans-serif;
     font-weight: 700;
     font-size: 2rem;
     background-color: white;
     color: black;
     border: 4px solid black;
-    outline-offset: 0.2em;
+    outline-offset: 0.2rem;
     letter-spacing: 0.2rem;
     outline: 1px solid rgb(255, 255, 255);
     padding: 15px 40px;
 }
 
-.other {
+.leader-other {
     background: rgba(0, 0, 0, 0.09);
     -webkit-backdrop-filter: blur(130px);
     backdrop-filter: blur(130px);
@@ -172,18 +189,6 @@ body {
     box-shadow:
         inset 0px 1px 23.4612px rgba(107, 100, 154, 0.3),
         inset 0px 1px 52.136px rgba(179, 171, 226, 0.2);
-}
-
-.rules {
-    position: fixed;
-    bottom: 1%;
-    right: 2%;
-    font-size: 2em;
-}
-
-.rules a {
-    text-decoration: underline;
-    color: white;
 }
 
 #err-cont {
@@ -200,7 +205,7 @@ body {
     justify-content: center;
 }
 
-.reg-par {
+.leader-reg-par {
     font-family: "Forgotten Futurist", sans-serif;
     word-break: break-word;
     font-size: 1.5rem;
@@ -212,7 +217,7 @@ body {
     opacity: 0.8;
 }
 
-.glass {
+.leader-glass {
     padding: 1.5rem;
     background: rgba(7, 9, 73, 0.09);
     box-shadow:
@@ -232,7 +237,7 @@ body {
     height: min-content;
 }
 
-#err .reg-par {
+#err .leader-reg-par {
     padding: 50px;
 }
 
@@ -254,201 +259,154 @@ body {
 }
 
 @media (max-width: 1600px) {
-    .betNumber {
-        font-size: 7em;
+    .leader-betNumber {
+        font-size: 7rem;
     }
 
-    .betSelect {
-        margin-left: 2em;
+    .leader-betSelect {
+        margin-left: 2rem;
     }
 }
 
 @media (max-width: 1300px) {
-    .title {
-        font-size: 2.4em;
+    .leader-title {
+        font-size: 2.5rem;
     }
 
-    .betNumber {
-        font-size: 4em;
+    .leader-betNumber {
+        font-size: 4rem;
     }
 
-    .betSelect {
-        font-size: 1.2em;
+    .leader-betSelect {
+        font-size: 1.2rem;
     }
 
-    .btn {
-        font-size: 0.8em;
+    .leader-btn {
+        font-size: 0.8rem;
     }
 }
 
 @media (max-width: 900px) {
-    .heading {
+    .leader-heading {
         flex-direction: column;
     }
 
-    .pictures {
+    .leader-pictures {
         gap: 0;
     }
 
-    .pictures .first {
+    .leader-pictures .leader-first,
+    .leader-pictures .leader-second,
+    .leader-pictures .leader-third {
         width: 150px;
         height: 150px;
     }
 
-    .first::after {
+    .leader-first::after,
+    .leader-second::after,
+    .leader-third::after {
         left: 42px;
     }
 
-    .first::before {
+    .leader-first::before {
         left: 28px;
     }
 
-    .pictures .second {
-        width: 150px;
-        height: 150px;
-    }
-
-    .second::after {
-        left: 42px;
-    }
-
-    .pictures .third {
-        width: 150px;
-        height: 150px;
-    }
-
-    .third::after {
-        left: 42px;
-    }
-
-    .current {
+    .leader-current {
         width: 90vw;
         padding: 10px 8px;
         font-size: 1.3rem;
         justify-content: space-around;
     }
 
-    .left {
+    .leader-left {
         width: -webkit-max-content;
         width: -moz-max-content;
         width: max-content;
     }
 
-    .other {
+    .leader-other {
         width: 100vw;
         padding: 10px 8px;
         font-size: 1.3rem;
     }
 
-    .title {
-        margin-bottom: 2em;
-        font-size: 1.7em;
+    .leader-title {
+        margin-bottom: 2rem;
+        text-align: center;
     }
 
-    .stash {
-        margin-left: -2em;
+    .leader-stash {
+        margin-left: -2rem;
     }
 
-    .content {
+    .leader-content {
         flex-direction: column-reverse;
-        margin-top: 5em;
+        margin-top: 5rem;
     }
 
-    .sliderHere {
+    .leader-sliderHere {
         width: 150%;
     }
 
-    .number {
+    .leader-number {
         width: 100%;
-        margin-left: -1em;
-        font-size: 0.8em;
+        margin-left: -1rem;
+        font-size: 0.8rem;
     }
 
-    .end1 {
+    .leader-end1,
+    .leader-end2 {
         width: 15px;
         height: 15px;
-        top: 0.8em;
+        top: 0.8rem;
     }
 
-    .end2 {
-        width: 15px;
-        height: 15px;
-        top: 0.8em;
+    .leader-desc {
+        margin-left: -6rem;
     }
 
-    .desc {
-        margin-left: -6em;
+    .leader-betSelect {
+        margin-left: -1rem;
+        font-size: 0.9rem;
     }
 
-    .betSelect {
-        margin-left: -1em;
-        font-size: 0.9em;
-    }
-
-    .ranks div {
+    .leader-ranks div {
         width: 80%;
     }
 
-    .rules {
+    .leader-rules {
         display: none;
     }
 
-    .current {
-        padding: 1em;
+    .leader-current {
+        padding: 1rem;
     }
 }
 
-@media (max-width: 900px) and (max-width: 450px) {
-    .pictures .first {
+@media (max-width: 450px) {
+    .leader-pictures .leader-first,
+    .leader-pictures .leader-second,
+    .leader-pictures .leader-third {
         width: 100px;
         height: 100px;
     }
 
-    .first::after {
+    .leader-first::after,
+    .leader-second::after,
+    .leader-third::after {
         left: 24px;
     }
 
-    .first::before {
+    .leader-first::before {
         left: 8px;
     }
 
-    .ranks {
-        gap: 0.4em;
+    .leader-ranks {
+        gap: 0.4rem;
     }
 
-    .pictures .second {
-        width: 100px;
-        height: 100px;
-    }
-
-    .second::after {
-        left: 24px;
-    }
-
-    .pictures .third {
-        width: 100px;
-        height: 100px;
-    }
-
-    .third::after {
-        left: 24px;
-        /* font-size: 0.4em; */
-    }
-
-    .current {
-        margin-bottom: 1.5em;
-    }
-}
-
-@media (max-width: 900px) {
-    .reg-par {
-        font-size: 1rem;
-        margin: auto;
-    }
-}
-
-@media (max-width: 900px) {
-    #err .reg-par {
-        padding: 10px 0;
+    .leader-current {
+        margin-bottom: 1.5rem;
     }
 }

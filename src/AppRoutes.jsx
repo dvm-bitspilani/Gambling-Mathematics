@@ -11,6 +11,7 @@ import { useURL } from "./utils/useData";
 import Exit from "./components/Exit";
 import Alert from "./components/Alert";
 import AlertContextProvider from "./contexts/AlertContext";
+import Leaderboard from "./pages/leaderboard";
 
 const AppRoutes = () => {
     const URL = useURL();
@@ -28,6 +29,7 @@ const AppRoutes = () => {
                     <Route path={URL.CATEGORIES} element={<Categories />} />
                     <Route path={URL.QUESTION} element={<Question />} />
                     <Route path={URL.FINISHED} element={<Finished />} />
+                    <Route path={URL.LEADERBOARD} element={<Leaderboard />} />
                     <Route path="*" element={<App />} />
                 </Routes>
             </AlertContextProvider>

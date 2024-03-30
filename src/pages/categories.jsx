@@ -61,6 +61,15 @@ const Categories = () => {
         fetchData();
     }, [user.token]);
 
+    useEffect(() => {
+        if (user.points === 0) {
+            setErrorText(
+                "Your points are 0. Redirecting you to finish.",
+                URL.FINISHED
+            );
+        }
+    }, [user.points]);
+
     // Handlers
     const handleLocate = async category => {
         try {

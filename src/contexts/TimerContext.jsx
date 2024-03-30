@@ -1,4 +1,10 @@
-import React, { createContext, useState, useContext, useRef } from "react";
+import React, {
+    createContext,
+    useState,
+    useContext,
+    useRef,
+    useEffect
+} from "react";
 
 const TimerContext = createContext();
 
@@ -24,16 +30,7 @@ const TimerContextProvider = ({ children }) => {
         endTime.setSeconds(endTime.getSeconds() + seconds);
 
         timerIdRef.current = setInterval(() => {
-            const { total, hours, minutes, seconds } =
-                getTimeRemaining(endTime);
-            if (total <= 0) {
-                clearInterval(timerIdRef.current);
-                handleTimeout();
-            } else {
-                setTimer(
-                    `${hours > 9 ? hours : "0" + hours}:${minutes > 9 ? minutes : "0" + minutes}:${seconds > 9 ? seconds : "0" + seconds}`
-                );
-            }
+            updateTimer(endTime);
         }, 1000);
     };
 
@@ -41,6 +38,18 @@ const TimerContextProvider = ({ children }) => {
         clearInterval(timerIdRef.current);
         timerIdRef.current = null;
         setTimer("00:00:00");
+    };
+
+    const updateTimer = endTime => {
+        const { total, hours, minutes, seconds } = getTimeRemaining(endTime);
+        if (total <= 0) {
+            clearInterval(timerIdRef.current);
+            handleTimeout();
+        } else {
+            setTimer(
+                `${hours > 9 ? hours : "0" + hours}:${minutes > 9 ? minutes : "0" + minutes}:${seconds > 9 ? seconds : "0" + seconds}`
+            );
+        }
     };
 
     const getTimeRemaining = endTime => {
@@ -56,6 +65,12 @@ const TimerContextProvider = ({ children }) => {
         clearInterval(timerIdRef.current);
         timerIdRef.current = null;
     };
+
+    useEffect(() => {
+        return () => {
+            clearTimer();
+        };
+    }, []);
 
     return (
         <TimerContext.Provider

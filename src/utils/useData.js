@@ -7,6 +7,7 @@ const useURL = () => {
         CATEGORIES: "/categories",
         QUESTION: "/question",
         FINISHED: "/finished",
+        LEADERBOARD: "/leaderboard",
 
         API_BASE: "https://test.bits-apogee.org/2024/main/gm_api",
         API_LOGIN: "/login",

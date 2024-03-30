@@ -1,16 +1,19 @@
-import React, { useContext } from "react";
+import React from "react";
 import "../styles/login.css";
-import UserContext from "../contexts/UserContext";
+import { useUser } from "../contexts/UserContext";
 import { useTitle } from "../utils/useHead";
 
 const Finished = () => {
+    // Hooks
     useTitle("Game Finished");
 
-    const { user } = useContext(UserContext);
+    // Context
+    const { user } = useUser();
 
-    const finalPoints =
-        user.points ?? JSON.parse(localStorage.user).points ?? "N/A";
+    // Logic to retrieve final points
+    const finalPoints = user.points ?? "N/A";
 
+    // JSX
     return (
         <div id="login-wrapper">
             <div id="left">
@@ -19,12 +22,11 @@ const Finished = () => {
                     Your game has ended. We hope you enjoyed it!
                 </div>
             </div>
-
             <div id="right">
                 <div id="login-form">
                     <div className="login-field-cont">
                         <div className="login-field">
-                            Your final points are: {finalPoints}
+                            {`You finished at ${finalPoints} points.`}
                         </div>
                     </div>
                 </div>
