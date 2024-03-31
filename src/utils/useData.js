@@ -15,7 +15,8 @@ const useURL = () => {
         API_MAX_BET: "/get_max_bet",
         API_PLACE_BET: "/place_bet",
         API_GET_QUESTION: "/get_question",
-        API_ANSWER: "/answer"
+        API_ANSWER: "/answer",
+        API_LEADERBOARD: "/leaderboad"
     };
 
     return URL;
@@ -23,18 +24,25 @@ const useURL = () => {
 
 const useInstructions = () => {
     const instructions = [
-        "A team can attempt only once.",
-        "You will be given 1000 coins initially.",
-        "There are 8 categories. You will choose a category and bet some amount of coins.",
-        "In each round a player has to bet a minimum of 200 coins.",
-        "After betting the coins, you will be shown a question which will have 4 options out of which only 1 will be correct.",
-        "If the answer is right you will get the coins back after being multiplied by the multiplier.",
-        "If the answer is wrong, the betted coins will be lost.",
-        "After attempting one question from the chosen category, you will choose another category and then bet and so on till you complete all the categories.",
-        "If you are out of the coins, your game will end.",
-        "After attempting all the 8 categories, your final amount of coins will be stored and the top 12 teams according to the number of coins will proceed to the next round.",
-        "Ties will be resolved on the basis of time taken to complete the game.",
-        "The maximum number of you can bet in each round and its corresponding multiplier is as follows."
+        "1. Each team can attempt only once.",
+        "2. Teams will have 10 minutes to understand the rules and strategize.",
+        "3. Teams will have a maximum of 50 minutes to attempt questions.",
+        "4. Each team will begin with 3,000 points.",
+        "5. There are 16 total categories: 12 Math Categories (teams choose 11 to attempt) and 4 Puzzle Categories (mandatory for all teams).",
+        "6. Within each category, teams can choose:.",
+        [
+            "Easy Question (1.25x bet reward on correct answer).",
+            "Medium Question (2x bet reward on correct answer).",
+            "Hard Question (4x bet reward on correct answer)"
+        ],
+        "7. Minimum bet amount: 200 points.",
+        "8. After betting you will be shown a question which will have 4 options out of which only 1 will be correct.",
+        "9. Incorrect or unanswered questions receive no points.",
+        "10. Teams will be penalized 10 percent of their final score for every math category they skip. Penalty is applied after all questions are attempted or time runs out.",
+        "11. Teams can attempt questions in any order.",
+        "12. All categories and difficulties are visible before making choices.",
+        "13. Minimum score cannot go below 0 points. If your coins are out the game will end.",
+        "14. Ties will be resolved on the basis of time taken to complete the game."
     ];
 
     return instructions;

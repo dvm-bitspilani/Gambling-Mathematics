@@ -1,7 +1,13 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import Cookies from "js-cookie";
 
-const initUser = { name: null, points: null, token: null, category: null };
+const initUser = {
+    name: null,
+    points: null,
+    token: null,
+    category: null,
+    rank: null
+};
 
 const UserContext = createContext();
 

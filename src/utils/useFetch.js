@@ -77,11 +77,16 @@ const postAnswer = async (question_id, option_id, userToken) => {
     );
 };
 
+const getLeaderboard = async userToken => {
+    return await createRequest("API_LEADERBOARD", "get", null, userToken);
+};
+
 export {
     postLogin,
     getCategories,
     postCategory,
     postBet,
     getQuestion,
-    postAnswer
+    postAnswer,
+    getLeaderboard
 };

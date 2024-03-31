@@ -31,7 +31,7 @@ const Question = () => {
         }
     }, [timer]);
 
-    // Fetch Data Function
+    // Functions
     const fetchData = async () => {
         try {
             const { data, error } = await getQuestion(user.token, user.level);
@@ -53,14 +53,13 @@ const Question = () => {
         }
     };
 
-    // Handle Fetch Error Function
+    // Handlers
     const handleFetchError = () => {
         setErrorText(
             "An error occurred while fetching the question. Please try again."
         );
     };
 
-    // Handle Answer Function
     const handleAnswer = async opt => {
         clearInterval(timer);
 
@@ -92,7 +91,6 @@ const Question = () => {
         }
     };
 
-    // Handle Error Function
     const handleError = () => {
         handleTimeout();
         setErrorText(

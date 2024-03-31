@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import rules from "../assets/rules.png";
 import "../styles/categories.css";
 import { useTitle } from "../utils/useHead";
 import { useInstructions, useURL } from "../utils/useData";
@@ -25,18 +24,27 @@ const Instructions = () => {
             <div style={{ textAlign: "center" }} className="title">
                 GAMBLING MATHS
             </div>
-
             <div className="instructions">
                 <div className="instructionsTitle">Instructions</div>
-
-                <ul className="instructionsContent">
+                <div className="instructionsContent">
                     {instructions.map((instruction, index) => (
-                        <li key={index}>{instruction}</li>
+                        <span key={index}>
+                            {typeof instruction === "string" ? (
+                                instruction
+                            ) : (
+                                <ul className="instructionsContent">
+                                    {instruction.map(
+                                        (subInstruction, subIndex) => (
+                                            <li key={subIndex}>
+                                                {subInstruction}
+                                            </li>
+                                        )
+                                    )}
+                                </ul>
+                            )}
+                        </span>
                     ))}
-                </ul>
-
-                <img className="rules-img" src={rules} alt="RULES" />
-
+                </div>
                 <div className="instructionsButton" onClick={handleClick}>
                     Continue to Play
                 </div>

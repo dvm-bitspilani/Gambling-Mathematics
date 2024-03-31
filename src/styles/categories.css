@@ -220,6 +220,11 @@ body {
     scale: 0.9;
     top: 20px;
     left: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
 }
 
 .categories-wrapper .content {

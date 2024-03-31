@@ -21,43 +21,6 @@ const Categories = () => {
 
     // Effects
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const { data, loading, error } = await getCategories(
-                    user.token
-                );
-
-                setLoading(loading);
-
-                if (data) {
-                    const { answered_categories: done, all_categories: all } =
-                        data;
-
-                    const completed = done?.map(c => c.id) ?? [];
-                    const shown =
-                        all?.filter(c => !completed.includes(c.id)) ?? [];
-
-                    if (shown.length === 0) {
-                        setSuccessText(
-                            "All categories completed! Redirecting you to finish.",
-                            URL.FINISHED
-                        );
-                    }
-
-                    setCategories(shown);
-                }
-
-                if (error) {
-                    setErrorText(
-                        "Failed to fetch categories. Refresh the page."
-                    );
-                    console.error(error);
-                }
-            } catch (err) {
-                console.error(err);
-            }
-        };
-
         fetchData();
     }, [user.token]);
 
@@ -70,10 +33,53 @@ const Categories = () => {
         }
     }, [user.points]);
 
+    // Functions
+    const fetchData = async () => {
+        try {
+            const { data, loading, error } = await getCategories(user.token);
+
+            setLoading(loading);
+
+            if (data) {
+                const { answered_categories: done, all_categories: all } = data;
+
+                const completed = done?.map(c => c.id) ?? [];
+                const shown = all?.filter(c => !completed.includes(c.id)) ?? [];
+
+                if (shown.length === 0) {
+                    setSuccessText(
+                        "All categories completed! Redirecting you to finish.",
+                        URL.FINISHED
+                    );
+                }
+
+                setCategories(shown);
+            }
+
+            if (error) {
+                setErrorText("Failed to fetch categories. Refresh the page.");
+                console.error(error);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     // Handlers
     const handleLocate = async category => {
         try {
-            await postCategory(category.name, user.token);
+            const { error } = await postCategory(category.name, user.token);
+
+            if (error) {
+                const { response } = error;
+
+                setErrorText(
+                    response.status === 403
+                        ? response.data.message
+                        : "Failed to find this category. Try again."
+                );
+                return;
+            }
 
             updateUser({ category: category.id });
 

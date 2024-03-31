@@ -8,7 +8,7 @@ import Categories from "./pages/categories";
 import Question from "./pages/question";
 import Finished from "./pages/finished";
 import { useURL } from "./utils/useData";
-import Exit from "./components/Exit";
+import Fixed from "./components/Fixed";
 import Alert from "./components/Alert";
 import AlertContextProvider from "./contexts/AlertContext";
 import Leaderboard from "./pages/leaderboard";
@@ -19,7 +19,7 @@ const AppRoutes = () => {
     return (
         <Router basename={URL.HOME}>
             <AlertContextProvider>
-                <Exit />
+                <Fixed />
                 <Alert />
 
                 <Routes>

@@ -134,12 +134,8 @@
     flex-direction: column;
     gap: 1rem;
     align-items: center;
-    font-size: 3rem;
+    font-size: 2rem;
     margin-top: 2rem;
-}
-
-.leader-rank:first-child {
-    margin-bottom: 100px;
 }
 
 .leader-ranks div div {
@@ -151,7 +147,9 @@
 .leader-ranks div {
     display: flex;
     width: 50%;
+    gap: 1rem;
     justify-content: space-between;
+    min-width: max-content;
 }
 
 .leader-card {
