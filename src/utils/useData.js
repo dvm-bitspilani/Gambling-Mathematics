@@ -16,7 +16,7 @@ const useURL = () => {
         API_PLACE_BET: "/place_bet",
         API_GET_QUESTION: "/get_question",
         API_ANSWER: "/answer",
-        API_LEADERBOARD: "/leaderboad"
+        API_LEADERBOARD: "/leaderboard"
     };
 
     return URL;

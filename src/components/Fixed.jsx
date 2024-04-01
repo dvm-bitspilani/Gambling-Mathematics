@@ -22,16 +22,18 @@ const Fixed = () => {
         navigate(URL.LEADERBOARD);
     };
 
-    return pathName ? (
+    return pathName === "" ? null : (
         <div className="topLeft">
             <div className="instructionsButton" onClick={handleExit}>
                 Exit Game
             </div>
-            <div className="instructionsButton" onClick={handleLeaderboard}>
-                Leaderboard
-            </div>
+            {pathName === URL.LEADERBOARD ? null : (
+                <div className="instructionsButton" onClick={handleLeaderboard}>
+                    Leaderboard
+                </div>
+            )}
         </div>
-    ) : null;
+    );
 };
 
 export default Fixed;

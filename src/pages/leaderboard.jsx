@@ -9,7 +9,7 @@ const Leaderboard = () => {
     // Hooks
     useVerifyAuth();
     useTitle("Leaderboard");
-    const { user } = useUser();
+    const { user, updateUser } = useUser();
 
     // States
     const [leaderboard, setLeaderboard] = useState([]);
@@ -28,7 +28,8 @@ const Leaderboard = () => {
             return;
         }
 
-        setLeaderboard(data);
+        updateUser({ rank: data.user_rank });
+        setLeaderboard(data.leaders.sort((a, b) => a.rank - b.rank));
     };
 
     // JSX
@@ -52,8 +53,9 @@ const Leaderboard = () => {
                         leaderboard.map(leader => (
                             <LeaderCard
                                 key={leader.id}
-                                title={leader.name}
                                 rank={leader.rank}
+                                title={leader.name}
+                                points={leader.points}
                             />
                         ))
                     ) : (
@@ -68,11 +70,11 @@ const Leaderboard = () => {
     );
 };
 
-const LeaderCard = ({ title, rank }) => {
+const LeaderCard = ({ rank, title, points }) => {
     return (
         <div className="leader-card">
-            <div className="leader-left">{title}</div>
-            <div className="leader-right">{rank}</div>
+            <div className="leader-left">{`${rank}. ${title}`}</div>
+            <div className="leader-right">{points}</div>
         </div>
     );
 };

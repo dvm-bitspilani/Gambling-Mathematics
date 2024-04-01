@@ -27,7 +27,7 @@ const Categories = () => {
     useEffect(() => {
         if (user.points === 0) {
             setErrorText(
-                "Your points are 0. Redirecting you to finish.",
+                "You have run out of points. Redirecting you to finish.",
                 URL.FINISHED
             );
         }
