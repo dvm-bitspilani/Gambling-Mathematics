@@ -38,7 +38,7 @@ body {
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
-    padding: 60px 80px;
+    padding: 80px;
     padding-bottom: 0;
 }
 
@@ -215,16 +215,36 @@ body {
     width: 25px;
 }
 
-.topLeft {
-    position: absolute;
+.num {
+    margin: 0;
+    padding: 5px 10px;
+    font-family: "Forgotten Futurist", sans-serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: white;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+.topLeft,
+.bottomRight {
+    z-index: 101;
+    position: fixed;
     scale: 0.9;
-    top: 20px;
-    left: 20px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    gap: 10px;
+    gap: 0 10px;
+    width: max-content;
+    height: max-content;
+    bottom: 20px;
+    right: 20px;
+}
+
+.topLeft {
+    top: 20px;
+    left: 20px;
 }
 
 .categories-wrapper .content {

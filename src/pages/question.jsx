@@ -5,7 +5,6 @@ import { useTitle } from "../utils/useHead";
 import { useURL } from "../utils/useData";
 import { useAlert } from "../contexts/AlertContext";
 import { useVerifyAuth } from "../utils/useAuth";
-import { useTimer } from "../contexts/TimerContext";
 import { getQuestion, postAnswer } from "../utils/useFetch";
 
 const Question = () => {
@@ -14,7 +13,6 @@ const Question = () => {
     useTitle("Answer Your Question");
     const { user, updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
-    const { timer, startTimer, handleTimeout } = useTimer();
     const URL = useURL();
 
     // State
@@ -24,12 +22,6 @@ const Question = () => {
     useEffect(() => {
         fetchData();
     }, []);
-
-    useEffect(() => {
-        if (timer === "00:00:00") {
-            handleError();
-        }
-    }, [timer]);
 
     // Functions
     const fetchData = async () => {
@@ -45,8 +37,6 @@ const Question = () => {
 
             updateUser({ points });
             setQuestion({ q: question, o: options, id: question_id });
-
-            startTimer(3, 0);
         } catch (error) {
             handleFetchError();
             console.log(error);
@@ -61,8 +51,6 @@ const Question = () => {
     };
 
     const handleAnswer = async opt => {
-        clearInterval(timer);
-
         try {
             const { data, error } = await postAnswer(
                 question.id,
@@ -92,7 +80,6 @@ const Question = () => {
     };
 
     const handleError = () => {
-        handleTimeout();
         setErrorText(
             "You could not pick the correct answer. Redirecting you back to categories.",
             URL.CATEGORIES
@@ -132,16 +119,6 @@ const Question = () => {
                             {opt.option_text}
                         </div>
                     )) ?? "Fetching Options.."}
-                </div>
-            </div>
-            <div id="right">
-                <div id="right-grid">
-                    <div className="reg-par" style={{ textAlign: "center" }}>
-                        Your Remaining Time:
-                    </div>
-                    <div className="num" id="timer">
-                        {timer}
-                    </div>
                 </div>
             </div>
         </div>

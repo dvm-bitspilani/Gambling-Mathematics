@@ -22,7 +22,7 @@ const Categories = () => {
     // Effects
     useEffect(() => {
         fetchData();
-    }, [user.token]);
+    }, []);
 
     useEffect(() => {
         if (user.points === 0) {

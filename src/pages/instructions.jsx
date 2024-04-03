@@ -4,6 +4,7 @@ import "../styles/categories.css";
 import { useTitle } from "../utils/useHead";
 import { useInstructions, useURL } from "../utils/useData";
 import { useVerifyAuth } from "../utils/useAuth";
+import { useTimer } from "../contexts/TimerContext";
 
 const Instructions = () => {
     // Hooks
@@ -11,10 +12,12 @@ const Instructions = () => {
     useTitle("General Instructions");
     const navigate = useNavigate();
     const instructions = useInstructions();
+    const { startTimer } = useTimer();
     const URL = useURL();
 
     // Event Handler
     const handleClick = () => {
+        startTimer(50, 0);
         navigate(URL.CATEGORIES);
     };
 

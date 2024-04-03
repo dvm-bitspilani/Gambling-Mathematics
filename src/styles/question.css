@@ -140,17 +140,6 @@ body {
     letter-spacing: 2px;
     opacity: 0.8;
 }
-.num {
-    width: 120px;
-    padding: 5px 10px;
-    margin: 0;
-    font-family: "Forgotten Futurist", sans-serif;
-    font-size: 2rem;
-    font-weight: 900;
-    color: white;
-    text-align: center;
-    letter-spacing: 5px;
-}
 
 #answers {
     width: 100%;

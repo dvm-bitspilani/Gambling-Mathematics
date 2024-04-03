@@ -1,10 +1,11 @@
 import React, {
     createContext,
     useState,
+    useEffect,
     useContext,
-    useRef,
-    useEffect
+    useRef
 } from "react";
+import Cookies from "js-cookie";
 
 const TimerContext = createContext();
 
@@ -19,15 +20,20 @@ export const useTimer = () => {
 };
 
 const TimerContextProvider = ({ children }) => {
-    const [timer, setTimer] = useState("00:00:00");
     const timerIdRef = useRef(null);
+    const [timer, setTimer] = useState("00:00:00");
+
+    useEffect(() => {
+        const storedTimer = Cookies.get("timer");
+        if (storedTimer) {
+            setTimer(JSON.parse(storedTimer));
+        }
+    }, []);
 
     const startTimer = (minutes, seconds) => {
         if (timerIdRef.current) return;
 
-        const endTime = new Date();
-        endTime.setMinutes(endTime.getMinutes() + minutes);
-        endTime.setSeconds(endTime.getSeconds() + seconds);
+        const endTime = Date.now() + minutes * 60 * 1000 + seconds * 1000;
 
         timerIdRef.current = setInterval(() => {
             updateTimer(endTime);
@@ -38,22 +44,24 @@ const TimerContextProvider = ({ children }) => {
         clearInterval(timerIdRef.current);
         timerIdRef.current = null;
         setTimer("00:00:00");
+        Cookies.remove("timer");
     };
 
     const updateTimer = endTime => {
         const { total, hours, minutes, seconds } = getTimeRemaining(endTime);
+
         if (total <= 0) {
             clearInterval(timerIdRef.current);
             handleTimeout();
         } else {
-            setTimer(
-                `${hours > 9 ? hours : "0" + hours}:${minutes > 9 ? minutes : "0" + minutes}:${seconds > 9 ? seconds : "0" + seconds}`
-            );
+            const formattedTime = formatTime(hours, minutes, seconds);
+            setTimer(formattedTime);
+            Cookies.set("timer", JSON.stringify(formattedTime), { expires: 1 });
         }
     };
 
     const getTimeRemaining = endTime => {
-        const total = Date.parse(endTime) - Date.now();
+        const total = endTime - Date.now();
         const seconds = Math.floor((total / 1000) % 60);
         const minutes = Math.floor((total / 1000 / 60) % 60);
         const hours = Math.floor((total / 1000 / 60 / 60) % 24);
@@ -64,6 +72,15 @@ const TimerContextProvider = ({ children }) => {
     const handleTimeout = () => {
         clearInterval(timerIdRef.current);
         timerIdRef.current = null;
+        Cookies.remove("timer");
+    };
+
+    const formatTime = (hours, minutes, seconds) => {
+        return `${formatDigit(hours)}:${formatDigit(minutes)}:${formatDigit(seconds)}`;
+    };
+
+    const formatDigit = digit => {
+        return digit > 9 ? digit : "0" + digit;
     };
 
     useEffect(() => {
