@@ -234,11 +234,12 @@ body {
 }
 
 .level-selector button:hover {
-    background: rgba(7, 9, 73, 0.3);
+    background: #0176D3;
 }
 
 .level-selector button.selected {
-    background: rgba(7, 9, 73, 0.5);
+    /* background: rgba(7, 9, 73, 0.5); */
+    background: #0176D3; 
 }
 
 #err-cont {

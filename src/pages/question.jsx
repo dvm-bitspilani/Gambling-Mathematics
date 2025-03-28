@@ -113,7 +113,7 @@ const Question = () => {
                         <div
                             key={opt.option_id}
                             id={opt.option_id}
-                            className="answer glass"
+                            className="answer glass1"
                             onClick={() => handleAnswer(opt)}
                         >
                             {opt.option_text}
