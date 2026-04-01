@@ -29,7 +29,9 @@ const UserContextProvider = ({ children }) => {
     const [user, setUser] = useState(() => {
         try {
             const storedUserCookie = Cookies.get("gm_user");
-            return storedUserCookie ? JSON.parse(storedUserCookie) : initUser;
+            return storedUserCookie
+                ? { ...initUser, ...JSON.parse(storedUserCookie), refresh: null }
+                : initUser;
         } catch (error) {
             console.error("Error retrieving user data.");
             return initUser;
@@ -38,7 +40,10 @@ const UserContextProvider = ({ children }) => {
 
     useEffect(() => {
         try {
-            Cookies.set("gm_user", JSON.stringify(user), { expires: 365 });
+            const { refresh, ...persistedUser } = user;
+            Cookies.set("gm_user", JSON.stringify(persistedUser), {
+                expires: 365
+            });
         } catch (error) {
             console.error("Error setting user data.");
         }

@@ -54,7 +54,10 @@ const Leaderboard = () => {
                     {leaderboard?.length ? (
                         leaderboard.map(leader => (
                             <LeaderCard
-                                key={leader.id ?? `${leader.team_name}-${leader.rank}`}
+                                key={
+                                    leader.id ??
+                                    `${leader.team_name ?? "team"}-${leader.rank ?? "na"}-${leader.points ?? "na"}`
+                                }
                                 rank={leader.rank}
                                 title={leader.team_name}
                                 points={leader.points}
