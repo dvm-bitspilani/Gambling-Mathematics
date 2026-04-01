@@ -44,15 +44,11 @@ const getCategories = async userToken => {
     return await createRequest("API_CATEGORY", "get", null, userToken);
 };
 
-const postCategory = async (category, userToken) => {
-    return await createRequest("API_CATEGORY", "post", { category }, userToken);
-};
-
 const postBet = async (bet, userToken, userCategory) => {
     return await createRequest(
         "API_PLACE_BET",
         "post",
-        { bet },
+        bet,
         userToken,
         userCategory
     );
@@ -84,7 +80,6 @@ const getLeaderboard = async userToken => {
 export {
     postLogin,
     getCategories,
-    postCategory,
     postBet,
     getQuestion,
     postAnswer,

@@ -28,8 +28,10 @@ const Leaderboard = () => {
             return;
         }
 
-        updateUser({ rank: data.user_rank });
-        setLeaderboard(data.leaders.sort((a, b) => a.rank - b.rank));
+        const results = Array.isArray(data?.results) ? data.results : [];
+        const currentTeam = results.find(leader => leader.is_current_team);
+        updateUser({ rank: currentTeam?.rank ?? null });
+        setLeaderboard(results.sort((a, b) => a.rank - b.rank));
     };
 
     // JSX
@@ -52,9 +54,12 @@ const Leaderboard = () => {
                     {leaderboard?.length ? (
                         leaderboard.map(leader => (
                             <LeaderCard
-                                key={leader.id}
+                                key={
+                                    leader.id ??
+                                    `${leader.team_name ?? "team"}-${leader.rank ?? "na"}-${leader.points ?? "na"}`
+                                }
                                 rank={leader.rank}
-                                title={leader.name}
+                                title={leader.team_name}
                                 points={leader.points}
                             />
                         ))

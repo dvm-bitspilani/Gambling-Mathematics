@@ -42,14 +42,23 @@ const App = () => {
     };
 
     const handleLoginSuccess = data => {
-        const { message, name, points, token } = data;
+        const {
+            access,
+            refresh,
+            team: { team_name, points } = {}
+        } = data ?? {};
 
-        if (message === "login") {
+        if (access) {
             setSuccessText(
                 "Login successful. Redirecting you to instructions.",
                 URL.INSTRUCTIONS
             );
-            updateUser({ name, points, token });
+            updateUser({
+                name: team_name ?? null,
+                points: points ?? 0,
+                token: access,
+                refresh: refresh ?? null
+            });
         } else {
             setErrorText("Login failed. Invalid credentials.");
         }

@@ -14,9 +14,15 @@ const Question = () => {
     const { user, updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
     const URL = useURL();
+    const IMAGE_BASE = "https://gambling-math.bits-apogee.org";
 
     // State
-    const [question, setQuestion] = useState({ q: "", o: [], id: null });
+    const [question, setQuestion] = useState({
+        text: "",
+        image: "",
+        options: [],
+        id: null
+    });
 
     // Effects
     useEffect(() => {
@@ -33,10 +39,13 @@ const Question = () => {
                 return;
             }
 
-            const { points, question, options, question_id } = data;
-
-            updateUser({ points });
-            setQuestion({ q: question, o: options, id: question_id });
+            const { image, text, options, question_id } = data;
+            setQuestion({
+                image,
+                text,
+                options,
+                id: question_id
+            });
         } catch (error) {
             handleFetchError();
             console.log(error);
@@ -54,7 +63,7 @@ const Question = () => {
         try {
             const { data, error } = await postAnswer(
                 question.id,
-                opt.option_id,
+                opt.id,
                 user.token
             );
 
@@ -63,14 +72,14 @@ const Question = () => {
                 return;
             }
 
-            updateUser({ category: null, points: data.points });
+            updateUser({ category: null, points: data.total_points });
 
-            if (data.status === "correct") {
+            if (data.correct) {
                 setSuccessText(
                     "You picked the correct answer. Redirecting you back to categories.",
                     URL.CATEGORIES
                 );
-            } else if (data.status === "incorrect") {
+            } else {
                 handleError();
             }
         } catch (err) {
@@ -98,25 +107,31 @@ const Question = () => {
             </div>
             <div id="left">
                 <div className="reg-par" id="question">
-                    {question?.q ? (
+                    {question?.image ? (
                         <img
-                            src={question.q}
-                            alt={question.q}
+                            src={
+                                question.image?.startsWith("http")
+                                    ? question.image
+                                    : `${IMAGE_BASE}${question.image}`
+                            }
+                            alt="question"
                             className="ques-img"
                         />
+                    ) : question?.text ? (
+                        question.text
                     ) : (
                         "Fetching Question.."
                     )}
                 </div>
                 <div id="answers">
-                    {question?.o?.map(opt => (
+                    {question?.options?.map(opt => (
                         <div
-                            key={opt.option_id}
-                            id={opt.option_id}
+                            key={opt.id}
+                            id={opt.id}
                             className="answer glass1"
                             onClick={() => handleAnswer(opt)}
                         >
-                            {opt.option_text}
+                            {opt.text}
                         </div>
                     )) ?? "Fetching Options.."}
                 </div>

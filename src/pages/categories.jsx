@@ -5,7 +5,7 @@ import { useTitle } from "../utils/useHead";
 import { useURL } from "../utils/useData";
 import { useAlert } from "../contexts/AlertContext";
 import { useVerifyAuth } from "../utils/useAuth";
-import { getCategories, postCategory } from "../utils/useFetch";
+import { getCategories } from "../utils/useFetch";
 
 const Categories = () => {
     // Hooks
@@ -41,16 +41,18 @@ const Categories = () => {
             setLoading(loading);
 
             if (data) {
-                const { answered_categories: done, all_categories: all } = data;
+                if (!Array.isArray(data)) {
+                    setErrorText(
+                        "Expected a categories list but received an invalid response. Refresh the page."
+                    );
+                    console.error("Unexpected categories response:", data);
+                    return;
+                }
 
-                const completed = done?.map(c => c.id) ?? [];
-                const shown = all?.filter(c => !completed.includes(c.id)) ?? [];
+                const shown = data;
 
                 if (shown.length === 0) {
-                    setSuccessText(
-                        "All categories completed! Redirecting you to finish.",
-                        URL.FINISHED
-                    );
+                    setSuccessText("All categories completed! Redirecting you to finish.", URL.FINISHED);
                 }
 
                 setCategories(shown);
@@ -68,19 +70,6 @@ const Categories = () => {
     // Handlers
     const handleLocate = async category => {
         try {
-            const { error } = await postCategory(category.name, user.token);
-
-            if (error) {
-                const { response } = error;
-
-                setErrorText(
-                    response.status === 403
-                        ? response.data.message
-                        : "Failed to find this category. Try again."
-                );
-                return;
-            }
-
             updateUser({ category: category.id });
 
             setSuccessText(
