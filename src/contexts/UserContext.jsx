@@ -5,8 +5,10 @@ const initUser = {
     name: null,
     points: null,
     token: null,
+    refresh: null,
     category: null,
-    rank: null
+    rank: null,
+    level: null
 };
 
 const UserContext = createContext();

@@ -45,14 +45,19 @@ const getCategories = async userToken => {
 };
 
 const postCategory = async (category, userToken) => {
-    return await createRequest("API_CATEGORY", "post", { category }, userToken);
+    return await createRequest(
+        "API_CATEGORY",
+        "post",
+        { name: category },
+        userToken
+    );
 };
 
 const postBet = async (bet, userToken, userCategory) => {
     return await createRequest(
         "API_PLACE_BET",
         "post",
-        { bet },
+        bet,
         userToken,
         userCategory
     );

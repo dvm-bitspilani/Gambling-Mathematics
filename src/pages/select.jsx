@@ -18,7 +18,7 @@ const Select = () => {
 
     // State
     const [bet, setBet] = useState(200);
-    const [selectedLevel, setSelectedLevel] = useState("H");
+    const [selectedLevel, setSelectedLevel] = useState("hard");
 
     // Effects
     useEffect(() => {
@@ -35,12 +35,12 @@ const Select = () => {
                 return;
             }
 
-            if (bet < 200) {
-                setErrorText("Minimum bet is 200 points.");
+            if (Number(bet) < 1) {
+                setErrorText("Minimum bet is 1 point.");
                 return;
             }
 
-            if (!["E", "M", "H"].includes(selectedLevel)) {
+            if (!["easy", "medium", "hard"].includes(selectedLevel)) {
                 setErrorText("Please select a level first.");
                 return;
             }
@@ -52,11 +52,19 @@ const Select = () => {
                 return;
             }
 
-            const { error } = await postBet(bet, user.token, user.category);
+            const { data, error } = await postBet(
+                { amount: Number(bet), level: selectedLevel },
+                user.token,
+                user.category
+            );
 
             if (error) {
-                handlePostBetError(error.response.status);
+                handlePostBetError(error);
                 return;
+            }
+
+            if (typeof data?.remaining_points === "number") {
+                updateUser({ points: data.remaining_points });
             }
 
             setSuccessText(
@@ -69,21 +77,25 @@ const Select = () => {
         }
     };
 
-    const handlePostBetError = status => {
+    const handlePostBetError = error => {
+        const status = error?.response?.status;
+        const detail = error?.response?.data?.detail;
+
         if (status === 403) {
             setErrorText(
                 "You have selected a different category. Redirecting you back to the category selection page.",
                 URL.CATEGORIES
             );
-        } else if (status === 406) {
+        } else if (
+            status === 400 &&
+            detail === "open bet already exists for this category and level"
+        ) {
             setErrorText(
                 "You have already placed a bet. Redirecting you to the questions page.",
                 URL.QUESTION
             );
         } else {
-            setErrorText(
-                "An error occurred while placing your bet. Please try again."
-            );
+            setErrorText(detail || "An error occurred while placing your bet.");
         }
     };
 
@@ -121,17 +133,27 @@ const Select = () => {
                     </div>
                     <div className="level-selector">
                         <span>Select Level: </span>
-                        {levels.map(({ level, text }) => (
+                        {levels.map(({ level, text }) => {
+                            const mappedLevel =
+                                level === "E"
+                                    ? "easy"
+                                    : level === "M"
+                                      ? "medium"
+                                      : "hard";
+                            return (
                             <button
                                 key={level}
-                                onClick={() => setSelectedLevel(level)}
+                                onClick={() => setSelectedLevel(mappedLevel)}
                                 className={
-                                    selectedLevel === level ? "selected" : ""
+                                    selectedLevel === mappedLevel
+                                        ? "selected"
+                                        : ""
                                 }
                             >
                                 {text}
                             </button>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
                 <div className="betSelect">
