@@ -84,7 +84,10 @@ const Select = () => {
 
     const handlePostBetError = error => {
         const status = error?.response?.status;
-        const detail = error?.response?.data?.detail;
+        const detail =
+            error?.response?.data?.detail ||
+            error?.message ||
+            "An error occurred while placing your bet.";
 
         if (status === 403) {
             setErrorText(
@@ -100,7 +103,7 @@ const Select = () => {
                 URL.QUESTION
             );
         } else {
-            setErrorText(detail || "An error occurred while placing your bet.");
+            setErrorText(detail);
         }
     };
 
@@ -138,10 +141,11 @@ const Select = () => {
                     </div>
                     <div className="level-selector">
                         <span>Select Level: </span>
-                        {levels.map(({ level, text }) => {
-                            const mappedLevel = levelMap[level];
-                            if (!mappedLevel) return null;
-                            return (
+                        {levels
+                            .filter(({ level }) => Boolean(levelMap[level]))
+                            .map(({ level, text }) => {
+                                const mappedLevel = levelMap[level];
+                                return (
                             <button
                                 key={level}
                                 onClick={() => setSelectedLevel(mappedLevel)}
@@ -153,8 +157,8 @@ const Select = () => {
                             >
                                 {text}
                             </button>
-                            );
-                        })}
+                                );
+                            })}
                     </div>
                 </div>
                 <div className="betSelect">

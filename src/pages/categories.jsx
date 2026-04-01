@@ -42,7 +42,9 @@ const Categories = () => {
 
             if (data) {
                 if (!Array.isArray(data)) {
-                    setErrorText("Unexpected categories response. Refresh the page.");
+                    setErrorText(
+                        "Expected a categories list but received an invalid response. Refresh the page."
+                    );
                     console.error("Unexpected categories response:", data);
                     return;
                 }
