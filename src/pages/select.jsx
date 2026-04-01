@@ -13,6 +13,11 @@ const Select = () => {
     useTitle("Place Your Bet");
     const URL = useURL();
     const levels = useLevels();
+    const levelMap = {
+        E: "easy",
+        M: "medium",
+        H: "hard"
+    };
     const { user, updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
 
@@ -134,12 +139,8 @@ const Select = () => {
                     <div className="level-selector">
                         <span>Select Level: </span>
                         {levels.map(({ level, text }) => {
-                            const mappedLevel =
-                                level === "E"
-                                    ? "easy"
-                                    : level === "M"
-                                      ? "medium"
-                                      : "hard";
+                            const mappedLevel = levelMap[level];
+                            if (!mappedLevel) return null;
                             return (
                             <button
                                 key={level}

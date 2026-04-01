@@ -14,6 +14,7 @@ const Question = () => {
     const { user, updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
     const URL = useURL();
+    const IMAGE_BASE = "https://gambling-math.bits-apogee.org";
 
     // State
     const [question, setQuestion] = useState({
@@ -111,7 +112,7 @@ const Question = () => {
                             src={
                                 question.image?.startsWith("http")
                                     ? question.image
-                                    : `https://gambling-math.bits-apogee.org${question.image}`
+                                    : `${IMAGE_BASE}${question.image}`
                             }
                             alt="question"
                             className="ques-img"

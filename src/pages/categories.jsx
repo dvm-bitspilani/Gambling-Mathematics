@@ -41,12 +41,16 @@ const Categories = () => {
             setLoading(loading);
 
             if (data) {
-                const shown = Array.isArray(data) ? data : [];
+                if (!Array.isArray(data)) {
+                    setErrorText("Unexpected categories response. Refresh the page.");
+                    console.error("Unexpected categories response:", data);
+                    return;
+                }
+
+                const shown = data;
 
                 if (shown.length === 0) {
-                    setSuccessText(
-                        "No categories available at the moment."
-                    );
+                    setSuccessText("All categories completed! Redirecting you to finish.", URL.FINISHED);
                 }
 
                 setCategories(shown);
