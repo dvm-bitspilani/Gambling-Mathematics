@@ -39,8 +39,8 @@ const AlertContextProvider = ({ children }) => {
         } else clearAll(3000);
     };
 
-    const setErrorText = (message, link) => {
-        setError({ status: true, message, title: "ERROR" });
+    const setErrorText = (message, link, title = "ERROR") => {
+        setError({ status: true, message, title });
         setSuccess(initialState);
 
         handleLink(link);

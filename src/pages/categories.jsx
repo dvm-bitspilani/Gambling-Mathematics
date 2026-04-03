@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useUser } from "../contexts/UserContext";
 import "../styles/categories.css";
 import { useTitle } from "../utils/useHead";
@@ -11,6 +12,7 @@ const Categories = () => {
     // Hooks
     useVerifyAuth();
     useTitle("View Your Categories");
+    const navigate = useNavigate();
     const { user, updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
     const URL = useURL();
@@ -52,14 +54,20 @@ const Categories = () => {
                 const shown = data;
 
                 if (shown.length === 0) {
-                    setSuccessText("All categories completed! Redirecting you to finish.", URL.FINISHED);
+                    setSuccessText(
+                        "All categories completed! Redirecting you to finish.",
+                        URL.FINISHED
+                    );
                 }
 
                 setCategories(shown);
             }
 
             if (error) {
-                setErrorText("Failed to fetch categories. Refresh the page.");
+                const detail = error?.response?.data?.detail;
+                setErrorText(
+                    detail || "Failed to fetch categories. Refresh the page."
+                );
                 console.error(error);
             }
         } catch (err) {
@@ -85,6 +93,13 @@ const Categories = () => {
     // JSX
     return (
         <div className="categories-wrapper">
+            <div
+                className="instructionsButton"
+                onClick={() => navigate(URL.INSTRUCTIONS)}
+                style={{ marginBottom: "1rem" }}
+            >
+                ← Back
+            </div>
             <div className="title">GAMBLING MATHS</div>
             <div className="stash">
                 <div className="stashTitle">Betting Stash</div>
@@ -93,17 +108,28 @@ const Categories = () => {
             <div className="content">
                 {loading ? (
                     <div className="loading"> Loading categories.</div>
-                ) : categories?.length > 0 ? (
+                ) : categories?.filter(c => c.remaining_questions > 0).length >
+                  0 ? (
                     <div className="categories">
-                        {categories?.map(category => (
-                            <div
-                                key={category.id}
-                                className="category"
-                                onClick={() => handleLocate(category)}
-                            >
-                                {category.name}
-                            </div>
-                        ))}
+                        {categories
+                            ?.filter(
+                                category => category.remaining_questions > 0
+                            )
+                            .map(category => (
+                                <div
+                                    key={category.id}
+                                    className="category"
+                                    onClick={() => handleLocate(category)}
+                                >
+                                    <span className="category-name">
+                                        {category.name}
+                                    </span>
+                                    <span className="category-count">
+                                        {category.remaining_questions}/3
+                                        remaining
+                                    </span>
+                                </div>
+                            ))}
                     </div>
                 ) : (
                     <div className="loading">No categories available.</div>

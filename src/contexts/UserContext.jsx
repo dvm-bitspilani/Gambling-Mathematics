@@ -1,5 +1,12 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
+import React, {
+    createContext,
+    useState,
+    useEffect,
+    useContext,
+    useCallback
+} from "react";
 import Cookies from "js-cookie";
+import { setupAuthCallbacks } from "../utils/useFetch";
 
 const initUser = {
     name: null,
@@ -29,8 +36,13 @@ const UserContextProvider = ({ children }) => {
     const [user, setUser] = useState(() => {
         try {
             const storedUserCookie = Cookies.get("gm_user");
+            const storedRefresh = sessionStorage.getItem("gm_refresh");
             return storedUserCookie
-                ? { ...initUser, ...JSON.parse(storedUserCookie), refresh: null }
+                ? {
+                      ...initUser,
+                      ...JSON.parse(storedUserCookie),
+                      refresh: storedRefresh || null
+                  }
                 : initUser;
         } catch (error) {
             console.error("Error retrieving user data.");
@@ -38,25 +50,37 @@ const UserContextProvider = ({ children }) => {
         }
     });
 
+    const updateUser = useCallback(newData => {
+        setUser(prevUser => ({ ...prevUser, ...newData }));
+    }, []);
+
+    const logoutUser = useCallback(() => {
+        Cookies.remove("gm_user");
+        sessionStorage.removeItem("gm_refresh");
+        setUser(initUser);
+    }, []);
+
+    useEffect(() => {
+        setupAuthCallbacks(updateUser, logoutUser);
+    }, [updateUser, logoutUser]);
+
     useEffect(() => {
         try {
             const { refresh, ...persistedUser } = user;
             Cookies.set("gm_user", JSON.stringify(persistedUser), {
-                expires: 365
+                expires: 365,
+                secure: true,
+                sameSite: "Strict"
             });
+            if (refresh) {
+                sessionStorage.setItem("gm_refresh", refresh);
+            } else {
+                sessionStorage.removeItem("gm_refresh");
+            }
         } catch (error) {
             console.error("Error setting user data.");
         }
     }, [user]);
-
-    const updateUser = newData => {
-        setUser(prevUser => ({ ...prevUser, ...newData }));
-    };
-
-    const logoutUser = () => {
-        Cookies.remove("gm_user");
-        setUser(initUser);
-    };
 
     return (
         <UserContext.Provider value={{ user, updateUser, logoutUser }}>

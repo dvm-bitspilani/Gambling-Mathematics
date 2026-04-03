@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/leaderboard.css";
+import "../styles/categories.css";
 import { useVerifyAuth } from "../utils/useAuth";
 import { useTitle } from "../utils/useHead";
 import { useUser } from "../contexts/UserContext";
+import { useAlert } from "../contexts/AlertContext";
 import { getLeaderboard } from "../utils/useFetch";
+import { useURL } from "../utils/useData";
 
 const Leaderboard = () => {
     // Hooks
     useVerifyAuth();
     useTitle("Leaderboard");
+    const navigate = useNavigate();
+    const URL = useURL();
     const { user, updateUser } = useUser();
+    const { setErrorText } = useAlert();
 
     // States
     const [leaderboard, setLeaderboard] = useState([]);
@@ -24,6 +31,8 @@ const Leaderboard = () => {
         const { data, error } = await getLeaderboard(user.token);
 
         if (error) {
+            const detail = error?.response?.data?.detail;
+            setErrorText(detail || "Failed to load leaderboard.");
             console.error(error);
             return;
         }
@@ -37,6 +46,13 @@ const Leaderboard = () => {
     // JSX
     return (
         <div className="leaderboard-container">
+            <div
+                className="instructionsButton"
+                onClick={() => navigate(URL.CATEGORIES)}
+                style={{ marginBottom: "1rem" }}
+            >
+                ← Back
+            </div>
             <div className="leader-heading">
                 <div className="leader-title">LEADERBOARD</div>
                 <div className="leader-subtitle">
@@ -61,6 +77,7 @@ const Leaderboard = () => {
                                 rank={leader.rank}
                                 title={leader.team_name}
                                 points={leader.points}
+                                isCurrentTeam={leader.is_current_team}
                             />
                         ))
                     ) : (
@@ -75,9 +92,9 @@ const Leaderboard = () => {
     );
 };
 
-const LeaderCard = ({ rank, title, points }) => {
+const LeaderCard = ({ rank, title, points, isCurrentTeam }) => {
     return (
-        <div className="leader-card">
+        <div className={`leader-card ${isCurrentTeam ? "leader-current" : ""}`}>
             <div className="leader-left">{`${rank}. ${title}`}</div>
             <div className="leader-right">{points}</div>
         </div>

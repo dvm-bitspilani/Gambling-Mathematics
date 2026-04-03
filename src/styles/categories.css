@@ -117,6 +117,22 @@ body {
     -webkit-backdrop-filter: blur(130px);
     backdrop-filter: blur(130px);
     border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.category-name {
+    font-size: 1.5rem;
+    letter-spacing: 0.12em;
+}
+
+.category-count {
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    opacity: 0.7;
+    font-weight: 400;
 }
 
 .category:hover {

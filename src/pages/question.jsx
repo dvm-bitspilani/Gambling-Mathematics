@@ -6,6 +6,9 @@ import { useURL } from "../utils/useData";
 import { useAlert } from "../contexts/AlertContext";
 import { useVerifyAuth } from "../utils/useAuth";
 import { getQuestion, postAnswer } from "../utils/useFetch";
+import { useTimer } from "../contexts/TimerContext";
+import { useNavigate } from "react-router-dom";
+import Fixed from "../components/Fixed";
 
 const Question = () => {
     // Hooks
@@ -14,7 +17,9 @@ const Question = () => {
     const { user, updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
     const URL = useURL();
-    const IMAGE_BASE = "https://gambling-math.bits-apogee.org";
+    const IMAGE_BASE = import.meta.env.VITE_IMAGE_BASE_URL;
+    const { restoreTimer, hasExpiredTimer, clearQuestionTimer } = useTimer();
+    const navigate = useNavigate();
 
     // State
     const [question, setQuestion] = useState({
@@ -35,7 +40,7 @@ const Question = () => {
             const { data, error } = await getQuestion(user.token, user.level);
 
             if (error) {
-                handleFetchError();
+                handleFetchError(error);
                 return;
             }
 
@@ -46,16 +51,28 @@ const Question = () => {
                 options,
                 id: question_id
             });
+
+            if (hasExpiredTimer(question_id)) {
+                setErrorText(
+                    "Time's up! Your timer expired. Redirecting to finished.",
+                    URL.FINISHED
+                );
+                return;
+            }
+
+            restoreTimer();
         } catch (error) {
-            handleFetchError();
+            handleFetchError(error);
             console.log(error);
         }
     };
 
     // Handlers
-    const handleFetchError = () => {
+    const handleFetchError = err => {
+        const detail = err?.response?.data?.detail;
         setErrorText(
-            "An error occurred while fetching the question. Please try again."
+            detail ||
+                "An error occurred while fetching the question. Please try again."
         );
     };
 
@@ -68,10 +85,11 @@ const Question = () => {
             );
 
             if (error) {
-                handleError();
+                handleError(error);
                 return;
             }
 
+            clearQuestionTimer(question.id);
             updateUser({ category: null, points: data.total_points });
 
             if (data.correct) {
@@ -80,17 +98,23 @@ const Question = () => {
                     URL.CATEGORIES
                 );
             } else {
-                handleError();
+                setErrorText(
+                    "You picked the wrong answer. Redirecting you back to categories.",
+                    URL.CATEGORIES,
+                    "Wrong Answer"
+                );
             }
         } catch (err) {
-            handleError();
+            handleError(err);
             console.log(err);
         }
     };
 
-    const handleError = () => {
+    const handleError = err => {
+        const detail = err?.response?.data?.detail;
         setErrorText(
-            "You could not pick the correct answer. Redirecting you back to categories.",
+            detail ||
+                "You could not pick the correct answer. Redirecting you back to categories.",
             URL.CATEGORIES
         );
     };
@@ -136,6 +160,7 @@ const Question = () => {
                     )) ?? "Fetching Options.."}
                 </div>
             </div>
+            <Fixed />
         </div>
     );
 };
