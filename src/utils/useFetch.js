@@ -34,7 +34,10 @@ const createRequest = async (
     addLink = null
 ) => {
     const apiURL = buildUrl(endpoint, addLink);
-    const headers = userToken ? { Authorization: `Bearer ${userToken}` } : {};
+    const headers = {
+        ...(userToken && { Authorization: `Bearer ${userToken}` }),
+        ...(data && { "Content-Type": "application/json" })
+    };
 
     return await fetchData(apiURL, method, data, headers);
 };
