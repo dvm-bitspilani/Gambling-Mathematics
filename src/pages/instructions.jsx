@@ -12,12 +12,12 @@ const Instructions = () => {
     useTitle("General Instructions");
     const navigate = useNavigate();
     const instructions = useInstructions();
-    const { startTimer } = useTimer();
+    const { startQuestionTimer } = useTimer();
     const URL = useURL();
 
     // Event Handler
     const handleClick = () => {
-        startTimer(50, 0);
+        startQuestionTimer("session", "medium");
         navigate(URL.CATEGORIES);
     };
 

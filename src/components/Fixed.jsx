@@ -11,7 +11,7 @@ const Fixed = () => {
     // Hooks
     const navigate = useNavigate();
     const pathName = usePathName();
-    const { timer } = useTimer();
+    const { formattedTime: timer } = useTimer();
     const { logoutUser } = useUser();
     const { setErrorText } = useAlert();
     const URL = useURL();
