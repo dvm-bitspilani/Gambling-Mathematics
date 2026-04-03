@@ -105,28 +105,23 @@ const Categories = () => {
             <div className="content">
                 {loading ? (
                     <div className="loading"> Loading categories.</div>
-                ) : categories?.filter(c => c.remaining_questions > 0).length >
-                  0 ? (
+                ) : categories?.length > 0 ? (
                     <div className="categories">
-                        {categories
-                            ?.filter(
-                                category => category.remaining_questions > 0
-                            )
-                            .map(category => (
-                                <div
-                                    key={category.id}
-                                    className="category"
-                                    onClick={() => handleLocate(category)}
-                                >
-                                    <span className="category-name">
-                                        {category.name}
-                                    </span>
-                                    <span className="category-count">
-                                        {category.remaining_questions}/3
-                                        remaining
-                                    </span>
-                                </div>
-                            ))}
+                        {categories?.map(category => (
+                            <div
+                                key={category.id}
+                                className="category"
+                                onClick={() => handleLocate(category)}
+                            >
+                                <span className="category-name">
+                                    {category.name}
+                                </span>
+                                <span className="category-count">
+                                    {category.remaining_questions ?? 3}/3
+                                    remaining
+                                </span>
+                            </div>
+                        ))}
                     </div>
                 ) : (
                     <div className="loading">No categories available.</div>
