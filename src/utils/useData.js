@@ -9,7 +9,7 @@ const useURL = () => {
         FINISHED: "/finished",
         LEADERBOARD: "/leaderboard",
 
-        API_BASE: import.meta.env.VITE_API_BASE_URL,
+        API_BASE: "https://gambling-math.bits-apogee.org/api",
         API_LOGIN: "/login",
         API_CATEGORY: "/category",
         API_MAX_BET: "/get_max_bet",

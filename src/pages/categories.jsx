@@ -64,10 +64,7 @@ const Categories = () => {
             }
 
             if (error) {
-                const detail = error?.response?.data?.detail;
-                setErrorText(
-                    detail || "Failed to fetch categories. Refresh the page."
-                );
+                setErrorText("Failed to fetch categories. Refresh the page.");
                 console.error(error);
             }
         } catch (err) {

@@ -65,8 +65,7 @@ const App = () => {
     };
 
     const handleLoginError = err => {
-        const detail = err?.response?.data?.detail;
-        setErrorText(detail || "Login failed. Please try again later.");
+        setErrorText("Login failed. Please try again later.");
         console.error(err);
     };
 

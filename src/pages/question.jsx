@@ -17,7 +17,7 @@ const Question = () => {
     const { user, updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
     const URL = useURL();
-    const IMAGE_BASE = import.meta.env.VITE_IMAGE_BASE_URL;
+    const IMAGE_BASE = "https://gambling-math.bits-apogee.org";
     const { restoreTimer, hasExpiredTimer, clearQuestionTimer } = useTimer();
     const navigate = useNavigate();
 
@@ -69,10 +69,8 @@ const Question = () => {
 
     // Handlers
     const handleFetchError = err => {
-        const detail = err?.response?.data?.detail;
         setErrorText(
-            detail ||
-                "An error occurred while fetching the question. Please try again."
+            "An error occurred while fetching the question. Please try again."
         );
     };
 
@@ -111,10 +109,8 @@ const Question = () => {
     };
 
     const handleError = err => {
-        const detail = err?.response?.data?.detail;
         setErrorText(
-            detail ||
-                "You could not pick the correct answer. Redirecting you back to categories.",
+            "You could not pick the correct answer. Redirecting you back to categories.",
             URL.CATEGORIES
         );
     };

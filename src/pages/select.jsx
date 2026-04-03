@@ -59,8 +59,8 @@ const Select = () => {
                 return;
             }
 
-            if (Number(bet) < 200) {
-                setErrorText("Minimum bet is 200 points.");
+            if (Number(bet) < 1) {
+                setErrorText("Minimum bet is 1 point.");
                 return;
             }
 

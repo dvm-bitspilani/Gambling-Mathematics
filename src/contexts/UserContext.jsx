@@ -1,12 +1,5 @@
-import React, {
-    createContext,
-    useState,
-    useEffect,
-    useContext,
-    useCallback
-} from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
 import Cookies from "js-cookie";
-import { setupAuthCallbacks } from "../utils/useFetch";
 
 const initUser = {
     name: null,
@@ -36,12 +29,10 @@ const UserContextProvider = ({ children }) => {
     const [user, setUser] = useState(() => {
         try {
             const storedUserCookie = Cookies.get("gm_user");
-            const storedRefresh = sessionStorage.getItem("gm_refresh");
             return storedUserCookie
                 ? {
                       ...initUser,
-                      ...JSON.parse(storedUserCookie),
-                      refresh: storedRefresh || null
+                      ...JSON.parse(storedUserCookie)
                   }
                 : initUser;
         } catch (error) {
@@ -50,33 +41,20 @@ const UserContextProvider = ({ children }) => {
         }
     });
 
-    const updateUser = useCallback(newData => {
+    const updateUser = newData => {
         setUser(prevUser => ({ ...prevUser, ...newData }));
-    }, []);
+    };
 
-    const logoutUser = useCallback(() => {
+    const logoutUser = () => {
         Cookies.remove("gm_user");
-        sessionStorage.removeItem("gm_refresh");
         setUser(initUser);
-    }, []);
-
-    useEffect(() => {
-        setupAuthCallbacks(updateUser, logoutUser);
-    }, [updateUser, logoutUser]);
+    };
 
     useEffect(() => {
         try {
-            const { refresh, ...persistedUser } = user;
-            Cookies.set("gm_user", JSON.stringify(persistedUser), {
-                expires: 365,
-                secure: true,
-                sameSite: "Strict"
+            Cookies.set("gm_user", JSON.stringify(user), {
+                expires: 365
             });
-            if (refresh) {
-                sessionStorage.setItem("gm_refresh", refresh);
-            } else {
-                sessionStorage.removeItem("gm_refresh");
-            }
         } catch (error) {
             console.error("Error setting user data.");
         }

@@ -25,7 +25,3 @@ dist-ssr
 
 # MISC
 *.lock
-
-# Environment variables
-.env
-!.env.example
