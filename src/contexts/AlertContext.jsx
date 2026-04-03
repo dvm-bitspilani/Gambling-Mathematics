@@ -27,13 +27,35 @@ const AlertContextProvider = ({ children }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const intervalRef = useRef(null);
+    const timeoutRef = useRef(null);
+    const mountedRef = useRef(true);
 
     const [error, setError] = useState(initialState);
     const [success, setSuccess] = useState(initialState);
 
+    useEffect(() => {
+        return () => {
+            mountedRef.current = false;
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+        };
+    }, []);
+
     const handleLink = link => {
         if (link) {
-            setTimeout(() => navigate(link), 2000);
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+
+            timeoutRef.current = setTimeout(() => {
+                if (mountedRef.current) {
+                    navigate(link);
+                }
+            }, 2000);
 
             if (intervalRef.current) {
                 clearInterval(intervalRef.current);
@@ -51,14 +73,6 @@ const AlertContextProvider = ({ children }) => {
         } else clearAll(3000);
     };
 
-    useEffect(() => {
-        return () => {
-            if (intervalRef.current) {
-                clearInterval(intervalRef.current);
-            }
-        };
-    }, []);
-
     const setErrorText = (message, link, title = "ERROR") => {
         setError({ status: true, message, title });
         setSuccess(initialState);
@@ -74,9 +88,19 @@ const AlertContextProvider = ({ children }) => {
     };
 
     const clearAll = (delay = 0) => {
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+            timeoutRef.current = null;
+        }
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
         setTimeout(() => {
-            setError(initialState);
-            setSuccess(initialState);
+            if (mountedRef.current) {
+                setError(initialState);
+                setSuccess(initialState);
+            }
         }, delay);
     };
 
