@@ -17,8 +17,16 @@ const Question = () => {
     const { user, updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
     const URL = useURL();
-    const IMAGE_BASE = "https://gambling-math.bits-apogee.org";
-    const { restoreTimer, hasExpiredTimer, clearQuestionTimer } = useTimer();
+    const IMAGE_BASE =
+        import.meta.env.VITE_IMAGE_BASE || window.location.origin;
+    const {
+        restoreTimer,
+        hasExpiredTimer,
+        clearQuestionTimer,
+        timerConfig,
+        currentTimer,
+        remainingTime
+    } = useTimer();
     const navigate = useNavigate();
 
     // State
@@ -76,10 +84,14 @@ const Question = () => {
 
     const handleAnswer = async opt => {
         try {
+            const totalDuration = timerConfig[currentTimer?.level] || 300;
+            const timeTaken = totalDuration - remainingTime;
+
             const { data, error } = await postAnswer(
                 question.id,
                 opt.id,
-                user.token
+                user.token,
+                timeTaken
             );
 
             if (error) {
@@ -91,15 +103,17 @@ const Question = () => {
             updateUser({ category: null, points: data.total_points });
 
             if (data.correct) {
+                const payoutMsg = data.payout
+                    ? ` You won ${data.payout} points!`
+                    : "";
                 setSuccessText(
-                    "You picked the correct answer. Redirecting you back to categories.",
+                    `Correct answer!${payoutMsg} Redirecting...`,
                     URL.CATEGORIES
                 );
             } else {
                 setErrorText(
-                    "You picked the wrong answer. Redirecting you back to categories.",
-                    URL.CATEGORIES,
-                    "Wrong Answer"
+                    "Wrong answer. Your bet was lost. Redirecting...",
+                    URL.CATEGORIES
                 );
             }
         } catch (err) {

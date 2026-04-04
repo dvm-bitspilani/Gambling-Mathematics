@@ -11,6 +11,7 @@ const useURL = () => {
 
         API_BASE: "https://gambling-math.bits-apogee.org/api",
         API_LOGIN: "/login",
+        API_TOKEN_REFRESH: "/token/refresh",
         API_CATEGORY: "/category",
         API_MAX_BET: "/get_max_bet",
         API_PLACE_BET: "/place_bet",

@@ -45,6 +45,10 @@ const UserContextProvider = ({ children }) => {
         setUser(prevUser => ({ ...prevUser, ...newData }));
     };
 
+    const updateUserToken = newToken => {
+        setUser(prevUser => ({ ...prevUser, token: newToken }));
+    };
+
     const logoutUser = () => {
         Cookies.remove("gm_user");
         setUser(initUser);
@@ -61,7 +65,9 @@ const UserContextProvider = ({ children }) => {
     }, [user]);
 
     return (
-        <UserContext.Provider value={{ user, updateUser, logoutUser }}>
+        <UserContext.Provider
+            value={{ user, updateUser, updateUserToken, logoutUser }}
+        >
             {children}
         </UserContext.Provider>
     );

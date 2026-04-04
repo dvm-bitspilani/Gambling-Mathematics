@@ -21,6 +21,7 @@
 7. **Leaderboard Filtering** — Teams that haven't answered any questions are now excluded from leaderboard rankings.
 
 **API Changes Summary:**
+
 - New endpoint: GET /api/game_config
 - Updated endpoint: GET /api/category (returns remaining_questions)
 - Updated endpoint: GET /api/leaderboard (returns questions_answered, filtered)
@@ -38,13 +39,13 @@
 - [Authentication](#authentication)
 - [Data Models](#data-models)
 - [API Endpoints](#api-endpoints)
-  - [1. Login](#1-login)
-  - [1.1 Game Configuration](#11-game-configuration)
-  - [2. Categories](#2-categories)
-  - [3. Place Bet](#3-place-bet)
-  - [4. Get Question](#4-get-question)
-  - [5. Submit Answer](#5-submit-answer)
-  - [6. Leaderboard](#6-leaderboard)
+    - [1. Login](#1-login)
+    - [1.1 Game Configuration](#11-game-configuration)
+    - [2. Categories](#2-categories)
+    - [3. Place Bet](#3-place-bet)
+    - [4. Get Question](#4-get-question)
+    - [5. Submit Answer](#5-submit-answer)
+    - [6. Leaderboard](#6-leaderboard)
 - [Game Flow](#game-flow)
 - [Error Handling](#error-handling)
 
@@ -105,16 +106,16 @@ Content-Type: application/json
 
 ```json
 {
-  "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
-  "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+    "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+    "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
 }
 ```
 
 **Error Response**
 
-| Status | Condition                        | Response                                                                    |
-|--------|----------------------------------|-----------------------------------------------------------------------------|
-| 401    | Invalid or expired refresh token | `{"detail": "Token is invalid or expired", "code": "token_not_valid"}`      |
+| Status | Condition                        | Response                                                               |
+| ------ | -------------------------------- | ---------------------------------------------------------------------- |
+| 401    | Invalid or expired refresh token | `{"detail": "Token is invalid or expired", "code": "token_not_valid"}` |
 
 ---
 
@@ -136,10 +137,10 @@ GET /api/game_config
 
 ```json
 {
-  "timer_easy": 180,
-  "timer_medium": 300,
-  "timer_hard": 420,
-  "instructions": "Timer durations per question difficulty: Easy questions have 3 minutes (180 seconds), Medium questions have 5 minutes (300 seconds), Hard questions have 7 minutes (420 seconds). Timer starts when the question is displayed."
+    "timer_easy": 180,
+    "timer_medium": 300,
+    "timer_hard": 420,
+    "instructions": "Timer durations per question difficulty: Easy questions have 3 minutes (180 seconds), Medium questions have 5 minutes (300 seconds), Hard questions have 7 minutes (420 seconds). Timer starts when the question is displayed."
 }
 ```
 
@@ -156,68 +157,68 @@ GET /api/game_config
 
 ### Category
 
-| Field         | Type          | Description             |
-|---------------|---------------|-------------------------|
-| `id`          | integer       | Unique identifier       |
-| `name`        | string(100)   | Category name (unique)  |
-| `description` | string        | Category description    |
-| `is_active`   | boolean       | Whether category is active |
-| `created_at`  | datetime      | Creation timestamp      |
+| Field         | Type        | Description                |
+| ------------- | ----------- | -------------------------- |
+| `id`          | integer     | Unique identifier          |
+| `name`        | string(100) | Category name (unique)     |
+| `description` | string      | Category description       |
+| `is_active`   | boolean     | Whether category is active |
+| `created_at`  | datetime    | Creation timestamp         |
 
 ### Question
 
-| Field         | Type          | Description                          |
-|---------------|---------------|--------------------------------------|
-| `id`          | integer       | Unique identifier                    |
-| `category_id` | integer       | FK → Category                        |
-| `level`       | string        | `easy`, `medium`, or `hard`          |
-| `text`        | string        | Question text (may be empty)         |
-| `image`       | string        | Relative URL to question image       |
-| `explanation` | string        | Explanation (not exposed via API)    |
-| `points`      | integer       | Internal field (not used in payouts) |
-| `is_active`   | boolean       | Whether question is active           |
-| `created_at`  | datetime      | Creation timestamp                   |
+| Field         | Type     | Description                          |
+| ------------- | -------- | ------------------------------------ |
+| `id`          | integer  | Unique identifier                    |
+| `category_id` | integer  | FK → Category                        |
+| `level`       | string   | `easy`, `medium`, or `hard`          |
+| `text`        | string   | Question text (may be empty)         |
+| `image`       | string   | Relative URL to question image       |
+| `explanation` | string   | Explanation (not exposed via API)    |
+| `points`      | integer  | Internal field (not used in payouts) |
+| `is_active`   | boolean  | Whether question is active           |
+| `created_at`  | datetime | Creation timestamp                   |
 
 ### Option
 
-| Field               | Type          | Description                       |
-|---------------------|---------------|-----------------------------------|
-| `id`                | integer       | Unique identifier                 |
-| `question_id`       | integer       | FK → Question                     |
-| `text`              | string(255)   | Option label: `A`, `B`, `C`, `D`  |
-| `is_correct`        | boolean       | Whether this is the correct answer|
-| `payout_multiplier` | float         | Multiplier for the selected correct option's payout (default: 2.0) |
+| Field               | Type        | Description                                                        |
+| ------------------- | ----------- | ------------------------------------------------------------------ |
+| `id`                | integer     | Unique identifier                                                  |
+| `question_id`       | integer     | FK → Question                                                      |
+| `text`              | string(255) | Option label: `A`, `B`, `C`, `D`                                   |
+| `is_correct`        | boolean     | Whether this is the correct answer                                 |
+| `payout_multiplier` | float       | Multiplier for the selected correct option's payout (default: 2.0) |
 
 ### TeamProfile
 
-| Field         | Type          | Description                  |
-|---------------|---------------|------------------------------|
-| `team_name`   | string(120)   | Team name (unique)           |
-| `points`      | integer       | Current balance (start: 3000)|
-| `created_at`  | datetime      | Creation timestamp           |
+| Field        | Type        | Description                   |
+| ------------ | ----------- | ----------------------------- |
+| `team_name`  | string(120) | Team name (unique)            |
+| `points`     | integer     | Current balance (start: 3000) |
+| `created_at` | datetime    | Creation timestamp            |
 
 ### Bet
 
-| Field         | Type          | Description                          |
-|---------------|---------------|--------------------------------------|
-| `id`          | integer       | Unique identifier                    |
-| `team_id`     | integer       | FK → TeamProfile                     |
-| `category_id` | integer       | FK → Category                        |
-| `amount`      | integer       | Bet amount (min: 200)                |
-| `level`       | string        | `easy`, `medium`, or `hard`          |
-| `status`      | string        | `open`, `won`, or `lost`             |
-| `payout`      | integer       | Payout amount (0 if lost)            |
-| `created_at`  | datetime      | Creation timestamp                   |
+| Field         | Type     | Description                 |
+| ------------- | -------- | --------------------------- |
+| `id`          | integer  | Unique identifier           |
+| `team_id`     | integer  | FK → TeamProfile            |
+| `category_id` | integer  | FK → Category               |
+| `amount`      | integer  | Bet amount (min: 200)       |
+| `level`       | string   | `easy`, `medium`, or `hard` |
+| `status`      | string   | `open`, `won`, or `lost`    |
+| `payout`      | integer  | Payout amount (0 if lost)   |
+| `created_at`  | datetime | Creation timestamp          |
 
 ### CategoryProgress
 
-| Field                | Type          | Description                          |
-|---------------------|---------------|--------------------------------------|
-| `id`                | integer       | Unique identifier                    |
-| `team_id`           | integer       | FK → TeamProfile                     |
-| `category_id`       | integer       | FK → Category                        |
-| `questions_answered`| integer       | Count of questions answered (max: 3) |
-| `created_at`        | datetime      | Creation timestamp                   |
+| Field                | Type     | Description                          |
+| -------------------- | -------- | ------------------------------------ |
+| `id`                 | integer  | Unique identifier                    |
+| `team_id`            | integer  | FK → TeamProfile                     |
+| `category_id`        | integer  | FK → Category                        |
+| `questions_answered` | integer  | Count of questions answered (max: 3) |
+| `created_at`         | datetime | Creation timestamp                   |
 
 **Constraint**: UniqueConstraint on (team_id, category_id) — one progress record per team per category.
 
@@ -241,17 +242,17 @@ POST /api/login
 
 **Request Body**
 
-| Field      | Type   | Required | Description       |
-|------------|--------|----------|-------------------|
-| `username` | string | Yes      | Team username      |
-| `password` | string | Yes      | Team password      |
+| Field      | Type   | Required | Description   |
+| ---------- | ------ | -------- | ------------- |
+| `username` | string | Yes      | Team username |
+| `password` | string | Yes      | Team password |
 
 **Request Example**
 
 ```json
 {
-  "username": "team_alpha",
-  "password": "securepassword123"
+    "username": "team_alpha",
+    "password": "securepassword123"
 }
 ```
 
@@ -259,12 +260,12 @@ POST /api/login
 
 ```json
 {
-  "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
-  "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
-  "team": {
-    "team_name": "Team Alpha",
-    "points": 1000
-  }
+    "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+    "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+    "team": {
+        "team_name": "Team Alpha",
+        "points": 3000
+    }
 }
 ```
 
@@ -272,10 +273,10 @@ POST /api/login
 
 **Error Responses**
 
-| Status | Condition                     | Response                                           |
-|--------|-------------------------------|----------------------------------------------------|
-| 400    | Missing username or password  | `{"detail": "username and password are required"}` |
-| 401    | Invalid credentials           | `{"detail": "invalid credentials"}`                |
+| Status | Condition                    | Response                                           |
+| ------ | ---------------------------- | -------------------------------------------------- |
+| 400    | Missing username or password | `{"detail": "username and password are required"}` |
+| 401    | Invalid credentials          | `{"detail": "invalid credentials"}`                |
 
 ---
 
@@ -299,18 +300,18 @@ GET /api/category
 
 ```json
 [
-  {
-    "id": 1,
-    "name": "Probability",
-    "description": "Questions on Probability",
-    "remaining_questions": 3
-  },
-  {
-    "id": 2,
-    "name": "Trigonometry",
-    "description": "Questions on Trigonometry",
-    "remaining_questions": 2
-  }
+    {
+        "id": 1,
+        "name": "Probability",
+        "description": "Questions on Probability",
+        "remaining_questions": 3
+    },
+    {
+        "id": 2,
+        "name": "Trigonometry",
+        "description": "Questions on Trigonometry",
+        "remaining_questions": 2
+    }
 ]
 ```
 
@@ -318,9 +319,9 @@ GET /api/category
 
 **Error Responses**
 
-| Status | Condition              | Response                                                      |
-|--------|------------------------|---------------------------------------------------------------|
-| 401    | Missing/invalid token  | `{"detail": "Authentication credentials were not provided."}` |
+| Status | Condition             | Response                                                      |
+| ------ | --------------------- | ------------------------------------------------------------- |
+| 401    | Missing/invalid token | `{"detail": "Authentication credentials were not provided."}` |
 
 #### 2.2 Create / Update Category
 
@@ -336,17 +337,17 @@ POST /api/category
 
 **Request Body**
 
-| Field         | Type   | Required | Description           |
-|---------------|--------|----------|-----------------------|
-| `name`        | string | Yes      | Category name (unique)|
-| `description` | string | No       | Category description  |
+| Field         | Type   | Required | Description            |
+| ------------- | ------ | -------- | ---------------------- |
+| `name`        | string | Yes      | Category name (unique) |
+| `description` | string | No       | Category description   |
 
 **Request Example**
 
 ```json
 {
-  "name": "Calculus",
-  "description": "Questions on derivatives and integrals"
+    "name": "Calculus",
+    "description": "Questions on derivatives and integrals"
 }
 ```
 
@@ -354,9 +355,9 @@ POST /api/category
 
 ```json
 {
-  "id": 16,
-  "name": "Calculus",
-  "description": "Questions on derivatives and integrals"
+    "id": 16,
+    "name": "Calculus",
+    "description": "Questions on derivatives and integrals"
 }
 ```
 
@@ -364,19 +365,19 @@ POST /api/category
 
 ```json
 {
-  "id": 16,
-  "name": "Calculus",
-  "description": "Updated description"
+    "id": 16,
+    "name": "Calculus",
+    "description": "Updated description"
 }
 ```
 
 **Error Responses**
 
-| Status | Condition              | Response                                                      |
-|--------|------------------------|---------------------------------------------------------------|
-| 400    | Missing name           | `{"detail": "name is required"}`                              |
-| 401    | Missing/invalid token  | `{"detail": "Authentication credentials were not provided."}` |
-| 403    | Non-admin user         | `{"detail": "admin only"}`                                    |
+| Status | Condition             | Response                                                      |
+| ------ | --------------------- | ------------------------------------------------------------- |
+| 400    | Missing name          | `{"detail": "name is required"}`                              |
+| 401    | Missing/invalid token | `{"detail": "Authentication credentials were not provided."}` |
+| 403    | Non-admin user        | `{"detail": "admin only"}`                                    |
 
 ---
 
@@ -394,16 +395,16 @@ POST /api/place_bet/{category_id}
 
 **URL Parameters**
 
-| Parameter     | Type    | Description           |
-|---------------|---------|-----------------------|
-| `category_id` | integer | ID of the category     |
+| Parameter     | Type    | Description        |
+| ------------- | ------- | ------------------ |
+| `category_id` | integer | ID of the category |
 
 **Request Body**
 
-| Field    | Type    | Required | Constraints              | Description        |
-|----------|---------|----------|--------------------------|--------------------|
-| `amount` | integer | Yes      | ≥ 200, ≤ current points  | Bet amount          |
-| `level`  | string  | Yes      | `easy`, `medium`, `hard` | Difficulty level   |
+| Field    | Type    | Required | Constraints              | Description      |
+| -------- | ------- | -------- | ------------------------ | ---------------- |
+| `amount` | integer | Yes      | ≥ 200, ≤ current points  | Bet amount       |
+| `level`  | string  | Yes      | `easy`, `medium`, `hard` | Difficulty level |
 
 **Request Example**
 
@@ -413,8 +414,8 @@ POST /api/place_bet/3
 
 ```json
 {
-  "amount": 200,
-  "level": "medium"
+    "amount": 200,
+    "level": "medium"
 }
 ```
 
@@ -422,28 +423,28 @@ POST /api/place_bet/3
 
 ```json
 {
-  "bet_id": 42,
-  "amount": 200,
-  "level": "medium",
-  "status": "open",
-  "remaining_points": 2800
+    "bet_id": 42,
+    "amount": 200,
+    "level": "medium",
+    "status": "open",
+    "remaining_points": 2800
 }
 ```
 
 **Error Responses**
 
-| Status | Condition                                     | Response                                                                   |
-|--------|-----------------------------------------------|----------------------------------------------------------------------------|
-| 400    | Missing amount or level                       | `{"detail": "amount and level are required"}`                              |
-| 400    | Amount is not an integer                      | `{"detail": "amount must be an integer"}`                                  |
-| 400    | Amount < 200                                  | `{"detail": "minimum bet amount is 200"}`                                  |
-| 400    | Insufficient points                           | `{"detail": "insufficient points"}`                                        |
-| 400    | Invalid level value                           | `{"detail": "invalid level"}`                                              |
-| 400    | Open bet already exists for this cat+level    | `{"detail": "open bet already exists for this category and level"}`        |
-| 400    | No unanswered questions for this cat+level    | `{"detail": "no unanswered questions left for this category and level"}`   |
-| 401    | Missing/invalid token                         | `{"detail": "Authentication credentials were not provided."}`              |
-| 404    | Category not found or inactive                | `{"detail": "Not found."}`                                                 |
-| 404    | No TeamProfile for user                       | `{"detail": "Not found."}`                                                 |
+| Status | Condition                                  | Response                                                                 |
+| ------ | ------------------------------------------ | ------------------------------------------------------------------------ |
+| 400    | Missing amount or level                    | `{"detail": "amount and level are required"}`                            |
+| 400    | Amount is not an integer                   | `{"detail": "amount must be an integer"}`                                |
+| 400    | Amount < 200                               | `{"detail": "minimum bet amount is 200"}`                                |
+| 400    | Insufficient points                        | `{"detail": "insufficient points"}`                                      |
+| 400    | Invalid level value                        | `{"detail": "invalid level"}`                                            |
+| 400    | Open bet already exists for this cat+level | `{"detail": "open bet already exists for this category and level"}`      |
+| 400    | No unanswered questions for this cat+level | `{"detail": "no unanswered questions left for this category and level"}` |
+| 401    | Missing/invalid token                      | `{"detail": "Authentication credentials were not provided."}`            |
+| 404    | Category not found or inactive             | `{"detail": "Not found."}`                                               |
+| 404    | No TeamProfile for user                    | `{"detail": "Not found."}`                                               |
 
 > **Note**: Both 404 conditions return the same response. The category lookup also filters by `is_active=True` — an inactive category returns 404 just like a non-existent one.
 
@@ -463,9 +464,9 @@ GET /api/get_question/{level}
 
 **URL Parameters**
 
-| Parameter | Type   | Description                            |
-|-----------|--------|----------------------------------------|
-| `level`   | string | `easy`, `medium`, or `hard`            |
+| Parameter | Type   | Description                 |
+| --------- | ------ | --------------------------- |
+| `level`   | string | `easy`, `medium`, or `hard` |
 
 **Request Body**: None
 
@@ -480,17 +481,17 @@ Authorization: Bearer eyJ0eXAiOiJKV1Qi...
 
 ```json
 {
-  "question_id": 15,
-  "category_id": 3,
-  "image": "/media/questions/Probability/medium/q1.png",
-  "text": "",
-  "level": "medium",
-  "options": [
-    { "id": 57, "text": "A" },
-    { "id": 58, "text": "B" },
-    { "id": 59, "text": "C" },
-    { "id": 60, "text": "D" }
-  ]
+    "question_id": 15,
+    "category_id": 3,
+    "image": "/media/questions/Probability/medium/q1.png",
+    "text": "",
+    "level": "medium",
+    "options": [
+        { "id": 57, "text": "A" },
+        { "id": 58, "text": "B" },
+        { "id": 59, "text": "C" },
+        { "id": 60, "text": "D" }
+    ]
 }
 ```
 
@@ -507,12 +508,12 @@ Authorization: Bearer eyJ0eXAiOiJKV1Qi...
 
 **Error Responses**
 
-| Status | Condition                                    | Response                                                      |
-|--------|----------------------------------------------|---------------------------------------------------------------|
-| 401    | Missing/invalid token                        | `{"detail": "Authentication credentials were not provided."}` |
-| 404    | No open bet or no unanswered questions       | `{"detail": "question not found"}`                            |
-| 404    | Category limit reached (3 questions answered)| `{"detail": "question not found"}`                            |
-| 404    | No TeamProfile for user                      | `{"detail": "Not found."}`                                    |
+| Status | Condition                                     | Response                                                      |
+| ------ | --------------------------------------------- | ------------------------------------------------------------- |
+| 401    | Missing/invalid token                         | `{"detail": "Authentication credentials were not provided."}` |
+| 404    | No open bet or no unanswered questions        | `{"detail": "question not found"}`                            |
+| 404    | Category limit reached (3 questions answered) | `{"detail": "question not found"}`                            |
+| 404    | No TeamProfile for user                       | `{"detail": "Not found."}`                                    |
 
 > **Note**: The `level` parameter is not validated. Passing an invalid value (e.g., `expert`) returns 404 `"question not found"` rather than a 400 error.
 
@@ -532,17 +533,17 @@ POST /api/answer
 
 **Request Body**
 
-| Field          | Type    | Required | Description                     |
-|----------------|---------|----------|---------------------------------|
-| `question_id`  | integer | Yes      | ID of the question being answered |
-| `option_id`    | integer | Yes      | ID of the selected option       |
+| Field         | Type    | Required | Description                       |
+| ------------- | ------- | -------- | --------------------------------- |
+| `question_id` | integer | Yes      | ID of the question being answered |
+| `option_id`   | integer | Yes      | ID of the selected option         |
 
 **Request Example**
 
 ```json
 {
-  "question_id": 15,
-  "option_id": 58
+    "question_id": 15,
+    "option_id": 58
 }
 ```
 
@@ -550,11 +551,11 @@ POST /api/answer
 
 ```json
 {
-  "correct": true,
-  "points_awarded": 300,
-  "bet_status": "won",
-  "payout": 300,
-  "total_points": 1150
+    "correct": true,
+    "points_awarded": 300,
+    "bet_status": "won",
+    "payout": 300,
+    "total_points": 1150
 }
 ```
 
@@ -562,11 +563,11 @@ POST /api/answer
 
 ```json
 {
-  "correct": false,
-  "points_awarded": 0,
-  "bet_status": "lost",
-  "payout": 0,
-  "total_points": 850
+    "correct": false,
+    "points_awarded": 0,
+    "bet_status": "lost",
+    "payout": 0,
+    "total_points": 850
 }
 ```
 
@@ -581,15 +582,15 @@ All options currently use the default multiplier of `2.0`, meaning a correct ans
 
 **Error Responses**
 
-| Status | Condition                          | Response                                                      |
-|--------|------------------------------------|---------------------------------------------------------------|
-| 400    | Missing question_id or option_id   | `{"detail": "question_id and option_id are required"}`       |
-| 400    | Already answered this question     | `{"detail": "already answered"}`                              |
-| 400    | No open bet for this cat+level     | `{"detail": "no open bet found"}`                             |
-| 401    | Missing/invalid token              | `{"detail": "Authentication credentials were not provided."}` |
-| 404    | Invalid question_id                | `{"detail": "Not found."}`                                    |
-| 404    | Invalid option_id for question     | `{"detail": "Not found."}`                                    |
-| 404    | No TeamProfile for user            | `{"detail": "Not found."}`                                    |
+| Status | Condition                        | Response                                                      |
+| ------ | -------------------------------- | ------------------------------------------------------------- |
+| 400    | Missing question_id or option_id | `{"detail": "question_id and option_id are required"}`        |
+| 400    | Already answered this question   | `{"detail": "already answered"}`                              |
+| 400    | No open bet for this cat+level   | `{"detail": "no open bet found"}`                             |
+| 401    | Missing/invalid token            | `{"detail": "Authentication credentials were not provided."}` |
+| 404    | Invalid question_id              | `{"detail": "Not found."}`                                    |
+| 404    | Invalid option_id for question   | `{"detail": "Not found."}`                                    |
+| 404    | No TeamProfile for user          | `{"detail": "Not found."}`                                    |
 
 ---
 
@@ -611,33 +612,34 @@ GET /api/leaderboard
 
 ```json
 {
-  "results": [
-    {
-      "rank": 1,
-      "team_name": "Team Alpha",
-      "points": 2500,
-      "questions_answered": 5,
-      "is_current_team": true
-    },
-    {
-      "rank": 2,
-      "team_name": "Team Beta",
-      "points": 2100,
-      "questions_answered": 7,
-      "is_current_team": false
-    },
-    {
-      "rank": 3,
-      "team_name": "Team Gamma",
-      "points": 1800,
-      "questions_answered": 4,
-      "is_current_team": false
-    }
-  ]
+    "results": [
+        {
+            "rank": 1,
+            "team_name": "Team Alpha",
+            "points": 2500,
+            "questions_answered": 5,
+            "is_current_team": true
+        },
+        {
+            "rank": 2,
+            "team_name": "Team Beta",
+            "points": 2100,
+            "questions_answered": 7,
+            "is_current_team": false
+        },
+        {
+            "rank": 3,
+            "team_name": "Team Gamma",
+            "points": 1800,
+            "questions_answered": 4,
+            "is_current_team": false
+        }
+    ]
 }
 ```
 
-> **Note**: 
+> **Note**:
+>
 > - Teams are sorted by: **points DESC** → **questions_answered ASC** → **team_name ASC**
 > - Tie-breaking: If teams have equal points, the team with fewer questions answered ranks higher
 > - Only teams that have answered at least 1 question appear on leaderboard
@@ -646,9 +648,9 @@ GET /api/leaderboard
 
 **Error Responses**
 
-| Status | Condition              | Response                                                      |
-|--------|------------------------|---------------------------------------------------------------|
-| 401    | Missing/invalid token  | `{"detail": "Authentication credentials were not provided."}` |
+| Status | Condition             | Response                                                      |
+| ------ | --------------------- | ------------------------------------------------------------- |
+| 401    | Missing/invalid token | `{"detail": "Authentication credentials were not provided."}` |
 
 ---
 
@@ -687,7 +689,8 @@ Step 6: CHECK LEADERBOARD
     → View rankings with your position highlighted
 ```
 
-> **Important**: 
+> **Important**:
+>
 > - You can have multiple open bets simultaneously — one per (category, level) combination. For example, you can bet on Probability+easy, Probability+medium, and Trigonometry+easy at the same time. When you call `GET /api/get_question/easy`, it returns a question from any category where you have an open easy bet.
 > - Each team can answer a **maximum of 3 questions per category**. Once 3 questions are answered for a category, no more questions will be served from that category.
 > - Questions are served in **random order**, not sequentially by ID.
@@ -748,7 +751,7 @@ All errors return JSON. Most use a simple format:
 
 ```json
 {
-  "detail": "Error message description"
+    "detail": "Error message description"
 }
 ```
 
@@ -756,14 +759,14 @@ Token-related errors use an extended format with a `code` and `messages` array (
 
 ### HTTP Status Codes
 
-| Status | Meaning     | Common Causes                              |
-|--------|-------------|--------------------------------------------|
-| 200    | OK          | Successful GET or POST                     |
-| 201    | Created     | Resource created (bet, category)           |
-| 400    | Bad Request | Invalid/missing params, business rule violation |
-| 401    | Unauthorized| Missing or expired JWT token               |
-| 403    | Forbidden   | Authenticated but lacks permission (admin) |
-| 404    | Not Found   | Resource does not exist or is inactive      |
+| Status | Meaning      | Common Causes                                   |
+| ------ | ------------ | ----------------------------------------------- |
+| 200    | OK           | Successful GET or POST                          |
+| 201    | Created      | Resource created (bet, category)                |
+| 400    | Bad Request  | Invalid/missing params, business rule violation |
+| 401    | Unauthorized | Missing or expired JWT token                    |
+| 403    | Forbidden    | Authenticated but lacks permission (admin)      |
+| 404    | Not Found    | Resource does not exist or is inactive          |
 
 ### Authentication Errors
 
@@ -796,18 +799,17 @@ Token-related errors use an extended format with a `code` and `messages` array (
 
 ## Quick Reference
 
-| Method | Endpoint                       | Auth  | Admin | Description               |
-|--------|--------------------------------|-------|-------|---------------------------|
-| POST   | `/api/login`                   | No    | No    | Authenticate, get tokens  |
-| GET    | `/api/game_config`             | No    | No    | Get timer configuration   |
-| GET    | `/api/category`                | Yes   | No    | List active categories    |
-| POST   | `/api/category`                | Yes   | Yes   | Create/update category    |
-| POST   | `/api/place_bet/{category_id}` | Yes   | No    | Place a bet               |
-| GET    | `/api/get_question/{level}`    | Yes   | No    | Get unanswered question   |
-| POST   | `/api/answer`                  | Yes   | No    | Submit answer             |
-| GET    | `/api/leaderboard`             | Yes   | No    | View rankings             |
+| Method | Endpoint                       | Auth | Admin | Description              |
+| ------ | ------------------------------ | ---- | ----- | ------------------------ |
+| POST   | `/api/login`                   | No   | No    | Authenticate, get tokens |
+| GET    | `/api/game_config`             | No   | No    | Get timer configuration  |
+| GET    | `/api/category`                | Yes  | No    | List active categories   |
+| POST   | `/api/category`                | Yes  | Yes   | Create/update category   |
+| POST   | `/api/place_bet/{category_id}` | Yes  | No    | Place a bet              |
+| GET    | `/api/get_question/{level}`    | Yes  | No    | Get unanswered question  |
+| POST   | `/api/answer`                  | Yes  | No    | Submit answer            |
+| GET    | `/api/leaderboard`             | Yes  | No    | View rankings            |
 
 ---
 
-*API Version 1.1 — April 2026*
-
+_API Version 1.1 — April 2026_

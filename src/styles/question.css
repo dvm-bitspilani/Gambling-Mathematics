@@ -50,11 +50,11 @@ body {
 }
 
 .glass1:hover {
-    background: #0176D3;
+    background: #0176d3;
 }
 
 .glass1::selection {
-    background: #0176D3;
+    background: #0176d3;
 }
 
 .glass {
