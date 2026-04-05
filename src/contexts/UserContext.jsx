@@ -51,6 +51,8 @@ const UserContextProvider = ({ children }) => {
 
     const logoutUser = () => {
         Cookies.remove("gm_user");
+        localStorage.removeItem("overallTimer");
+        localStorage.removeItem("overallTimerSeconds");
         localStorage.removeItem("questionTimer");
         localStorage.removeItem("timerConfig");
         setUser(initUser);

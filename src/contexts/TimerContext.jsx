@@ -9,7 +9,8 @@ import React, {
 
 const TimerContext = createContext();
 
-const STORAGE_KEY = "questionTimer";
+const OVERALL_TIMER_KEY = "overallTimer";
+const QUESTION_TIMER_KEY = "questionTimer";
 const CONFIG_KEY = "timerConfig";
 
 const DEFAULT_CONFIG = {
@@ -17,6 +18,8 @@ const DEFAULT_CONFIG = {
     medium: 300,
     hard: 420
 };
+
+const DEFAULT_OVERALL_SECONDS = 50 * 60;
 
 export const useTimer = () => {
     const context = useContext(TimerContext);
@@ -29,9 +32,15 @@ export const useTimer = () => {
 };
 
 const TimerContextProvider = ({ children }) => {
-    const timerIdRef = useRef(null);
-    const [currentTimer, setCurrentTimer] = useState(null);
-    const [remainingTime, setRemainingTime] = useState(0);
+    const overallTimerIdRef = useRef(null);
+    const questionTimerIdRef = useRef(null);
+
+    const [overallTimer, setOverallTimer] = useState(null);
+    const [overallRemainingTime, setOverallRemainingTime] = useState(0);
+
+    const [questionTimer, setQuestionTimer] = useState(null);
+    const [questionRemainingTime, setQuestionRemainingTime] = useState(0);
+
     const [timerConfig, setTimerConfig] = useState(() => {
         try {
             const stored = localStorage.getItem(CONFIG_KEY);
@@ -41,24 +50,60 @@ const TimerContextProvider = ({ children }) => {
         }
     });
 
-    const getStoredTimer = useCallback(() => {
+    const [overallTimerSeconds, setOverallTimerSeconds] = useState(() => {
         try {
-            const stored = localStorage.getItem(STORAGE_KEY);
+            const stored = localStorage.getItem("overallTimerSeconds");
+            return stored ? parseInt(stored, 10) : DEFAULT_OVERALL_SECONDS;
+        } catch {
+            return DEFAULT_OVERALL_SECONDS;
+        }
+    });
+
+    const getStoredOverallTimer = useCallback(() => {
+        try {
+            const stored = localStorage.getItem(OVERALL_TIMER_KEY);
             return stored ? JSON.parse(stored) : null;
         } catch {
             return null;
         }
     }, []);
 
-    const setStoredTimer = useCallback(timerData => {
+    const setStoredOverallTimer = useCallback(timerData => {
         try {
             if (timerData) {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(timerData));
+                localStorage.setItem(
+                    OVERALL_TIMER_KEY,
+                    JSON.stringify(timerData)
+                );
             } else {
-                localStorage.removeItem(STORAGE_KEY);
+                localStorage.removeItem(OVERALL_TIMER_KEY);
             }
         } catch (error) {
-            console.error("Failed to store timer:", error);
+            console.error("Failed to store overall timer:", error);
+        }
+    }, []);
+
+    const getStoredQuestionTimer = useCallback(() => {
+        try {
+            const stored = localStorage.getItem(QUESTION_TIMER_KEY);
+            return stored ? JSON.parse(stored) : null;
+        } catch {
+            return null;
+        }
+    }, []);
+
+    const setStoredQuestionTimer = useCallback(timerData => {
+        try {
+            if (timerData) {
+                localStorage.setItem(
+                    QUESTION_TIMER_KEY,
+                    JSON.stringify(timerData)
+                );
+            } else {
+                localStorage.removeItem(QUESTION_TIMER_KEY);
+            }
+        } catch (error) {
+            console.error("Failed to store question timer:", error);
         }
     }, []);
 
@@ -77,91 +122,211 @@ const TimerContextProvider = ({ children }) => {
         return total;
     }, []);
 
+    const clearOverallTimer = useCallback(() => {
+        if (overallTimerIdRef.current) {
+            clearInterval(overallTimerIdRef.current);
+            overallTimerIdRef.current = null;
+        }
+        setStoredOverallTimer(null);
+        setOverallTimer(null);
+        setOverallRemainingTime(0);
+    }, [setStoredOverallTimer]);
+
     const clearQuestionTimer = useCallback(
         questionId => {
-            if (timerIdRef.current) {
-                clearInterval(timerIdRef.current);
-                timerIdRef.current = null;
+            if (questionTimerIdRef.current) {
+                clearInterval(questionTimerIdRef.current);
+                questionTimerIdRef.current = null;
             }
 
-            const stored = getStoredTimer();
+            const stored = getStoredQuestionTimer();
             if (!questionId || (stored && stored.questionId === questionId)) {
-                setStoredTimer(null);
-                setCurrentTimer(null);
-                setRemainingTime(0);
+                setStoredQuestionTimer(null);
+                setQuestionTimer(null);
+                setQuestionRemainingTime(0);
             }
         },
-        [getStoredTimer, setStoredTimer]
+        [getStoredQuestionTimer, setStoredQuestionTimer]
     );
 
     const clearAllTimers = useCallback(() => {
-        if (timerIdRef.current) {
-            clearInterval(timerIdRef.current);
-            timerIdRef.current = null;
-        }
-        setStoredTimer(null);
-        setCurrentTimer(null);
-        setRemainingTime(0);
-    }, [setStoredTimer]);
+        clearOverallTimer();
+        clearQuestionTimer();
+    }, [clearOverallTimer, clearQuestionTimer]);
 
-    const hasExpiredTimer = useCallback(
-        questionId => {
-            const stored = getStoredTimer();
-            if (!stored || stored.questionId !== questionId) {
-                return false;
-            }
-            return Date.now() >= stored.endTime;
-        },
-        [getStoredTimer]
-    );
-
-    const getRemainingTime = useCallback(
-        questionId => {
-            const stored = getStoredTimer();
-            if (!stored || stored.questionId !== questionId) {
-                return 0;
-            }
-            return getTimeRemaining(stored.endTime);
-        },
-        [getStoredTimer, getTimeRemaining]
-    );
-
-    const startQuestionTimer = useCallback(
-        (questionId, level, customDurations = null) => {
-            const durations = customDurations || timerConfig;
-            const duration = durations[level] || durations.medium || 300;
+    const startOverallTimer = useCallback(
+        (customSeconds = null) => {
+            const duration = customSeconds || overallTimerSeconds;
             const endTime = Date.now() + duration * 1000;
 
-            setStoredTimer({
-                questionId,
-                endTime,
-                level
-            });
+            setStoredOverallTimer({ endTime, duration });
+            setOverallTimer({ endTime });
+            setOverallRemainingTime(duration);
 
-            setCurrentTimer({ questionId, level, endTime });
-            setRemainingTime(duration);
-
-            if (timerIdRef.current) {
-                clearInterval(timerIdRef.current);
+            if (overallTimerIdRef.current) {
+                clearInterval(overallTimerIdRef.current);
             }
 
-            timerIdRef.current = setInterval(() => {
+            overallTimerIdRef.current = setInterval(() => {
                 const remaining = getTimeRemaining(endTime);
 
                 if (remaining <= 0) {
-                    clearInterval(timerIdRef.current);
-                    timerIdRef.current = null;
-                    setRemainingTime(0);
-                    setStoredTimer(null);
+                    clearInterval(overallTimerIdRef.current);
+                    overallTimerIdRef.current = null;
+                    setOverallRemainingTime(0);
+                    setStoredOverallTimer(null);
                 } else {
-                    setRemainingTime(remaining);
+                    setOverallRemainingTime(remaining);
                 }
             }, 1000);
 
             return duration;
         },
-        [timerConfig, setStoredTimer, getTimeRemaining]
+        [overallTimerSeconds, setStoredOverallTimer, getTimeRemaining]
     );
+
+    const restoreOverallTimer = useCallback(() => {
+        const stored = getStoredOverallTimer();
+
+        if (!stored) {
+            return false;
+        }
+
+        if (Date.now() >= stored.endTime) {
+            setStoredOverallTimer(null);
+            return { expired: true };
+        }
+
+        const remaining = getTimeRemaining(stored.endTime);
+        setOverallTimer({ endTime: stored.endTime });
+        setOverallRemainingTime(remaining);
+
+        if (overallTimerIdRef.current) {
+            clearInterval(overallTimerIdRef.current);
+        }
+
+        overallTimerIdRef.current = setInterval(() => {
+            const newRemaining = getTimeRemaining(stored.endTime);
+
+            if (newRemaining <= 0) {
+                clearInterval(overallTimerIdRef.current);
+                overallTimerIdRef.current = null;
+                setOverallRemainingTime(0);
+                setStoredOverallTimer(null);
+            } else {
+                setOverallRemainingTime(newRemaining);
+            }
+        }, 1000);
+
+        return { restored: true, remainingTime: remaining };
+    }, [getStoredOverallTimer, setStoredOverallTimer, getTimeRemaining]);
+
+    const hasExpiredQuestionTimer = useCallback(
+        questionId => {
+            const stored = getStoredQuestionTimer();
+            if (!stored || stored.questionId !== questionId) {
+                return false;
+            }
+            return Date.now() >= stored.endTime;
+        },
+        [getStoredQuestionTimer]
+    );
+
+    const getQuestionRemainingTime = useCallback(
+        questionId => {
+            const stored = getStoredQuestionTimer();
+            if (!stored || stored.questionId !== questionId) {
+                return 0;
+            }
+            return getTimeRemaining(stored.endTime);
+        },
+        [getStoredQuestionTimer, getTimeRemaining]
+    );
+
+    const startQuestionTimer = useCallback(
+        (questionId, level, customDuration = null) => {
+            const duration =
+                customDuration ||
+                timerConfig[level] ||
+                timerConfig.medium ||
+                300;
+            const endTime = Date.now() + duration * 1000;
+
+            setStoredQuestionTimer({
+                questionId,
+                endTime,
+                level
+            });
+
+            setQuestionTimer({ questionId, level, endTime });
+            setQuestionRemainingTime(duration);
+
+            if (questionTimerIdRef.current) {
+                clearInterval(questionTimerIdRef.current);
+            }
+
+            questionTimerIdRef.current = setInterval(() => {
+                const remaining = getTimeRemaining(endTime);
+
+                if (remaining <= 0) {
+                    clearInterval(questionTimerIdRef.current);
+                    questionTimerIdRef.current = null;
+                    setQuestionRemainingTime(0);
+                    setStoredQuestionTimer(null);
+                } else {
+                    setQuestionRemainingTime(remaining);
+                }
+            }, 1000);
+
+            return duration;
+        },
+        [timerConfig, setStoredQuestionTimer, getTimeRemaining]
+    );
+
+    const restoreQuestionTimer = useCallback(() => {
+        const stored = getStoredQuestionTimer();
+
+        if (!stored) {
+            return false;
+        }
+
+        if (Date.now() >= stored.endTime) {
+            setStoredQuestionTimer(null);
+            return { expired: true, questionId: stored.questionId };
+        }
+
+        const remaining = getTimeRemaining(stored.endTime);
+        setQuestionTimer({
+            questionId: stored.questionId,
+            level: stored.level,
+            endTime: stored.endTime
+        });
+        setQuestionRemainingTime(remaining);
+
+        if (questionTimerIdRef.current) {
+            clearInterval(questionTimerIdRef.current);
+        }
+
+        questionTimerIdRef.current = setInterval(() => {
+            const newRemaining = getTimeRemaining(stored.endTime);
+
+            if (newRemaining <= 0) {
+                clearInterval(questionTimerIdRef.current);
+                questionTimerIdRef.current = null;
+                setQuestionRemainingTime(0);
+                setStoredQuestionTimer(null);
+            } else {
+                setQuestionRemainingTime(newRemaining);
+            }
+        }, 1000);
+
+        return {
+            restored: true,
+            questionId: stored.questionId,
+            level: stored.level,
+            remainingTime: remaining
+        };
+    }, [getStoredQuestionTimer, setStoredQuestionTimer, getTimeRemaining]);
 
     const updateTimerConfig = useCallback(config => {
         const newConfig = { ...DEFAULT_CONFIG, ...config };
@@ -173,82 +338,66 @@ const TimerContextProvider = ({ children }) => {
         }
     }, []);
 
-    const restoreTimer = useCallback(() => {
-        const stored = getStoredTimer();
-
-        if (!stored) {
-            return false;
+    const setOverallDuration = useCallback(seconds => {
+        const duration = seconds || DEFAULT_OVERALL_SECONDS;
+        setOverallTimerSeconds(duration);
+        try {
+            localStorage.setItem("overallTimerSeconds", duration.toString());
+        } catch (error) {
+            console.error("Failed to store overall timer seconds:", error);
         }
+    }, []);
 
-        if (Date.now() >= stored.endTime) {
-            setStoredTimer(null);
-            return { expired: true, questionId: stored.questionId };
-        }
-
-        const remaining = getTimeRemaining(stored.endTime);
-        setCurrentTimer({
-            questionId: stored.questionId,
-            level: stored.level,
-            endTime: stored.endTime
-        });
-        setRemainingTime(remaining);
-
-        if (timerIdRef.current) {
-            clearInterval(timerIdRef.current);
-        }
-
-        timerIdRef.current = setInterval(() => {
-            const newRemaining = getTimeRemaining(stored.endTime);
-
-            if (newRemaining <= 0) {
-                clearInterval(timerIdRef.current);
-                timerIdRef.current = null;
-                setRemainingTime(0);
-                setStoredTimer(null);
-            } else {
-                setRemainingTime(newRemaining);
-            }
-        }, 1000);
-
+    const getOverallTimerState = useCallback(() => {
         return {
-            restored: true,
-            questionId: stored.questionId,
-            level: stored.level,
-            remainingTime: remaining
+            timer: overallTimer,
+            remainingTime: overallRemainingTime,
+            formattedTime: formatTime(overallRemainingTime),
+            isActive: !!overallTimer
         };
-    }, [getStoredTimer, setStoredTimer, getTimeRemaining]);
+    }, [overallTimer, overallRemainingTime]);
 
-    const getTimerState = useCallback(() => {
+    const getQuestionTimerState = useCallback(() => {
         return {
-            currentTimer,
-            remainingTime,
-            formattedTime: formatTime(remainingTime),
-            isActive: !!currentTimer
+            timer: questionTimer,
+            remainingTime: questionRemainingTime,
+            formattedTime: formatTime(questionRemainingTime),
+            isActive: !!questionTimer
         };
-    }, [currentTimer, remainingTime]);
+    }, [questionTimer, questionRemainingTime]);
 
     useEffect(() => {
         return () => {
-            if (timerIdRef.current) {
-                clearInterval(timerIdRef.current);
+            if (overallTimerIdRef.current) {
+                clearInterval(overallTimerIdRef.current);
+            }
+            if (questionTimerIdRef.current) {
+                clearInterval(questionTimerIdRef.current);
             }
         };
     }, []);
 
     const value = {
         timerConfig,
-        currentTimer,
-        remainingTime,
-        formattedTime: formatTime(remainingTime),
-        getStoredTimer,
+        overallTimer,
+        overallRemainingTime,
+        overallFormattedTime: formatTime(overallRemainingTime),
+        questionTimer,
+        questionRemainingTime,
+        questionFormattedTime: formatTime(questionRemainingTime),
+        startOverallTimer,
+        restoreOverallTimer,
+        clearOverallTimer,
         startQuestionTimer,
-        getRemainingTime,
+        restoreQuestionTimer,
+        getQuestionRemainingTime,
         clearQuestionTimer,
         clearAllTimers,
-        hasExpiredTimer,
+        hasExpiredQuestionTimer,
         updateTimerConfig,
-        restoreTimer,
-        getTimerState
+        setOverallDuration,
+        getOverallTimerState,
+        getQuestionTimerState
     };
 
     return (

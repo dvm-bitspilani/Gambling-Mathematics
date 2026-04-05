@@ -8,30 +8,51 @@ import { useAlert } from "../contexts/AlertContext";
 import { usePathName } from "../utils/useHead";
 
 const Fixed = () => {
-    // Hooks
     const navigate = useNavigate();
     const pathName = usePathName();
-    const { formattedTime: timer, clearAllTimers } = useTimer();
+    const {
+        overallFormattedTime,
+        questionFormattedTime,
+        clearAllTimers,
+        questionRemainingTime,
+        overallRemainingTime
+    } = useTimer();
     const { logoutUser } = useUser();
     const { setErrorText } = useAlert();
     const URL = useURL();
 
-    // States
-    const [timerActive, setTimerActive] = useState(false);
-
-    // Effects
-    useEffect(() => {
-        const activePages = [URL.CATEGORIES, URL.QUESTION, URL.SELECT];
-        setTimerActive(activePages.includes(pathName) && timer !== "00:00:00");
-    }, [pathName, timer]);
+    const [overallTimerActive, setOverallTimerActive] = useState(false);
+    const [questionTimerActive, setQuestionTimerActive] = useState(false);
 
     useEffect(() => {
-        if (timerActive && timer === "00:00:00") {
+        const overallPages = [URL.CATEGORIES, URL.SELECT];
+        setOverallTimerActive(overallPages.includes(pathName));
+        setQuestionTimerActive(pathName === URL.QUESTION);
+    }, [pathName, URL]);
+
+    const displayTimer = questionTimerActive
+        ? questionFormattedTime
+        : overallFormattedTime;
+    const displayRemaining = questionTimerActive
+        ? questionRemainingTime
+        : overallRemainingTime;
+
+    useEffect(() => {
+        if (
+            questionTimerActive &&
+            displayRemaining === 0 &&
+            questionFormattedTime === "00:00:00"
+        ) {
             setErrorText("Time's up! Redirecting you to finish.", URL.FINISHED);
         }
-    }, [timerActive, timer]);
+    }, [
+        questionTimerActive,
+        displayRemaining,
+        questionFormattedTime,
+        URL,
+        setErrorText
+    ]);
 
-    // Handlers
     const handleExit = () => {
         clearAllTimers();
         logoutUser();
@@ -42,12 +63,10 @@ const Fixed = () => {
         navigate(URL.LEADERBOARD);
     };
 
-    // Functions
     const render = (links, jsx) => {
         return links.includes(pathName) ? null : jsx;
     };
 
-    // JSX
     return pathName === "" ? null : (
         <>
             <div className="topLeft">
@@ -71,10 +90,10 @@ const Fixed = () => {
                     style={{ flexDirection: "column" }}
                 >
                     <div className="num" id="timer">
-                        {timer}
+                        {displayTimer}
                     </div>
                     <div className="reg-par" style={{ textAlign: "center" }}>
-                        Time Remaining
+                        {questionTimerActive ? "Question Time" : "Overall Time"}
                     </div>
                 </div>
             )}

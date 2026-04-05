@@ -11,27 +11,25 @@ import { useNavigate } from "react-router-dom";
 import Fixed from "../components/Fixed";
 
 const Question = () => {
-    // Hooks
     useVerifyAuth();
     useTitle("Answer Your Question");
     const { user, updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
     const URL = useURL();
     const IMAGE_BASE =
-        import.meta.env.VITE_IMAGE_BASE || window.location.origin;
+        import.meta.env.VITE_IMAGE_BASE ||
+        "https://gambling-math.bits-apogee.org";
     const {
-        restoreTimer,
-        hasExpiredTimer,
+        restoreQuestionTimer,
+        hasExpiredQuestionTimer,
         clearQuestionTimer,
         timerConfig,
-        currentTimer,
-        remainingTime,
-        getStoredTimer,
+        questionTimer,
+        questionRemainingTime,
         startQuestionTimer
     } = useTimer();
     const navigate = useNavigate();
 
-    // State
     const [question, setQuestion] = useState({
         text: "",
         image: "",
@@ -39,12 +37,10 @@ const Question = () => {
         id: null
     });
 
-    // Effects
     useEffect(() => {
         fetchData();
     }, []);
 
-    // Functions
     const fetchData = async () => {
         try {
             const { data, error } = await getQuestion(user.token, user.level);
@@ -54,7 +50,14 @@ const Question = () => {
                 return;
             }
 
-            const { image, text, options, question_id } = data;
+            const {
+                image,
+                text,
+                options,
+                question_id,
+                question_timer_seconds,
+                question_timer_remaining_seconds
+            } = data;
             setQuestion({
                 image,
                 text,
@@ -62,10 +65,15 @@ const Question = () => {
                 id: question_id
             });
 
-            const stored = getStoredTimer();
-            
-            if (stored && stored.questionId === question_id) {
-                if (hasExpiredTimer(question_id)) {
+            const stored = localStorage.getItem("questionTimer");
+            const parsedStored = stored ? JSON.parse(stored) : null;
+
+            if (parsedStored && parsedStored.questionId !== question_id) {
+                clearQuestionTimer(parsedStored.questionId);
+            }
+
+            if (parsedStored && parsedStored.questionId === question_id) {
+                if (hasExpiredQuestionTimer(question_id)) {
                     clearQuestionTimer(question_id);
                     setErrorText(
                         "Time's up! Your timer expired. Redirecting to finished.",
@@ -73,12 +81,14 @@ const Question = () => {
                     );
                     return;
                 }
-                restoreTimer();
+                restoreQuestionTimer();
             } else {
-                if (stored && stored.questionId !== question_id) {
-                    clearQuestionTimer(stored.questionId);
-                }
-                startQuestionTimer(question_id, user.level);
+                const duration =
+                    question_timer_remaining_seconds ||
+                    question_timer_seconds ||
+                    timerConfig[user.level] ||
+                    300;
+                startQuestionTimer(question_id, user.level, duration);
             }
         } catch (error) {
             handleFetchError(error);
@@ -86,7 +96,6 @@ const Question = () => {
         }
     };
 
-    // Handlers
     const handleFetchError = err => {
         setErrorText(
             "An error occurred while fetching the question. Please try again."
@@ -95,8 +104,8 @@ const Question = () => {
 
     const handleAnswer = async opt => {
         try {
-            const totalDuration = timerConfig[currentTimer?.level] || 300;
-            const timeTaken = totalDuration - remainingTime;
+            const totalDuration = timerConfig[questionTimer?.level] || 300;
+            const timeTaken = totalDuration - questionRemainingTime;
 
             const { data, error } = await postAnswer(
                 question.id,

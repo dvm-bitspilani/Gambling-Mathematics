@@ -7,17 +7,17 @@ import { useVerifyAuth } from "../utils/useAuth";
 import { useTimer } from "../contexts/TimerContext";
 
 const Instructions = () => {
-    // Hooks
     useVerifyAuth();
     useTitle("General Instructions");
     const navigate = useNavigate();
     const instructions = useInstructions();
-    const { startQuestionTimer } = useTimer();
+    const { startOverallTimer, restoreOverallTimer, overallTimer } = useTimer();
     const URL = useURL();
 
-    // Event Handler
     const handleClick = () => {
-        startQuestionTimer("session", "medium");
+        if (!overallTimer) {
+            startOverallTimer();
+        }
         navigate(URL.CATEGORIES);
     };
 

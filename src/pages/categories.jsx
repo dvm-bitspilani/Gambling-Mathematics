@@ -10,20 +10,23 @@ import { getCategories, getGameConfig } from "../utils/useFetch";
 import { useTimer } from "../contexts/TimerContext";
 
 const Categories = () => {
-    // Hooks
     useVerifyAuth();
     useTitle("View Your Categories");
     const navigate = useNavigate();
     const { user, updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
-    const { updateTimerConfig } = useTimer();
+    const {
+        updateTimerConfig,
+        restoreOverallTimer,
+        startOverallTimer,
+        overallTimer,
+        setOverallDuration
+    } = useTimer();
     const URL = useURL();
 
-    // State
     const [loading, setLoading] = useState(true);
     const [categories, setCategories] = useState([]);
 
-    // Effects
     useEffect(() => {
         fetchData();
     }, []);
@@ -37,7 +40,6 @@ const Categories = () => {
         }
     }, [user.points]);
 
-    // Functions
     const fetchData = async () => {
         try {
             const [categoriesRes, configRes] = await Promise.all([
@@ -52,7 +54,10 @@ const Categories = () => {
                     setErrorText(
                         "Expected a categories list but received an invalid response. Refresh the page."
                     );
-                    console.error("Unexpected categories response:", categoriesRes.data);
+                    console.error(
+                        "Unexpected categories response:",
+                        categoriesRes.data
+                    );
                     return;
                 }
 
@@ -73,23 +78,45 @@ const Categories = () => {
                 console.error(categoriesRes.error);
             }
 
-            if (configRes.data?.timer_durations) {
-                updateTimerConfig(configRes.data.timer_durations);
+            if (configRes.data) {
+                if (configRes.data.timer_durations) {
+                    updateTimerConfig(configRes.data.timer_durations);
+                }
+                if (configRes.data.overall_timer_seconds) {
+                    setOverallDuration(configRes.data.overall_timer_seconds);
+                }
+            }
+
+            const restoreResult = restoreOverallTimer();
+            if (restoreResult?.expired) {
+                setErrorText(
+                    "Overall time expired. Redirecting to finish.",
+                    URL.FINISHED
+                );
+            } else if (!restoreResult && !overallTimer) {
+                startOverallTimer();
             }
         } catch (err) {
             console.error(err);
         }
     };
 
-    // Handlers
     const handleLocate = async category => {
         try {
             updateUser({ category: category.id });
 
-            setSuccessText(
-                `Selected ${category.name}. Redirecting you to the bet.`,
-                URL.SELECT
-            );
+            if (category.has_active_bet && category.active_bet_level) {
+                updateUser({ level: category.active_bet_level });
+                setSuccessText(
+                    `Active bet found in ${category.name}. Redirecting to question.`,
+                    URL.QUESTION
+                );
+            } else {
+                setSuccessText(
+                    `Selected ${category.name}. Redirecting you to the bet.`,
+                    URL.SELECT
+                );
+            }
         } catch (err) {
             setErrorText("Failed to find this category. Try again.");
             console.error(err);
