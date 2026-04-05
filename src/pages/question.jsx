@@ -16,9 +16,7 @@ const Question = () => {
     const { user, updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
     const URL = useURL();
-    const IMAGE_BASE =
-        import.meta.env.VITE_IMAGE_BASE ||
-        "https://gambling-math.bits-apogee.org/";
+    const IMAGE_BASE = "https://gambling-math.bits-apogee.org/";
     const {
         restoreQuestionTimer,
         hasExpiredQuestionTimer,
