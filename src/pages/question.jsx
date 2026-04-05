@@ -18,7 +18,7 @@ const Question = () => {
     const URL = useURL();
     const IMAGE_BASE =
         import.meta.env.VITE_IMAGE_BASE ||
-        "https://gambling-math.bits-apogee.org";
+        "https://gambling-math.bits-apogee.org/";
     const {
         restoreQuestionTimer,
         hasExpiredQuestionTimer,
@@ -167,7 +167,7 @@ const Question = () => {
                             src={
                                 question.image?.startsWith("http")
                                     ? question.image
-                                    : `${IMAGE_BASE}${question.image}`
+                                    : `${IMAGE_BASE}${question.image?.replace(/^\//, "")}`
                             }
                             alt="question"
                             className="ques-img"
