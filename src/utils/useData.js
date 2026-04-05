@@ -11,7 +11,7 @@ const useURL = () => {
 
         API_BASE: "https://gambling-math.bits-apogee.org/api",
         API_LOGIN: "/login",
-        API_TOKEN_REFRESH: "/token/refresh",
+        API_TOKEN_REFRESH: "/token/refresh/",
         API_CATEGORY: "/category",
         API_MAX_BET: "/get_max_bet",
         API_PLACE_BET: "/place_bet",
@@ -37,14 +37,15 @@ const useInstructions = () => {
             "Medium Question (2x bet reward on correct answer).",
             "Hard Question (4x bet reward on correct answer)"
         ],
-        "7. Minimum bet amount: 200 points.",
-        "8. After betting you will be shown a question which will have 4 options out of which only 1 will be correct.",
-        "9. Incorrect or unanswered questions receive no points.",
-        "10. Teams can attempt questions in any order.",
-        "11. All categories and difficulties are visible before making choices wisely.",
-        "12. Minimum score cannot go below 0 points. If your coins are out, the game will end.",
-        "13. Ties will be resolved on the basis of time taken to complete the game.",
-        "14. Users shall be logged out after 3 minutes of inactivity. Hence, submit your answer within 3 minutes."
+        "7. PER-QUESTION TIMER: Easy questions - 3 minutes | Medium questions - 5 minutes | Hard questions - 7 minutes. Timer starts when the question is displayed.",
+        "8. Minimum bet amount: 200 points.",
+        "9. After betting you will be shown a question which will have 4 options out of which only 1 will be correct.",
+        "10. Incorrect or unanswered questions receive no points.",
+        "11. Teams can attempt questions in any order.",
+        "12. All categories and difficulties are visible before making choices wisely.",
+        "13. Minimum score cannot go below 0 points. If your coins are out, the game will end.",
+        "14. In case of a tie, the team with fewer questions answered ranks higher.",
+        "15. Users shall be logged out after 3 minutes of inactivity."
     ];
 
     return instructions;

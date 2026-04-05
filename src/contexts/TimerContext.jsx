@@ -94,6 +94,16 @@ const TimerContextProvider = ({ children }) => {
         [getStoredTimer, setStoredTimer]
     );
 
+    const clearAllTimers = useCallback(() => {
+        if (timerIdRef.current) {
+            clearInterval(timerIdRef.current);
+            timerIdRef.current = null;
+        }
+        setStoredTimer(null);
+        setCurrentTimer(null);
+        setRemainingTime(0);
+    }, [setStoredTimer]);
+
     const hasExpiredTimer = useCallback(
         questionId => {
             const stored = getStoredTimer();
@@ -230,9 +240,11 @@ const TimerContextProvider = ({ children }) => {
         currentTimer,
         remainingTime,
         formattedTime: formatTime(remainingTime),
+        getStoredTimer,
         startQuestionTimer,
         getRemainingTime,
         clearQuestionTimer,
+        clearAllTimers,
         hasExpiredTimer,
         updateTimerConfig,
         restoreTimer,

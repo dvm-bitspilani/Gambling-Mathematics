@@ -137,9 +137,11 @@ GET /api/game_config
 
 ```json
 {
-    "timer_easy": 180,
-    "timer_medium": 300,
-    "timer_hard": 420,
+    "timer_durations": {
+        "easy": 180,
+        "medium": 300,
+        "hard": 420
+    },
     "instructions": "Timer durations per question difficulty: Easy questions have 3 minutes (180 seconds), Medium questions have 5 minutes (300 seconds), Hard questions have 7 minutes (420 seconds). Timer starts when the question is displayed."
 }
 ```
@@ -596,7 +598,7 @@ All options currently use the default multiplier of `2.0`, meaning a correct ans
 
 ### 6. Leaderboard
 
-Returns all teams ranked by points (descending), with alphabetical tiebreaker by team name.
+Returns teams ranked by points (descending), then questions answered (ascending), then team name (ascending). Teams with zero questions answered are excluded.
 
 **Request**
 
@@ -700,7 +702,7 @@ Step 6: CHECK LEADERBOARD
 ```bash
 # 0. Get timer configuration (optional)
 curl -X GET https://gambling-math.bits-apogee.org/api/game_config
-# → {"timer_easy": 180, "timer_medium": 300, "timer_hard": 420,
+# → {"timer_durations": {"easy": 180, "medium": 300, "hard": 420},
 #    "instructions": "Timer durations per question difficulty..."}
 
 # 1. Login

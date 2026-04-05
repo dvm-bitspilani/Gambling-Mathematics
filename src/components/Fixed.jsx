@@ -11,7 +11,7 @@ const Fixed = () => {
     // Hooks
     const navigate = useNavigate();
     const pathName = usePathName();
-    const { formattedTime: timer } = useTimer();
+    const { formattedTime: timer, clearAllTimers } = useTimer();
     const { logoutUser } = useUser();
     const { setErrorText } = useAlert();
     const URL = useURL();
@@ -33,6 +33,7 @@ const Fixed = () => {
 
     // Handlers
     const handleExit = () => {
+        clearAllTimers();
         logoutUser();
         navigate(URL.BASE);
     };

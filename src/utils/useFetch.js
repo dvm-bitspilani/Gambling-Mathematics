@@ -64,6 +64,7 @@ const refreshAccessToken = async refreshToken => {
 
 const fetchData = async (url, method, data, headers, onLogout) => {
     try {
+        const URL = useURL();
         let response = await fetch(url, {
             method,
             headers,
@@ -92,7 +93,7 @@ const fetchData = async (url, method, data, headers, onLogout) => {
                 } else {
                     clearUserFromCookies();
                     if (onLogout) onLogout();
-                    window.location.href = "/";
+                    window.location.href = URL.HOME;
                     return {
                         data: null,
                         error: new Error("Session expired"),
@@ -102,7 +103,7 @@ const fetchData = async (url, method, data, headers, onLogout) => {
             } else {
                 clearUserFromCookies();
                 if (onLogout) onLogout();
-                window.location.href = "/";
+                window.location.href = URL.HOME;
                 return {
                     data: null,
                     error: new Error("No refresh token"),

@@ -6,7 +6,8 @@ import { useTitle } from "../utils/useHead";
 import { useURL } from "../utils/useData";
 import { useAlert } from "../contexts/AlertContext";
 import { useVerifyAuth } from "../utils/useAuth";
-import { getCategories } from "../utils/useFetch";
+import { getCategories, getGameConfig } from "../utils/useFetch";
+import { useTimer } from "../contexts/TimerContext";
 
 const Categories = () => {
     // Hooks
@@ -15,6 +16,7 @@ const Categories = () => {
     const navigate = useNavigate();
     const { user, updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
+    const { updateTimerConfig } = useTimer();
     const URL = useURL();
 
     // State
@@ -38,20 +40,23 @@ const Categories = () => {
     // Functions
     const fetchData = async () => {
         try {
-            const { data, loading, error } = await getCategories(user.token);
+            const [categoriesRes, configRes] = await Promise.all([
+                getCategories(user.token),
+                getGameConfig()
+            ]);
 
-            setLoading(loading);
+            setLoading(categoriesRes.loading);
 
-            if (data) {
-                if (!Array.isArray(data)) {
+            if (categoriesRes.data) {
+                if (!Array.isArray(categoriesRes.data)) {
                     setErrorText(
                         "Expected a categories list but received an invalid response. Refresh the page."
                     );
-                    console.error("Unexpected categories response:", data);
+                    console.error("Unexpected categories response:", categoriesRes.data);
                     return;
                 }
 
-                const shown = data;
+                const shown = categoriesRes.data;
 
                 if (shown.length === 0) {
                     setSuccessText(
@@ -63,9 +68,13 @@ const Categories = () => {
                 setCategories(shown);
             }
 
-            if (error) {
+            if (categoriesRes.error) {
                 setErrorText("Failed to fetch categories. Refresh the page.");
-                console.error(error);
+                console.error(categoriesRes.error);
+            }
+
+            if (configRes.data?.timer_durations) {
+                updateTimerConfig(configRes.data.timer_durations);
             }
         } catch (err) {
             console.error(err);

@@ -25,7 +25,9 @@ const Question = () => {
         clearQuestionTimer,
         timerConfig,
         currentTimer,
-        remainingTime
+        remainingTime,
+        getStoredTimer,
+        startQuestionTimer
     } = useTimer();
     const navigate = useNavigate();
 
@@ -60,15 +62,24 @@ const Question = () => {
                 id: question_id
             });
 
-            if (hasExpiredTimer(question_id)) {
-                setErrorText(
-                    "Time's up! Your timer expired. Redirecting to finished.",
-                    URL.FINISHED
-                );
-                return;
+            const stored = getStoredTimer();
+            
+            if (stored && stored.questionId === question_id) {
+                if (hasExpiredTimer(question_id)) {
+                    clearQuestionTimer(question_id);
+                    setErrorText(
+                        "Time's up! Your timer expired. Redirecting to finished.",
+                        URL.FINISHED
+                    );
+                    return;
+                }
+                restoreTimer();
+            } else {
+                if (stored && stored.questionId !== question_id) {
+                    clearQuestionTimer(stored.questionId);
+                }
+                startQuestionTimer(question_id, user.level);
             }
-
-            restoreTimer();
         } catch (error) {
             handleFetchError(error);
             console.log(error);
@@ -113,7 +124,8 @@ const Question = () => {
             } else {
                 setErrorText(
                     "Wrong answer. Your bet was lost. Redirecting...",
-                    URL.CATEGORIES
+                    URL.CATEGORIES,
+                    "Wrong Answer"
                 );
             }
         } catch (err) {

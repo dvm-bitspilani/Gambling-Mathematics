@@ -5,10 +5,9 @@ import "../styles/categories.css";
 import { useTitle } from "../utils/useHead";
 import { useLevels, useURL } from "../utils/useData";
 import { useAlert } from "../contexts/AlertContext";
-import { postBet, getGameConfig, getQuestion } from "../utils/useFetch";
+import { postBet } from "../utils/useFetch";
 import { useUser } from "../contexts/UserContext";
 import { useVerifyAuth } from "../utils/useAuth";
-import { useTimer } from "../contexts/TimerContext";
 
 const Select = () => {
     // Hooks
@@ -24,7 +23,6 @@ const Select = () => {
     };
     const { user, updateUser } = useUser();
     const { setErrorText, setSuccessText } = useAlert();
-    const { updateTimerConfig, startQuestionTimer } = useTimer();
 
     // State
     const [bet, setBet] = useState(200);
@@ -34,20 +32,6 @@ const Select = () => {
     useEffect(() => {
         updateUser({ level: selectedLevel });
     }, [selectedLevel]);
-
-    useEffect(() => {
-        const fetchGameConfig = async () => {
-            try {
-                const { data, error } = await getGameConfig();
-                if (!error && data?.timer_durations) {
-                    updateTimerConfig(data.timer_durations);
-                }
-            } catch (err) {
-                console.error("Failed to fetch game config:", err);
-            }
-        };
-        fetchGameConfig();
-    }, [updateTimerConfig]);
 
     // Event Handlers
     const handleBetSelection = async () => {
@@ -59,8 +43,8 @@ const Select = () => {
                 return;
             }
 
-            if (Number(bet) < 1) {
-                setErrorText("Minimum bet is 1 point.");
+            if (Number(bet) < 200) {
+                setErrorText("Minimum bet is 200 points.");
                 return;
             }
 
@@ -89,13 +73,6 @@ const Select = () => {
 
             if (typeof data?.remaining_points === "number") {
                 updateUser({ points: data.remaining_points });
-            }
-
-            const { data: questionData, error: questionError } =
-                await getQuestion(user.token, selectedLevel);
-
-            if (!questionError && questionData?.question_id) {
-                startQuestionTimer(questionData.question_id, selectedLevel);
             }
 
             setSuccessText(
@@ -166,6 +143,8 @@ const Select = () => {
                                 id="myRange"
                                 value={bet}
                                 onChange={e => setBet(e.target.value)}
+                                min="200"
+                                step="1"
                             />
                         </div>
                     </div>
