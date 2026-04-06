@@ -6,7 +6,7 @@ import { useTitle } from "../utils/useHead";
 import { useURL } from "../utils/useData";
 import { useAlert } from "../contexts/AlertContext";
 import { useVerifyAuth } from "../utils/useAuth";
-import { getCategories, getGameConfig } from "../utils/useFetch";
+import { getCategories, getGameConfig, getGameState } from "../utils/useFetch";
 import { useTimer } from "../contexts/TimerContext";
 
 const Categories = () => {
@@ -20,7 +20,8 @@ const Categories = () => {
         restoreOverallTimer,
         startOverallTimer,
         overallTimer,
-        setOverallDuration
+        setOverallDuration,
+        syncOverallTimerFromBackend
     } = useTimer();
     const URL = useURL();
 
@@ -42,9 +43,10 @@ const Categories = () => {
 
     const fetchData = async () => {
         try {
-            const [categoriesRes, configRes] = await Promise.all([
+            const [categoriesRes, configRes, gameStateRes] = await Promise.all([
                 getCategories(user.token),
-                getGameConfig()
+                getGameConfig(),
+                getGameState(user.token).catch(e => ({ data: null, error: e, loading: false }))
             ]);
 
             setLoading(categoriesRes.loading);
@@ -87,14 +89,28 @@ const Categories = () => {
                 }
             }
 
-            const restoreResult = restoreOverallTimer();
-            if (restoreResult?.expired) {
+            if (gameStateRes?.data?.game_timer) {
+                syncOverallTimerFromBackend(gameStateRes.data.game_timer);
+            }
+
+            if (gameStateRes?.data?.status === "timer_expired") {
                 setErrorText(
                     "Overall time expired. Redirecting to finish.",
                     URL.FINISHED
                 );
-            } else if (!restoreResult && !overallTimer) {
-                startOverallTimer();
+                return;
+            }
+
+            if (!gameStateRes?.data?.game_timer) {
+                const restoreResult = restoreOverallTimer();
+                if (restoreResult?.expired) {
+                    setErrorText(
+                        "Overall time expired. Redirecting to finish.",
+                        URL.FINISHED
+                    );
+                } else if (!restoreResult && !overallTimer) {
+                    startOverallTimer();
+                }
             }
         } catch (err) {
             console.error(err);

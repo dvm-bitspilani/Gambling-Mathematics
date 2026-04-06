@@ -4,20 +4,15 @@ import "../styles/categories.css";
 import { useTitle } from "../utils/useHead";
 import { useInstructions, useURL } from "../utils/useData";
 import { useVerifyAuth } from "../utils/useAuth";
-import { useTimer } from "../contexts/TimerContext";
 
 const Instructions = () => {
     useVerifyAuth();
     useTitle("General Instructions");
     const navigate = useNavigate();
     const instructions = useInstructions();
-    const { startOverallTimer, restoreOverallTimer, overallTimer } = useTimer();
     const URL = useURL();
 
     const handleClick = () => {
-        if (!overallTimer) {
-            startOverallTimer();
-        }
         navigate(URL.CATEGORIES);
     };
 

@@ -112,6 +112,18 @@ const fetchData = async (url, method, data, headers, onLogout) => {
             }
         }
 
+        if (response.status === 409) {
+            let body = {};
+            try {
+                body = await response.json();
+            } catch {}
+            const err = new Error(body.detail || "HTTP error! status: 409");
+            err.status = 409;
+            err.data = body;
+            err.response = { status: 409, data: body };
+            throw err;
+        }
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -190,6 +202,10 @@ const getGameConfig = async () => {
     return await createRequest("API_GAME_CONFIG", "get", null, null);
 };
 
+const getGameState = async userToken => {
+    return await createRequest("API_GAME_STATE", "get", null, userToken);
+};
+
 export {
     postLogin,
     getCategories,
@@ -197,5 +213,6 @@ export {
     getQuestion,
     postAnswer,
     getLeaderboard,
-    getGameConfig
+    getGameConfig,
+    getGameState
 };

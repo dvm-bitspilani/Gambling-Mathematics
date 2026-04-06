@@ -15,7 +15,8 @@ const Fixed = () => {
         questionFormattedTime,
         clearAllTimers,
         questionRemainingTime,
-        overallRemainingTime
+        overallRemainingTime,
+        questionTimer
     } = useTimer();
     const { logoutUser } = useUser();
     const { setErrorText } = useAlert();
@@ -40,6 +41,7 @@ const Fixed = () => {
     useEffect(() => {
         if (
             questionTimerActive &&
+            questionTimer !== null &&
             displayRemaining === 0 &&
             questionFormattedTime === "00:00:00"
         ) {
@@ -47,6 +49,7 @@ const Fixed = () => {
         }
     }, [
         questionTimerActive,
+        questionTimer,
         displayRemaining,
         questionFormattedTime,
         URL,

@@ -154,9 +154,52 @@ const TimerContextProvider = ({ children }) => {
         clearQuestionTimer();
     }, [clearOverallTimer, clearQuestionTimer]);
 
+    const syncOverallTimerFromBackend = useCallback(
+        gameTimer => {
+            if (!gameTimer) return;
+
+            if (gameTimer.is_expired) {
+                clearOverallTimer();
+                return;
+            }
+
+            const duration = gameTimer.overall_timer_seconds;
+            const endTime = Date.now() + gameTimer.remaining_seconds * 1000;
+
+            setStoredOverallTimer({ endTime, duration });
+            setOverallTimer({ endTime });
+            setOverallRemainingTime(gameTimer.remaining_seconds);
+            setOverallTimerSeconds(duration);
+
+            try {
+                localStorage.setItem("overallTimerSeconds", duration.toString());
+            } catch (error) {
+                console.error("Failed to store overall timer seconds:", error);
+            }
+
+            if (overallTimerIdRef.current) {
+                clearInterval(overallTimerIdRef.current);
+            }
+
+            overallTimerIdRef.current = setInterval(() => {
+                const remaining = getTimeRemaining(endTime);
+
+                if (remaining <= 0) {
+                    clearInterval(overallTimerIdRef.current);
+                    overallTimerIdRef.current = null;
+                    setOverallRemainingTime(0);
+                    setStoredOverallTimer(null);
+                } else {
+                    setOverallRemainingTime(remaining);
+                }
+            }, 1000);
+        },
+        [clearOverallTimer, setStoredOverallTimer, getTimeRemaining]
+    );
+
     const startOverallTimer = useCallback(
         (customSeconds = null) => {
-            const duration = customSeconds || overallTimerSeconds;
+            const duration = customSeconds ?? overallTimerSeconds;
             const endTime = Date.now() + duration * 1000;
 
             setStoredOverallTimer({ endTime, duration });
@@ -339,7 +382,7 @@ const TimerContextProvider = ({ children }) => {
     }, []);
 
     const setOverallDuration = useCallback(seconds => {
-        const duration = seconds || DEFAULT_OVERALL_SECONDS;
+        const duration = seconds ?? DEFAULT_OVERALL_SECONDS;
         setOverallTimerSeconds(duration);
         try {
             localStorage.setItem("overallTimerSeconds", duration.toString());
@@ -388,6 +431,7 @@ const TimerContextProvider = ({ children }) => {
         startOverallTimer,
         restoreOverallTimer,
         clearOverallTimer,
+        syncOverallTimerFromBackend,
         startQuestionTimer,
         restoreQuestionTimer,
         getQuestionRemainingTime,

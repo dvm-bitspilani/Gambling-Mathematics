@@ -7,6 +7,7 @@ import { useLevels, useURL } from "../utils/useData";
 import { useAlert } from "../contexts/AlertContext";
 import { postBet } from "../utils/useFetch";
 import { useUser } from "../contexts/UserContext";
+import { useTimer } from "../contexts/TimerContext";
 import { useVerifyAuth } from "../utils/useAuth";
 
 const Select = () => {
@@ -22,6 +23,7 @@ const Select = () => {
         H: "hard"
     };
     const { user, updateUser } = useUser();
+    const { syncOverallTimerFromBackend } = useTimer();
     const { setErrorText, setSuccessText } = useAlert();
 
     // State
@@ -73,6 +75,10 @@ const Select = () => {
 
             if (typeof data?.remaining_points === "number") {
                 updateUser({ points: data.remaining_points });
+            }
+
+            if (data?.game_timer) {
+                syncOverallTimerFromBackend(data.game_timer);
             }
 
             setSuccessText(

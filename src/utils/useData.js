@@ -18,7 +18,8 @@ const useURL = () => {
         API_GET_QUESTION: "/get_question",
         API_ANSWER: "/answer",
         API_LEADERBOARD: "/leaderboard",
-        API_GAME_CONFIG: "/game_config"
+        API_GAME_CONFIG: "/game_config",
+        API_GAME_STATE: "/game_state"
     };
 
     return URL;
