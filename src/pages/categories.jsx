@@ -93,6 +93,10 @@ const Categories = () => {
                 syncOverallTimerFromBackend(gameStateRes.data.game_timer);
             }
 
+            if (gameStateRes?.data?.points !== undefined) {
+                updateUser({ points: gameStateRes.data.points });
+            }
+
             if (gameStateRes?.data?.status === "timer_expired") {
                 setErrorText(
                     "Overall time expired. Redirecting to finish.",

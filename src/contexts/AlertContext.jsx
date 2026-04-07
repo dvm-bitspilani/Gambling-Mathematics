@@ -33,6 +33,29 @@ const AlertContextProvider = ({ children }) => {
     const [error, setError] = useState(initialState);
     const [success, setSuccess] = useState(initialState);
 
+    const immediateRedirect = (link, message = null, type = null) => {
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+            timeoutRef.current = null;
+        }
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
+        
+        if (message && type === 'success') {
+            setSuccess({ status: true, message, title: "SUCCESS" });
+            setError(initialState);
+        } else if (message && type === 'error') {
+            setError({ status: true, message, title: "ERROR" });
+            setSuccess(initialState);
+        }
+        
+        if (link) {
+            navigate(link);
+        }
+    };
+
     useEffect(() => {
         return () => {
             mountedRef.current = false;
@@ -73,18 +96,24 @@ const AlertContextProvider = ({ children }) => {
         } else clearAll(3000);
     };
 
-    const setErrorText = (message, link, title = "ERROR") => {
-        setError({ status: true, message, title });
-        setSuccess(initialState);
-
-        handleLink(link);
+    const setErrorText = (message, link, title = "ERROR", immediate = false) => {
+        if (immediate) {
+            immediateRedirect(link, message, 'error');
+        } else {
+            setError({ status: true, message, title });
+            setSuccess(initialState);
+            handleLink(link);
+        }
     };
 
-    const setSuccessText = (message, link) => {
-        setSuccess({ status: true, message, title: "SUCCESS" });
-        setError(initialState);
-
-        handleLink(link);
+    const setSuccessText = (message, link, immediate = false) => {
+        if (immediate) {
+            immediateRedirect(link, message, 'success');
+        } else {
+            setSuccess({ status: true, message, title: "SUCCESS" });
+            setError(initialState);
+            handleLink(link);
+        }
     };
 
     const clearAll = (delay = 0) => {
@@ -109,7 +138,8 @@ const AlertContextProvider = ({ children }) => {
         success,
         setErrorText,
         setSuccessText,
-        clearAll
+        clearAll,
+        immediateRedirect
     };
 
     return (

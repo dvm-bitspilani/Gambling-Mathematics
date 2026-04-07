@@ -5,7 +5,7 @@ import "../styles/categories.css";
 import { useTitle } from "../utils/useHead";
 import { useLevels, useURL } from "../utils/useData";
 import { useAlert } from "../contexts/AlertContext";
-import { postBet } from "../utils/useFetch";
+import { postBet, getGameState } from "../utils/useFetch";
 import { useUser } from "../contexts/UserContext";
 import { useTimer } from "../contexts/TimerContext";
 import { useVerifyAuth } from "../utils/useAuth";
@@ -24,20 +24,47 @@ const Select = () => {
     };
     const { user, updateUser } = useUser();
     const { syncOverallTimerFromBackend } = useTimer();
-    const { setErrorText, setSuccessText } = useAlert();
+    const { setErrorText, setSuccessText, immediateRedirect } = useAlert();
 
     // State
     const [bet, setBet] = useState(200);
     const [selectedLevel, setSelectedLevel] = useState("hard");
+    const [submitting, setSubmitting] = useState(false);
 
     // Effects
     useEffect(() => {
         updateUser({ level: selectedLevel });
     }, [selectedLevel]);
 
+    useEffect(() => {
+        const syncGameStateOnLoad = async () => {
+            try {
+                const { data } = await getGameState(user.token);
+                if (data?.points !== undefined) {
+                    updateUser({ points: data.points });
+                }
+                if (data?.game_timer) {
+                    syncOverallTimerFromBackend(data.game_timer);
+                }
+                if (data?.open_bets_count > 0 && data?.open_bet_levels?.length > 0) {
+                    const level = data.open_bet_levels[0];
+                    updateUser({ level });
+                    immediateRedirect(URL.QUESTION);
+                }
+            } catch (err) {
+                console.error("Failed to sync game state:", err);
+            }
+        };
+        syncGameStateOnLoad();
+    }, [user.token, updateUser, syncOverallTimerFromBackend, immediateRedirect, URL.QUESTION]);
+
     // Event Handlers
     const handleBetSelection = async () => {
+        if (submitting) return;
+
         try {
+            setSubmitting(true);
+            
             if (!bet) {
                 setErrorText(
                     "Please enter the number of points you want to bet."
@@ -81,13 +108,12 @@ const Select = () => {
                 syncOverallTimerFromBackend(data.game_timer);
             }
 
-            setSuccessText(
-                "Your bet has been placed successfully. You will be redirected to the questions page.",
-                URL.QUESTION
-            );
+            immediateRedirect(URL.QUESTION, "Bet placed successfully!", 'success');
         } catch (err) {
             setErrorText("An error occurred while placing your bet.");
             console.error("Error placing bet:", err);
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -186,8 +212,11 @@ const Select = () => {
                         Once you have selected the number of points you want to
                         bet, click on the button below to start the game.
                     </div>
-                    <div className="btns" onClick={handleBetSelection}>
-                        SELECT
+                    <div
+                        className={`btns${submitting ? ' disabled' : ''}`}
+                        onClick={submitting ? undefined : handleBetSelection}
+                    >
+                        {submitting ? 'PLACING...' : 'SELECT'}
                     </div>
                 </div>
             </div>
