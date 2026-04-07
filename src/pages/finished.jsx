@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../styles/login.css";
 import { useUser } from "../contexts/UserContext";
 import { useTitle } from "../utils/useHead";
@@ -6,6 +6,10 @@ import { useTitle } from "../utils/useHead";
 const Finished = () => {
     // Hooks
     useTitle("Game Finished");
+
+    useEffect(() => {
+        localStorage.removeItem('gambling_timer_expired_redirect');
+    }, []);
 
     // Context
     const { user } = useUser();

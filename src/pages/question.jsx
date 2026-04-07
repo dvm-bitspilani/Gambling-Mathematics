@@ -9,6 +9,8 @@ import { getQuestion, postAnswer, getGameState } from "../utils/useFetch";
 import { useTimer } from "../contexts/TimerContext";
 import { useNavigate } from "react-router-dom";
 
+const TIMER_EXPIRED_FLAG = 'gambling_timer_expired_redirect';
+
 const Question = () => {
     useVerifyAuth();
     useTitle("Answer Your Question");
@@ -116,16 +118,13 @@ const Question = () => {
 
     // Handle timer expiration redirect
     useEffect(() => {
-        if (
-            questionRemainingTime === 0 &&
-            questionTimer?.questionId === question.id &&
-            question.id !== null &&
-            !submitting
-        ) {
+        if (questionRemainingTime === 0 && questionTimer !== null && !submitting) {
+            if (localStorage.getItem(TIMER_EXPIRED_FLAG)) return;
+            localStorage.setItem(TIMER_EXPIRED_FLAG, 'true');
             clearQuestionTimer(question.id);
             immediateRedirect(URL.FINISHED, "Time's up! Your timer expired.", 'error');
         }
-    }, [questionRemainingTime, questionTimer?.questionId, question.id, clearQuestionTimer, immediateRedirect, URL.FINISHED, submitting]);
+    }, [questionRemainingTime, questionTimer, clearQuestionTimer, immediateRedirect, URL.FINISHED, submitting, question.id]);
 
     const handleFetchError = err => {
         const detail = err?.response?.data?.detail || err?.message || "";

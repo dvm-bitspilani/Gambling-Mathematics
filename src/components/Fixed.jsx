@@ -14,13 +14,15 @@ const Fixed = () => {
         overallFormattedTime,
         questionFormattedTime,
         clearAllTimers,
+        clearQuestionTimer,
         questionRemainingTime,
         overallRemainingTime,
         questionTimer
     } = useTimer();
     const { logoutUser } = useUser();
-    const { setErrorText } = useAlert();
+    const { setErrorText, immediateRedirect } = useAlert();
     const URL = useURL();
+    const TIMER_EXPIRED_FLAG = 'gambling_timer_expired_redirect';
 
     const [overallTimerActive, setOverallTimerActive] = useState(false);
     const [questionTimerActive, setQuestionTimerActive] = useState(false);
@@ -45,7 +47,10 @@ const Fixed = () => {
             displayRemaining === 0 &&
             questionFormattedTime === "00:00:00"
         ) {
-            setErrorText("Time's up! Redirecting you to finish.", URL.FINISHED);
+            if (localStorage.getItem(TIMER_EXPIRED_FLAG)) return;
+            localStorage.setItem(TIMER_EXPIRED_FLAG, 'true');
+            clearQuestionTimer();
+            immediateRedirect(URL.FINISHED, "Time's up!", 'error');
         }
     }, [
         questionTimerActive,
@@ -53,7 +58,8 @@ const Fixed = () => {
         displayRemaining,
         questionFormattedTime,
         URL,
-        setErrorText
+        immediateRedirect,
+        clearQuestionTimer
     ]);
 
     const handleExit = () => {
