@@ -96,7 +96,7 @@ const Question = () => {
                 if (parsedStored && parsedStored.questionId === question_id) {
                     if (hasExpiredQuestionTimer(question_id)) {
                         clearQuestionTimer(question_id);
-                        immediateRedirect(URL.CATEGORIES, "Time's up! Your bet was lost.", 'error');
+                        syncAndRedirectToCategories("Time's up! Your bet was lost.");
                         return;
                     }
                     restoreQuestionTimer();
@@ -122,24 +122,38 @@ const Question = () => {
             if (localStorage.getItem(TIMER_EXPIRED_FLAG)) return;
             localStorage.setItem(TIMER_EXPIRED_FLAG, 'true');
             clearQuestionTimer(question.id);
-            immediateRedirect(URL.CATEGORIES, "Time's up! Your bet was lost.", 'error');
+            syncAndRedirectToCategories("Time's up! Your bet was lost.");
         }
     }, [questionRemainingTime, questionTimer, clearQuestionTimer, immediateRedirect, URL.CATEGORIES, submitting, question.id]);
 
-    const handleFetchError = err => {
+    const handleFetchError = async err => {
         const detail = err?.response?.data?.detail || err?.message || "";
         
         if (detail === "no open bet found for this level") {
             immediateRedirect(URL.CATEGORIES, "No active bet found.", 'error');
-        } else if (detail === "question timer expired") {
-            immediateRedirect(URL.CATEGORIES, "Time's up! Your bet was lost.", 'error');
+        } else if (detail === "question timer expired" || detail === "bet lost due to timeout") {
+            await syncAndRedirectToCategories("Time's up! Your bet was lost.");
         } else if (detail.includes("overall") || detail.includes("game timer")) {
             immediateRedirect(URL.FINISHED, "Game timer expired.", 'error');
         } else if (err?.response?.status === 409) {
-            immediateRedirect(URL.CATEGORIES, "Time's up! Your bet was lost.", 'error');
+            if (detail.includes("overall") || detail.includes("game timer")) {
+                immediateRedirect(URL.FINISHED, "Game timer expired.", 'error');
+            } else {
+                await syncAndRedirectToCategories("Time's up! Your bet was lost.");
+            }
         } else {
             immediateRedirect(URL.CATEGORIES, "Error fetching question.", 'error');
         }
+    };
+
+    const syncAndRedirectToCategories = async message => {
+        try {
+            const gameState = await getGameState(user.token);
+            if (gameState.data?.points !== undefined) {
+                updateUser({ points: gameState.data.points });
+            }
+        } catch {}
+        immediateRedirect(URL.CATEGORIES, message, 'error');
     };
 
     const handleAnswer = async opt => {
@@ -168,7 +182,11 @@ const Question = () => {
                 }
                 
                 if (error?.response?.status === 409 || errorDetail.includes("timer expired")) {
-                    immediateRedirect(URL.FINISHED, "Game timer expired.", 'error');
+                    if (errorDetail.includes("overall") || errorDetail.includes("game timer")) {
+                        immediateRedirect(URL.FINISHED, "Game timer expired.", 'error');
+                    } else {
+                        await syncAndRedirectToCategories("Time's up! Your bet was lost.");
+                    }
                     return;
                 }
                 

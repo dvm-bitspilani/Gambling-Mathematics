@@ -50,7 +50,11 @@ const Fixed = () => {
             if (localStorage.getItem(TIMER_EXPIRED_FLAG)) return;
             localStorage.setItem(TIMER_EXPIRED_FLAG, 'true');
             clearQuestionTimer();
-            immediateRedirect(URL.FINISHED, "Time's up!", 'error');
+            immediateRedirect(
+                URL.CATEGORIES,
+                "Time's up! Your bet was lost.",
+                'error'
+            );
         }
     }, [
         questionTimerActive,
