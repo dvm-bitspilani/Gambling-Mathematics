@@ -27,6 +27,7 @@ const Categories = () => {
 
     const [loading, setLoading] = useState(true);
     const [categories, setCategories] = useState([]);
+    const [hasGlobalActiveBet, setHasGlobalActiveBet] = useState(false);
 
     useEffect(() => {
         fetchData();
@@ -95,6 +96,16 @@ const Categories = () => {
 
             if (gameStateRes?.data?.points !== undefined) {
                 updateUser({ points: gameStateRes.data.points });
+            }
+
+            if (gameStateRes?.data?.open_bets_count > 0 && gameStateRes?.data?.open_bet_levels?.length > 0) {
+                setHasGlobalActiveBet(true);
+                updateUser({ level: gameStateRes.data.open_bet_levels[0] });
+                setSuccessText(
+                    "You have an active bet. Redirecting to your question.",
+                    URL.QUESTION
+                );
+                return;
             }
 
             if (gameStateRes?.data?.status === "timer_expired") {
@@ -171,11 +182,13 @@ const Categories = () => {
                         {categories?.map(category => (
                             <div
                                 key={category.id}
-                                className={`category${!category.remaining_questions || category.remaining_questions <= 0 ? " disabled" : ""}`}
+                                className={`category${hasGlobalActiveBet || !category.remaining_questions || category.remaining_questions <= 0 ? " disabled" : ""}`}
                                 onClick={
-                                    category.remaining_questions > 0
-                                        ? () => handleLocate(category)
-                                        : undefined
+                                    hasGlobalActiveBet
+                                        ? undefined
+                                        : category.remaining_questions > 0
+                                            ? () => handleLocate(category)
+                                            : undefined
                                 }
                             >
                                 <span className="category-name">

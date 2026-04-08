@@ -96,7 +96,7 @@ const Question = () => {
                 if (parsedStored && parsedStored.questionId === question_id) {
                     if (hasExpiredQuestionTimer(question_id)) {
                         clearQuestionTimer(question_id);
-                        immediateRedirect(URL.FINISHED, "Time's up! Your timer expired.", 'error');
+                        immediateRedirect(URL.CATEGORIES, "Time's up! Your bet was lost.", 'error');
                         return;
                     }
                     restoreQuestionTimer();
@@ -122,17 +122,21 @@ const Question = () => {
             if (localStorage.getItem(TIMER_EXPIRED_FLAG)) return;
             localStorage.setItem(TIMER_EXPIRED_FLAG, 'true');
             clearQuestionTimer(question.id);
-            immediateRedirect(URL.FINISHED, "Time's up! Your timer expired.", 'error');
+            immediateRedirect(URL.CATEGORIES, "Time's up! Your bet was lost.", 'error');
         }
-    }, [questionRemainingTime, questionTimer, clearQuestionTimer, immediateRedirect, URL.FINISHED, submitting, question.id]);
+    }, [questionRemainingTime, questionTimer, clearQuestionTimer, immediateRedirect, URL.CATEGORIES, submitting, question.id]);
 
     const handleFetchError = err => {
         const detail = err?.response?.data?.detail || err?.message || "";
         
         if (detail === "no open bet found for this level") {
             immediateRedirect(URL.CATEGORIES, "No active bet found.", 'error');
-        } else if (err?.response?.status === 409 || detail.includes("timer expired")) {
-            immediateRedirect(URL.FINISHED, "Timer expired.", 'error');
+        } else if (detail === "question timer expired") {
+            immediateRedirect(URL.CATEGORIES, "Time's up! Your bet was lost.", 'error');
+        } else if (detail.includes("overall") || detail.includes("game timer")) {
+            immediateRedirect(URL.FINISHED, "Game timer expired.", 'error');
+        } else if (err?.response?.status === 409) {
+            immediateRedirect(URL.CATEGORIES, "Time's up! Your bet was lost.", 'error');
         } else {
             immediateRedirect(URL.CATEGORIES, "Error fetching question.", 'error');
         }
