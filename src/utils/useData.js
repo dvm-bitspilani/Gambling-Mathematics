@@ -45,8 +45,7 @@ const useInstructions = () => {
         "11. Teams can attempt questions in any order.",
         "12. All categories and difficulties are visible before making choices wisely.",
         "13. Minimum score cannot go below 0 points. If your coins are out, the game will end.",
-        "14. In case of a tie, the team with fewer questions answered ranks higher.",
-        "15. Users shall be logged out after 3 minutes of inactivity."
+        "14. In case of a tie, the team with fewer questions answered ranks higher."
     ];
 
     return instructions;
