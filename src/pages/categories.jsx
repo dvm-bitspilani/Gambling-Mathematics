@@ -123,6 +123,11 @@ const Categories = () => {
 
     const handleLocate = async category => {
         try {
+            if (!category.remaining_questions || category.remaining_questions <= 0) {
+                setErrorText("Cannot attempt more questions from this category — limit reached.");
+                return;
+            }
+
             updateUser({ category: category.id });
 
             if (category.has_active_bet && category.active_bet_level) {
@@ -166,8 +171,12 @@ const Categories = () => {
                         {categories?.map(category => (
                             <div
                                 key={category.id}
-                                className="category"
-                                onClick={() => handleLocate(category)}
+                                className={`category${!category.remaining_questions || category.remaining_questions <= 0 ? " disabled" : ""}`}
+                                onClick={
+                                    category.remaining_questions > 0
+                                        ? () => handleLocate(category)
+                                        : undefined
+                                }
                             >
                                 <span className="category-name">
                                     {category.name}

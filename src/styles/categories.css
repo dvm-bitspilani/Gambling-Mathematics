@@ -139,6 +139,15 @@ body {
     background: rgba(7, 9, 73, 0.3);
 }
 
+.category.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.category.disabled:hover {
+    background: rgba(7, 9, 73, 0.09);
+}
+
 .instructionsButton {
     cursor: pointer;
     font-weight: 700;
