@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useUser } from "../contexts/UserContext";
 import "../styles/categories.css";
 import { useTitle } from "../utils/useHead";
@@ -18,8 +18,9 @@ const Categories = () => {
     useVerifyAuth();
     useTitle("View Your Categories");
     const navigate = useNavigate();
+    const location = useLocation();
     const { user, updateUser } = useUser();
-    const { setErrorText, setSuccessText } = useAlert();
+    const { setErrorText, setSuccessText, immediateRedirect } = useAlert();
     const {
         updateTimerConfig,
         restoreOverallTimer,
@@ -33,6 +34,9 @@ const Categories = () => {
     const [loading, setLoading] = useState(true);
     const [categories, setCategories] = useState([]);
     const [redirecting, setRedirecting] = useState(false);
+
+    const fetchDataRef = useRef(fetchData);
+    fetchDataRef.current = fetchData;
 
     const syncUserFromActiveBet = useCallback(
         activeBet => {
@@ -55,8 +59,18 @@ const Categories = () => {
     );
 
     useEffect(() => {
-        fetchData();
+        fetchDataRef.current();
+    }, [location.pathname]);
+
+    useEffect(() => {
+        return () => {
+            setRedirecting(false);
+        };
     }, []);
+
+    useEffect(() => {
+        setRedirecting(false);
+    }, [location.pathname]);
 
     useEffect(() => {
         if (user.points === 0) {
@@ -141,7 +155,13 @@ const Categories = () => {
                 return;
             }
 
-            if (syncUserFromActiveBet(activeBet)) {
+            // Clear stale state if backend reports no active bet but frontend has level set
+            if (!activeBet?.level && user.level) {
+                updateUser({ level: null, category: null });
+            }
+
+            if (activeBet?.level) {
+                syncUserFromActiveBet(activeBet);
                 setRedirecting(true);
                 setSuccessText(
                     "You have an active bet. Redirecting to your question.",
@@ -175,6 +195,7 @@ const Categories = () => {
             console.error(err);
         } finally {
             setLoading(false);
+            setRedirecting(false);
         }
     };
 
@@ -199,14 +220,16 @@ const Categories = () => {
 
             if (category.has_active_bet && category.active_bet_level) {
                 updateUser({ level: category.active_bet_level });
-                setSuccessText(
+                immediateRedirect(
+                    URL.QUESTION,
                     `Active bet found in ${category.name}. Redirecting to question.`,
-                    URL.QUESTION
+                    "success"
                 );
             } else {
-                setSuccessText(
+                immediateRedirect(
+                    URL.SELECT,
                     `Selected ${category.name}. Redirecting you to the bet.`,
-                    URL.SELECT
+                    "success"
                 );
             }
         } catch (err) {

@@ -209,14 +209,16 @@ const Select = () => {
             "An error occurred while placing your bet.";
 
         if (status === 409 && detail.includes("overall")) {
-            setErrorText(
+            immediateRedirect(
+                URL.FINISHED,
                 "Game timer expired. Redirecting you to finish.",
-                URL.FINISHED
+                "error"
             );
         } else if (status === 403) {
-            setErrorText(
+            immediateRedirect(
+                URL.CATEGORIES,
                 "You have selected a different category. Redirecting you back to the category selection page.",
-                URL.CATEGORIES
+                "error"
             );
         } else if (
             status === 400 &&
@@ -228,9 +230,10 @@ const Select = () => {
             );
 
             if (!redirected) {
-                setErrorText(
+                immediateRedirect(
+                    URL.QUESTION,
                     "You already have an active bet. Redirecting you to the question page.",
-                    URL.QUESTION
+                    "error"
                 );
             }
         } else {

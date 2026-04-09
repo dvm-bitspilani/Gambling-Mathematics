@@ -107,6 +107,7 @@ const Question = () => {
 
             if (detail === "no open bet found for this level") {
                 clearQuestionTimer();
+                updateUser({ level: null, category: null });
                 immediateRedirect(
                     URL.CATEGORIES,
                     "No active bet found.",
@@ -155,7 +156,8 @@ const Question = () => {
             immediateRedirect,
             syncAndRedirectToCategories,
             URL.CATEGORIES,
-            URL.FINISHED
+            URL.FINISHED,
+            updateUser
         ]
     );
 
@@ -185,6 +187,7 @@ const Question = () => {
 
                 if (!activeLevel) {
                     clearQuestionTimer();
+                    updateUser({ level: null, category: null });
                     immediateRedirect(
                         URL.CATEGORIES,
                         "No active bet found.",
@@ -346,6 +349,7 @@ const Question = () => {
                 }
 
                 clearQuestionTimer();
+                updateUser({ level: null, category: null });
                 immediateRedirect(
                     URL.CATEGORIES,
                     "No active bet found.",
@@ -483,7 +487,7 @@ const Question = () => {
             }
 
             clearQuestionTimer(question.id);
-            updateUser({ points: data.total_points });
+            updateUser({ points: data.total_points, level: null, category: null });
 
             if (data.game_timer) {
                 syncOverallTimerFromBackend(data.game_timer);

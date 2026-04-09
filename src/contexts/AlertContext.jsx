@@ -70,20 +70,21 @@ const AlertContextProvider = ({ children }) => {
     }, []);
 
     const handleLink = link => {
-        if (link) {
-            if (timeoutRef.current) {
-                clearTimeout(timeoutRef.current);
-            }
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+            timeoutRef.current = null;
+        }
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
 
+        if (link) {
             timeoutRef.current = setTimeout(() => {
                 if (mountedRef.current) {
                     navigate(link);
                 }
             }, 2000);
-
-            if (intervalRef.current) {
-                clearInterval(intervalRef.current);
-            }
 
             intervalRef.current = setInterval(() => {
                 const path = location.pathname.replace(/\/gamblingmaths/g, "");
@@ -134,13 +135,25 @@ const AlertContextProvider = ({ children }) => {
         }, delay);
     };
 
+    const resetNavigation = () => {
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+            timeoutRef.current = null;
+        }
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
+    };
+
     const contextValue = {
         error,
         success,
         setErrorText,
         setSuccessText,
         clearAll,
-        immediateRedirect
+        immediateRedirect,
+        resetNavigation
     };
 
     return (
