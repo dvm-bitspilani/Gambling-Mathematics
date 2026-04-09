@@ -80,6 +80,7 @@ const Question = () => {
     const syncAndRedirectToCategories = useCallback(
         async message => {
             clearQuestionTimer();
+            updateUser({ level: null, category: null });
             try {
                 const gameState = await getGameState(user.token);
                 if (gameState.data?.points !== undefined) {
@@ -157,7 +158,8 @@ const Question = () => {
             syncAndRedirectToCategories,
             URL.CATEGORIES,
             URL.FINISHED,
-            updateUser
+            updateUser,
+            setErrorText
         ]
     );
 
@@ -435,6 +437,7 @@ const Question = () => {
                         updateUser({ points: gameState.data.points });
                     }
                     clearQuestionTimer(question.id);
+                    updateUser({ level: null, category: null });
                     immediateRedirect(
                         URL.CATEGORIES,
                         "Your answer was already recorded.",

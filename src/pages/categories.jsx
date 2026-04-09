@@ -195,7 +195,6 @@ const Categories = () => {
             console.error(err);
         } finally {
             setLoading(false);
-            setRedirecting(false);
         }
     };
 
