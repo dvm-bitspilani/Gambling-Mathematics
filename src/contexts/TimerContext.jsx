@@ -53,6 +53,7 @@ export const useTimer = () => {
 const TimerContextProvider = ({ children }) => {
     const overallTimerIdRef = useRef(null);
     const questionTimerIdRef = useRef(null);
+    const questionTimerRef = useRef(null);
 
     const [overallTimer, setOverallTimer] = useState(null);
     const [overallRemainingTime, setOverallRemainingTime] = useState(0);
@@ -170,7 +171,7 @@ const TimerContextProvider = ({ children }) => {
                 normalizedQuestionId === null ||
                 questionIdsMatch(stored?.questionId, normalizedQuestionId) ||
                 questionIdsMatch(
-                    questionTimer?.questionId,
+                    questionTimerRef.current?.questionId,
                     normalizedQuestionId
                 );
 
@@ -188,7 +189,7 @@ const TimerContextProvider = ({ children }) => {
             setQuestionRemainingTime(0);
             return true;
         },
-        [getStoredQuestionTimer, questionTimer, setStoredQuestionTimer]
+        [getStoredQuestionTimer, setStoredQuestionTimer]
     );
 
     const clearAllTimers = useCallback(() => {
@@ -352,6 +353,7 @@ const TimerContextProvider = ({ children }) => {
                 level,
                 endTime
             });
+            questionTimerRef.current = { questionId: normalizedQuestionId, level, endTime };
             setQuestionRemainingTime(duration);
 
             if (questionTimerIdRef.current) {
@@ -399,6 +401,12 @@ const TimerContextProvider = ({ children }) => {
         if (questionTimerIdRef.current) {
             clearInterval(questionTimerIdRef.current);
         }
+
+        questionTimerRef.current = {
+            questionId: stored.questionId,
+            level: stored.level,
+            endTime: stored.endTime
+        };
 
         questionTimerIdRef.current = setInterval(() => {
             const newRemaining = getTimeRemaining(stored.endTime);

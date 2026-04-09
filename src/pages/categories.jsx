@@ -219,12 +219,13 @@ const Categories = () => {
     // JSX
     return (
         <div className="categories-wrapper">
-            <div
-                className="instructionsButton"
-                onClick={() => navigate(URL.INSTRUCTIONS)}
-                style={{ marginBottom: "1rem" }}
-            >
-                ← Back
+            <div className="categories-header" style={{ marginBottom: "1rem" }}>
+                <div className="instructionsButton" onClick={() => navigate(URL.INSTRUCTIONS)}>
+                    ← Back
+                </div>
+                <div className="instructionsButton" onClick={() => window.location.reload()}>
+                    ↻ Refresh
+                </div>
             </div>
             <div className="title">GAMBLING MATHS</div>
             <div className="stash">

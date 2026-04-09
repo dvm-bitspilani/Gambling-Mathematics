@@ -169,6 +169,13 @@ body {
     background-color: rgba(256, 256, 256, 0.7);
 }
 
+.categories-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
 .rules-img {
     width: 50vw;
 }

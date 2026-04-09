@@ -377,6 +377,9 @@ const Question = () => {
         if (hasMountedRef.current) return;
         hasMountedRef.current = true;
         syncAndFetchQuestion();
+        return () => {
+            hasMountedRef.current = false;
+        };
     }, [syncAndFetchQuestion]);
 
     useEffect(() => {

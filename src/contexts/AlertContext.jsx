@@ -3,7 +3,8 @@ import React, {
     useContext,
     useState,
     useRef,
-    useEffect
+    useEffect,
+    useCallback
 } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -33,7 +34,7 @@ const AlertContextProvider = ({ children }) => {
     const [error, setError] = useState(initialState);
     const [success, setSuccess] = useState(initialState);
 
-    const immediateRedirect = (link, message = null, type = null) => {
+    const immediateRedirect = useCallback((link, message = null, type = null) => {
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
             timeoutRef.current = null;
@@ -54,7 +55,7 @@ const AlertContextProvider = ({ children }) => {
         if (link) {
             navigate(link);
         }
-    };
+    }, [navigate]);
 
     useEffect(() => {
         return () => {
