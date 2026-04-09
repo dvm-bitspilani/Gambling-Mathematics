@@ -43,6 +43,7 @@ const Question = () => {
     const submitLockRef = useRef(false);
     const timerExpiredDuringSubmissionRef = useRef(false);
     const suppressLocalTimeoutRedirectRef = useRef(false);
+    const hasMountedRef = useRef(false);
 
     const isSameQuestionId = useCallback((left, right) => {
         if (left === undefined || left === null) {
@@ -373,6 +374,8 @@ const Question = () => {
     );
 
     useEffect(() => {
+        if (hasMountedRef.current) return;
+        hasMountedRef.current = true;
         syncAndFetchQuestion();
     }, [syncAndFetchQuestion]);
 
