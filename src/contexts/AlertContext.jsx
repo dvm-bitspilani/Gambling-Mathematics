@@ -29,6 +29,7 @@ const AlertContextProvider = ({ children }) => {
     const location = useLocation();
     const intervalRef = useRef(null);
     const timeoutRef = useRef(null);
+    const clearTimeoutRef = useRef(null);
     const mountedRef = useRef(true);
 
     const [error, setError] = useState(initialState);
