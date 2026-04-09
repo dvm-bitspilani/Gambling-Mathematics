@@ -46,6 +46,19 @@ const Question = () => {
     const initialSyncRef = useRef(false);
     const navigationInFlightRef = useRef(false);
 
+    const beginNavigation = useCallback(
+        (link, message = null, type = null) => {
+            if (navigationInFlightRef.current) {
+                return true;
+            }
+
+            navigationInFlightRef.current = true;
+            immediateRedirect(link, message, type);
+            return true;
+        },
+        [immediateRedirect]
+    );
+
     const isSameQuestionId = useCallback((left, right) => {
         if (left === undefined || left === null) {
             return false;
@@ -109,6 +122,7 @@ const Question = () => {
             const detail = err?.response?.data?.detail || err?.message || "";
 
             if (detail === "no open bet found for this level") {
+                navigationInFlightRef.current = true;
                 clearQuestionTimer();
                 updateUser({ level: null, category: null });
                 immediateRedirect(
@@ -127,6 +141,7 @@ const Question = () => {
                 detail.includes("overall") ||
                 detail.includes("game timer")
             ) {
+                navigationInFlightRef.current = true;
                 clearQuestionTimer();
                 immediateRedirect(URL.FINISHED, "Game timer expired.", "error");
             } else if (err?.response?.status === 409) {
@@ -134,6 +149,7 @@ const Question = () => {
                     detail.includes("overall") ||
                     detail.includes("game timer")
                 ) {
+                    navigationInFlightRef.current = true;
                     clearQuestionTimer();
                     immediateRedirect(
                         URL.FINISHED,
@@ -189,6 +205,7 @@ const Question = () => {
                     syncOverallTimerFromBackend(gameState.data.game_timer);
                 }
                 if (gameState.data?.status === "timer_expired") {
+                    navigationInFlightRef.current = true;
                     clearQuestionTimer();
                     immediateRedirect(
                         URL.FINISHED,
@@ -199,6 +216,7 @@ const Question = () => {
                 }
 
                 if (!activeLevel) {
+                    navigationInFlightRef.current = true;
                     clearQuestionTimer();
                     updateUser({ level: null, category: null });
                     immediateRedirect(
@@ -349,6 +367,7 @@ const Question = () => {
                 }
 
                 if (gameState.data?.status === "timer_expired") {
+                    navigationInFlightRef.current = true;
                     clearQuestionTimer();
                     immediateRedirect(
                         URL.FINISHED,
@@ -375,7 +394,7 @@ const Question = () => {
 
                 clearQuestionTimer();
                 updateUser({ level: null, category: null });
-                immediateRedirect(
+                beginNavigation(
                     URL.CATEGORIES,
                     "No active bet found.",
                     "error"
@@ -406,7 +425,7 @@ const Question = () => {
         if (initialSyncRef.current) return;
         initialSyncRef.current = true;
         syncAndFetchQuestion();
-    }, [syncAndFetchQuestion]);
+    }, [user.token]);
 
     useEffect(() => {
         if (questionRemainingTime !== 0 || questionTimer === null) {
@@ -476,7 +495,7 @@ const Question = () => {
                         errorDetail.includes("overall") ||
                         errorDetail.includes("game timer")
                     ) {
-                        immediateRedirect(
+                        beginNavigation(
                             URL.FINISHED,
                             "Game timer expired.",
                             "error"
@@ -519,7 +538,7 @@ const Question = () => {
             }
 
             if (data.game_status === "timer_expired") {
-                immediateRedirect(
+                beginNavigation(
                     URL.FINISHED,
                     "Overall time expired.",
                     "error"

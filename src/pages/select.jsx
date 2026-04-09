@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/select.css";
 import "../styles/categories.css";
@@ -34,78 +34,83 @@ const Select = () => {
     const [bet, setBet] = useState(200);
     const [selectedLevel, setSelectedLevel] = useState("hard");
     const [submitting, setSubmitting] = useState(false);
+    const navigationInFlightRef = useRef(false);
 
-    const syncUserFromActiveBet = useCallback(
-        activeBet => {
-            if (!activeBet?.level) {
-                return false;
-            }
-
-            const nextUser = { level: activeBet.level };
-            if (
-                activeBet.categoryId !== undefined &&
-                activeBet.categoryId !== null
-            ) {
-                nextUser.category = activeBet.categoryId;
-            }
-
-            updateUser(nextUser);
+    const beginNavigation = (link, message = null, type = null) => {
+        if (navigationInFlightRef.current) {
             return true;
-        },
-        [updateUser]
-    );
+        }
 
-    const syncActiveBetAndRedirect = useCallback(
-        async message => {
-            try {
-                const { data } = await getGameState(user.token);
+        navigationInFlightRef.current = true;
+        immediateRedirect(link, message, type);
+        return true;
+    };
 
-                if (data?.points !== undefined) {
-                    updateUser({ points: data.points });
-                }
-                if (data?.game_timer) {
-                    syncOverallTimerFromBackend(data.game_timer);
-                }
-                if (data?.status === "timer_expired") {
-                    immediateRedirect(
-                        URL.FINISHED,
-                        "Game timer expired.",
-                        "error"
-                    );
-                    return true;
-                }
+    const syncUserFromActiveBet = activeBet => {
+        if (!activeBet?.level) {
+            return false;
+        }
 
-                const activeBet = getActionableActiveBet(data);
-                if (syncUserFromActiveBet(activeBet)) {
-                    immediateRedirect(URL.QUESTION, message, "error");
-                    return true;
-                }
-            } catch (err) {
-                console.error("Failed to sync active bet:", err);
+        const nextUser = { level: activeBet.level };
+        if (
+            activeBet.categoryId !== undefined &&
+            activeBet.categoryId !== null
+        ) {
+            nextUser.category = activeBet.categoryId;
+        }
+
+        updateUser(nextUser);
+        return true;
+    };
+
+    const syncActiveBetAndRedirect = async message => {
+        if (navigationInFlightRef.current) {
+            return true;
+        }
+
+        try {
+            const { data } = await getGameState(user.token);
+
+            if (navigationInFlightRef.current) {
+                return true;
             }
 
-            return false;
-        },
-        [
-            user.token,
-            updateUser,
-            syncOverallTimerFromBackend,
-            immediateRedirect,
-            syncUserFromActiveBet,
-            URL.FINISHED,
-            URL.QUESTION
-        ]
-    );
+            if (data?.points !== undefined) {
+                updateUser({ points: data.points });
+            }
+            if (data?.game_timer) {
+                syncOverallTimerFromBackend(data.game_timer);
+            }
+            if (data?.status === "timer_expired") {
+                beginNavigation(
+                    URL.FINISHED,
+                    "Game timer expired.",
+                    "error"
+                );
+                return true;
+            }
 
-    // Effects
-    useEffect(() => {
-        updateUser({ level: selectedLevel });
-    }, [selectedLevel]);
+            const activeBet = getActionableActiveBet(data);
+            if (syncUserFromActiveBet(activeBet)) {
+                beginNavigation(URL.QUESTION, message, "error");
+                return true;
+            }
+        } catch (err) {
+            console.error("Failed to sync active bet:", err);
+        }
+
+        return false;
+    };
 
     useEffect(() => {
         const syncGameStateOnLoad = async () => {
             try {
                 const { data } = await getGameState(user.token);
+
+                if (navigationInFlightRef.current) {
+                    return;
+                }
+
                 if (data?.points !== undefined) {
                     updateUser({ points: data.points });
                 }
@@ -113,7 +118,7 @@ const Select = () => {
                     syncOverallTimerFromBackend(data.game_timer);
                 }
                 if (data?.status === "timer_expired") {
-                    immediateRedirect(
+                    beginNavigation(
                         URL.FINISHED,
                         "Game timer expired.",
                         "error"
@@ -123,20 +128,14 @@ const Select = () => {
 
                 const activeBet = getActionableActiveBet(data);
                 if (syncUserFromActiveBet(activeBet)) {
-                    immediateRedirect(URL.QUESTION);
+                    beginNavigation(URL.QUESTION);
                 }
             } catch (err) {
                 console.error("Failed to sync game state:", err);
             }
         };
         syncGameStateOnLoad();
-    }, [
-        user.token,
-        updateUser,
-        syncOverallTimerFromBackend,
-        immediateRedirect,
-        URL.QUESTION
-    ]);
+    }, [user.token]);
 
     // Event Handlers
     const handleBetSelection = async () => {
@@ -181,14 +180,19 @@ const Select = () => {
             }
 
             if (typeof data?.remaining_points === "number") {
-                updateUser({ points: data.remaining_points });
+                updateUser({
+                    points: data.remaining_points,
+                    level: selectedLevel
+                });
+            } else {
+                updateUser({ level: selectedLevel });
             }
 
             if (data?.game_timer) {
                 syncOverallTimerFromBackend(data.game_timer);
             }
 
-            immediateRedirect(
+            beginNavigation(
                 URL.QUESTION,
                 "Bet placed successfully!",
                 "success"
@@ -209,13 +213,13 @@ const Select = () => {
             "An error occurred while placing your bet.";
 
         if (status === 409 && detail.includes("overall")) {
-            immediateRedirect(
+            beginNavigation(
                 URL.FINISHED,
                 "Game timer expired. Redirecting you to finish.",
                 "error"
             );
         } else if (status === 403) {
-            immediateRedirect(
+            beginNavigation(
                 URL.CATEGORIES,
                 "You have selected a different category. Redirecting you back to the category selection page.",
                 "error"
@@ -230,7 +234,7 @@ const Select = () => {
             );
 
             if (!redirected) {
-                immediateRedirect(
+                beginNavigation(
                     URL.QUESTION,
                     "You already have an active bet. Redirecting you to the question page.",
                     "error"

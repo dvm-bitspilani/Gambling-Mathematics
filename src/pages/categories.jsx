@@ -35,31 +35,27 @@ const Categories = () => {
     const [categories, setCategories] = useState([]);
     const [redirecting, setRedirecting] = useState(false);
     const redirectingRef = useRef(redirecting);
-    const shouldRedirectRef = useRef(false);
+    const navigationInFlightRef = useRef(false);
 
     useEffect(() => {
         redirectingRef.current = redirecting;
     }, [redirecting]);
 
-    const syncUserFromActiveBet = activeBet => {
-        if (!activeBet?.level) {
-            return false;
+    const beginNavigation = (link, message, type, nextUserState = null) => {
+        if (navigationInFlightRef.current) {
+            return true;
         }
 
-        const nextUser = { level: activeBet.level };
-        if (
-            activeBet.categoryId !== undefined &&
-            activeBet.categoryId !== null
-        ) {
-            nextUser.category = activeBet.categoryId;
+        navigationInFlightRef.current = true;
+        setRedirecting(true);
+        if (nextUserState) {
+            updateUser(nextUserState);
         }
-
-        updateUser(nextUser);
+        immediateRedirect(link, message, type);
         return true;
     };
 
-    const fetchData = async () => {
-        shouldRedirectRef.current = false;
+    const fetchData = async isCancelled => {
         setLoading(true);
 
         try {
@@ -72,6 +68,10 @@ const Categories = () => {
                     loading: false
                 }))
             ]);
+
+            if (isCancelled() || navigationInFlightRef.current) {
+                return;
+            }
 
             const gameState = gameStateRes?.data;
             const activeBet = getActionableActiveBet(gameState);
@@ -123,12 +123,20 @@ const Categories = () => {
                 updateUser({ points: gameState.points });
             }
 
+            if ((gameState?.points ?? user.points) === 0) {
+                beginNavigation(
+                    URL.FINISHED,
+                    "You have run out of points. Redirecting you to finish.",
+                    "error"
+                );
+                return;
+            }
+
             if (gameState?.status === "timer_expired") {
-                shouldRedirectRef.current = true;
-                setRedirecting(true);
-                setErrorText(
+                beginNavigation(
+                    URL.FINISHED,
                     "Overall time expired. Redirecting to finish.",
-                    URL.FINISHED
+                    "error"
                 );
                 return;
             }
@@ -139,22 +147,23 @@ const Categories = () => {
             }
 
             if (activeBet?.level) {
-                syncUserFromActiveBet(activeBet);
-                shouldRedirectRef.current = true;
-                setRedirecting(true);
-                setSuccessText(
+                beginNavigation(
+                    URL.QUESTION,
                     "You have an active bet. Redirecting to your question.",
-                    URL.QUESTION
+                    "success",
+                    {
+                        category: activeBet.categoryId ?? user.category,
+                        level: activeBet.level
+                    }
                 );
                 return;
             }
 
             if (categoriesComplete) {
-                shouldRedirectRef.current = true;
-                setRedirecting(true);
-                setSuccessText(
+                beginNavigation(
+                    URL.FINISHED,
                     "All categories completed! Redirecting you to finish.",
-                    URL.FINISHED
+                    "success"
                 );
                 return;
             }
@@ -162,11 +171,10 @@ const Categories = () => {
             if (!gameState?.game_timer) {
                 const restoreResult = restoreOverallTimer();
                 if (restoreResult?.expired) {
-                    shouldRedirectRef.current = true;
-                    setRedirecting(true);
-                    setErrorText(
+                    beginNavigation(
+                        URL.FINISHED,
                         "Overall time expired. Redirecting to finish.",
-                        URL.FINISHED
+                        "error"
                     );
                 } else if (!restoreResult && !overallTimer) {
                     startOverallTimer();
@@ -175,36 +183,31 @@ const Categories = () => {
         } catch (err) {
             console.error(err);
         } finally {
-            setLoading(false);
-            if (!shouldRedirectRef.current) {
+            if (!isCancelled()) {
+                setLoading(false);
+            }
+            if (!isCancelled() && !navigationInFlightRef.current) {
                 setRedirecting(false);
             }
         }
     };
 
     useEffect(() => {
+        let cancelled = false;
+        const isCancelled = () => cancelled;
+
+        navigationInFlightRef.current = false;
         setRedirecting(false);
-        fetchData();
+        fetchData(isCancelled);
+
+        return () => {
+            cancelled = true;
+            navigationInFlightRef.current = false;
+        };
     }, [location.pathname, user.token]);
 
-    useEffect(() => {
-        return () => {
-            setRedirecting(false);
-        };
-    }, []);
-
-    useEffect(() => {
-        if (user.points === 0) {
-            setRedirecting(true);
-            setErrorText(
-                "You have run out of points. Redirecting you to finish.",
-                URL.FINISHED
-            );
-        }
-    }, [user.points, setErrorText, URL.FINISHED]);
-
     const handleLocate = async category => {
-        if (redirectingRef.current) {
+        if (redirectingRef.current || navigationInFlightRef.current) {
             return;
         }
 
@@ -219,21 +222,22 @@ const Categories = () => {
                 return;
             }
 
-            setRedirecting(true);
-            updateUser({ category: category.id });
-
             if (category.has_active_bet && category.active_bet_level) {
-                updateUser({ level: category.active_bet_level });
-                immediateRedirect(
+                beginNavigation(
                     URL.QUESTION,
                     `Active bet found in ${category.name}. Redirecting to question.`,
-                    "success"
+                    "success",
+                    {
+                        category: category.id,
+                        level: category.active_bet_level
+                    }
                 );
             } else {
-                immediateRedirect(
+                beginNavigation(
                     URL.SELECT,
                     `Selected ${category.name}. Redirecting you to the bet.`,
-                    "success"
+                    "success",
+                    { category: category.id }
                 );
             }
         } catch (err) {

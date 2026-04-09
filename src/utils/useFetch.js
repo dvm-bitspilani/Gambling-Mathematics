@@ -41,6 +41,15 @@ const clearUserFromCookies = () => {
     Cookies.remove("gm_user");
 };
 
+const createAuthError = detail => {
+    const err = new Error(detail);
+    err.status = 401;
+    err.code = "auth_expired";
+    err.data = { detail, code: "auth_expired" };
+    err.response = { status: 401, data: err.data };
+    return err;
+};
+
 const refreshAccessToken = async refreshToken => {
     try {
         const URL = useURL();
@@ -70,7 +79,6 @@ const refreshAccessToken = async refreshToken => {
 
 const fetchData = async (url, method, data, headers, onLogout) => {
     try {
-        const URL = useURL();
         let response = await fetch(url, {
             method,
             headers,
@@ -102,20 +110,20 @@ const fetchData = async (url, method, data, headers, onLogout) => {
                 } else {
                     clearUserFromCookies();
                     if (onLogout) onLogout();
-                    window.location.href = URL.HOME;
+                    window.dispatchEvent(new Event("gm:auth-expired"));
                     return {
                         data: null,
-                        error: new Error("Session expired"),
+                        error: createAuthError("Session expired"),
                         loading: false
                     };
                 }
             } else {
                 clearUserFromCookies();
                 if (onLogout) onLogout();
-                window.location.href = URL.HOME;
+                window.dispatchEvent(new Event("gm:auth-expired"));
                 return {
                     data: null,
-                    error: new Error("No refresh token"),
+                    error: createAuthError("No refresh token"),
                     loading: false
                 };
             }

@@ -12,7 +12,7 @@ const useVerifyAuth = link => {
 
     useEffect(() => {
         if (!user.token) {
-            navigate(link);
+            navigate(link, { replace: true });
         }
     }, [user.token, navigate, link]);
 };
@@ -26,7 +26,7 @@ const useRedirect = link => {
 
     useEffect(() => {
         if (user.token) {
-            navigate(link);
+            navigate(link, { replace: true });
         }
     }, [user.token, navigate, link]);
 };

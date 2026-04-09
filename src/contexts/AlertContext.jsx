@@ -28,48 +28,63 @@ export const useAlert = () => {
 const AlertContextProvider = ({ children }) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const intervalRef = useRef(null);
     const timeoutRef = useRef(null);
     const clearTimeoutRef = useRef(null);
     const mountedRef = useRef(true);
-    const locationRef = useRef(location.pathname);
+    const pendingRedirectRef = useRef(null);
 
     useEffect(() => {
-        locationRef.current = location.pathname;
+        const pendingRedirect = pendingRedirectRef.current;
+
+        if (!pendingRedirect) {
+            return;
+        }
+
+        if (location.pathname === pendingRedirect.target) {
+            pendingRedirectRef.current = null;
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+                timeoutRef.current = null;
+            }
+            clearAll();
+            return;
+        }
+
+        if (location.pathname !== pendingRedirect.originPath) {
+            pendingRedirectRef.current = null;
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+                timeoutRef.current = null;
+            }
+        }
     }, [location.pathname]);
 
     const [error, setError] = useState(initialState);
     const [success, setSuccess] = useState(initialState);
 
     const immediateRedirect = useCallback((link, message = null, type = null) => {
+        pendingRedirectRef.current = null;
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
             timeoutRef.current = null;
         }
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = null;
-        }
         
-        if (message && type === 'success') {
+        if (message && type === "success") {
             setSuccess({ status: true, message, title: "SUCCESS" });
             setError(initialState);
-        } else if (message && type === 'error') {
+        } else if (message && type === "error") {
             setError({ status: true, message, title: "ERROR" });
             setSuccess(initialState);
         }
         
         if (link) {
-            navigate(link);
+            navigate(link, { replace: true });
         }
     }, [navigate]);
 
     useEffect(() => {
         return () => {
             mountedRef.current = false;
-            if (intervalRef.current) {
-                clearInterval(intervalRef.current);
-            }
             if (timeoutRef.current) {
                 clearTimeout(timeoutRef.current);
             }
@@ -80,13 +95,10 @@ const AlertContextProvider = ({ children }) => {
     }, []);
 
     const clearAll = useCallback((delay = 0) => {
+        pendingRedirectRef.current = null;
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
             timeoutRef.current = null;
-        }
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = null;
         }
         if (clearTimeoutRef.current) {
             clearTimeout(clearTimeoutRef.current);
@@ -104,29 +116,26 @@ const AlertContextProvider = ({ children }) => {
             clearTimeout(timeoutRef.current);
             timeoutRef.current = null;
         }
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = null;
-        }
 
         if (link) {
+            const pendingRedirect = {
+                id: Date.now(),
+                target: link,
+                originPath: location.pathname
+            };
+            pendingRedirectRef.current = pendingRedirect;
             timeoutRef.current = setTimeout(() => {
-                if (mountedRef.current) {
-                    navigate(link);
+                if (
+                    mountedRef.current &&
+                    pendingRedirectRef.current?.id === pendingRedirect.id
+                ) {
+                    navigate(link, { replace: true });
                 }
             }, 2000);
-
-            intervalRef.current = setInterval(() => {
-                const path = locationRef.current.replace(/\/gamblingmaths/g, "");
-
-                if (path === link) {
-                    clearInterval(intervalRef.current);
-                    intervalRef.current = null;
-                    clearAll();
-                }
-            }, 1000);
-        } else clearAll(3000);
-    }, [navigate, clearAll]);
+        } else {
+            clearAll(3000);
+        }
+    }, [navigate, clearAll, location.pathname]);
 
     const setErrorText = useCallback((message, link, title = "ERROR", immediate = false) => {
         if (immediate) {
@@ -153,14 +162,11 @@ const AlertContextProvider = ({ children }) => {
             clearTimeout(timeoutRef.current);
             timeoutRef.current = null;
         }
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = null;
-        }
         if (clearTimeoutRef.current) {
             clearTimeout(clearTimeoutRef.current);
             clearTimeoutRef.current = null;
         }
+        pendingRedirectRef.current = null;
     }, []);
 
     const contextValue = useMemo(() => ({

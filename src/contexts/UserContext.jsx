@@ -1,4 +1,11 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
+import React, {
+    createContext,
+    useState,
+    useEffect,
+    useContext,
+    useCallback,
+    useMemo
+} from "react";
 import Cookies from "js-cookie";
 
 const initUser = {
@@ -41,15 +48,15 @@ const UserContextProvider = ({ children }) => {
         }
     });
 
-    const updateUser = newData => {
+    const updateUser = useCallback(newData => {
         setUser(prevUser => ({ ...prevUser, ...newData }));
-    };
+    }, []);
 
-    const updateUserToken = newToken => {
+    const updateUserToken = useCallback(newToken => {
         setUser(prevUser => ({ ...prevUser, token: newToken }));
-    };
+    }, []);
 
-    const logoutUser = () => {
+    const logoutUser = useCallback(() => {
         Cookies.remove("gm_user");
         localStorage.removeItem("overallTimer");
         localStorage.removeItem("overallTimerSeconds");
@@ -57,7 +64,18 @@ const UserContextProvider = ({ children }) => {
         localStorage.removeItem("timerConfig");
         localStorage.removeItem("gambling_timer_expired_redirect");
         setUser(initUser);
-    };
+    }, []);
+
+    useEffect(() => {
+        const handleAuthExpired = () => {
+            setUser(initUser);
+        };
+
+        window.addEventListener("gm:auth-expired", handleAuthExpired);
+        return () => {
+            window.removeEventListener("gm:auth-expired", handleAuthExpired);
+        };
+    }, []);
 
     useEffect(() => {
         try {
@@ -69,10 +87,13 @@ const UserContextProvider = ({ children }) => {
         }
     }, [user]);
 
+    const contextValue = useMemo(
+        () => ({ user, updateUser, updateUserToken, logoutUser }),
+        [user, updateUser, updateUserToken, logoutUser]
+    );
+
     return (
-        <UserContext.Provider
-            value={{ user, updateUser, updateUserToken, logoutUser }}
-        >
+        <UserContext.Provider value={contextValue}>
             {children}
         </UserContext.Provider>
     );
