@@ -34,6 +34,12 @@ const Categories = () => {
     const [loading, setLoading] = useState(true);
     const [categories, setCategories] = useState([]);
     const [redirecting, setRedirecting] = useState(false);
+    const redirectingRef = useRef(redirecting);
+    const shouldRedirectRef = useRef(false);
+
+    useEffect(() => {
+        redirectingRef.current = redirecting;
+    }, [redirecting]);
 
     const fetchDataRef = useRef(fetchData);
     fetchDataRef.current = fetchData;
@@ -147,6 +153,7 @@ const Categories = () => {
             }
 
             if (gameState?.status === "timer_expired") {
+                shouldRedirectRef.current = true;
                 setRedirecting(true);
                 setErrorText(
                     "Overall time expired. Redirecting to finish.",
@@ -162,6 +169,7 @@ const Categories = () => {
 
             if (activeBet?.level) {
                 syncUserFromActiveBet(activeBet);
+                shouldRedirectRef.current = true;
                 setRedirecting(true);
                 setSuccessText(
                     "You have an active bet. Redirecting to your question.",
@@ -171,6 +179,7 @@ const Categories = () => {
             }
 
             if (categoriesComplete) {
+                shouldRedirectRef.current = true;
                 setRedirecting(true);
                 setSuccessText(
                     "All categories completed! Redirecting you to finish.",
@@ -199,7 +208,7 @@ const Categories = () => {
     };
 
     const handleLocate = async category => {
-        if (redirecting) {
+        if (redirectingRef.current) {
             return;
         }
 

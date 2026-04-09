@@ -31,6 +31,11 @@ const AlertContextProvider = ({ children }) => {
     const timeoutRef = useRef(null);
     const clearTimeoutRef = useRef(null);
     const mountedRef = useRef(true);
+    const locationRef = useRef(location.pathname);
+
+    useEffect(() => {
+        locationRef.current = location.pathname;
+    }, [location.pathname]);
 
     const [error, setError] = useState(initialState);
     const [success, setSuccess] = useState(initialState);
@@ -67,6 +72,9 @@ const AlertContextProvider = ({ children }) => {
             if (timeoutRef.current) {
                 clearTimeout(timeoutRef.current);
             }
+            if (clearTimeoutRef.current) {
+                clearTimeout(clearTimeoutRef.current);
+            }
         };
     }, []);
 
@@ -88,7 +96,7 @@ const AlertContextProvider = ({ children }) => {
             }, 2000);
 
             intervalRef.current = setInterval(() => {
-                const path = location.pathname.replace(/\/gamblingmaths/g, "");
+                const path = locationRef.current.replace(/\/gamblingmaths/g, "");
 
                 if (path === link) {
                     clearInterval(intervalRef.current);
@@ -119,7 +127,7 @@ const AlertContextProvider = ({ children }) => {
         }
     };
 
-    const clearAll = (delay = 0) => {
+    function clearAll(delay = 0) {
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
             timeoutRef.current = null;
@@ -128,13 +136,16 @@ const AlertContextProvider = ({ children }) => {
             clearInterval(intervalRef.current);
             intervalRef.current = null;
         }
-        setTimeout(() => {
+        if (clearTimeoutRef.current) {
+            clearTimeout(clearTimeoutRef.current);
+        }
+        clearTimeoutRef.current = setTimeout(() => {
             if (mountedRef.current) {
                 setError(initialState);
                 setSuccess(initialState);
             }
         }, delay);
-    };
+    }
 
     const resetNavigation = () => {
         if (timeoutRef.current) {
@@ -144,6 +155,10 @@ const AlertContextProvider = ({ children }) => {
         if (intervalRef.current) {
             clearInterval(intervalRef.current);
             intervalRef.current = null;
+        }
+        if (clearTimeoutRef.current) {
+            clearTimeout(clearTimeoutRef.current);
+            clearTimeoutRef.current = null;
         }
     };
 
