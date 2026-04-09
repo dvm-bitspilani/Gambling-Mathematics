@@ -1,11 +1,16 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../styles/question.css";
 import { useUser } from "../contexts/UserContext";
 import { useTitle } from "../utils/useHead";
 import { useURL } from "../utils/useData";
 import { useAlert } from "../contexts/AlertContext";
 import { useVerifyAuth } from "../utils/useAuth";
-import { getQuestion, postAnswer, getGameState } from "../utils/useFetch";
+import {
+    getQuestion,
+    postAnswer,
+    getGameState,
+    getActionableActiveBet
+} from "../utils/useFetch";
 import { useTimer } from "../contexts/TimerContext";
 
 const TIMER_EXPIRED_FLAG = "gambling_timer_expired_redirect";
@@ -35,19 +40,64 @@ const Question = () => {
         id: null
     });
     const [submitting, setSubmitting] = useState(false);
-    const submitLockRef = React.useRef(false);
+    const submitLockRef = useRef(false);
+    const timerExpiredDuringSubmissionRef = useRef(false);
+    const suppressLocalTimeoutRedirectRef = useRef(false);
+
+    const isSameQuestionId = useCallback((left, right) => {
+        if (left === undefined || left === null) {
+            return false;
+        }
+
+        if (right === undefined || right === null) {
+            return false;
+        }
+
+        return String(left) === String(right);
+    }, []);
+
+    const syncUserFromActiveBet = useCallback(
+        activeBet => {
+            if (!activeBet?.level) {
+                return null;
+            }
+
+            const nextUser = { level: activeBet.level };
+            if (
+                activeBet.categoryId !== undefined &&
+                activeBet.categoryId !== null
+            ) {
+                nextUser.category = activeBet.categoryId;
+            }
+
+            updateUser(nextUser);
+            return activeBet.level;
+        },
+        [updateUser]
+    );
 
     const syncAndRedirectToCategories = useCallback(
         async message => {
+            clearQuestionTimer();
             try {
                 const gameState = await getGameState(user.token);
                 if (gameState.data?.points !== undefined) {
                     updateUser({ points: gameState.data.points });
                 }
+                if (gameState.data?.game_timer) {
+                    syncOverallTimerFromBackend(gameState.data.game_timer);
+                }
             } catch {}
             immediateRedirect(URL.CATEGORIES, message, "error");
         },
-        [user.token, updateUser, immediateRedirect, URL.CATEGORIES]
+        [
+            user.token,
+            updateUser,
+            syncOverallTimerFromBackend,
+            clearQuestionTimer,
+            immediateRedirect,
+            URL.CATEGORIES
+        ]
     );
 
     const handleFetchError = useCallback(
@@ -55,6 +105,7 @@ const Question = () => {
             const detail = err?.response?.data?.detail || err?.message || "";
 
             if (detail === "no open bet found for this level") {
+                clearQuestionTimer();
                 immediateRedirect(
                     URL.CATEGORIES,
                     "No active bet found.",
@@ -71,12 +122,14 @@ const Question = () => {
                 detail.includes("overall") ||
                 detail.includes("game timer")
             ) {
+                clearQuestionTimer();
                 immediateRedirect(URL.FINISHED, "Game timer expired.", "error");
             } else if (err?.response?.status === 409) {
                 if (
                     detail.includes("overall") ||
                     detail.includes("game timer")
                 ) {
+                    clearQuestionTimer();
                     immediateRedirect(
                         URL.FINISHED,
                         "Game timer expired.",
@@ -88,6 +141,7 @@ const Question = () => {
                     );
                 }
             } else {
+                clearQuestionTimer();
                 immediateRedirect(
                     URL.CATEGORIES,
                     "Error fetching question.",
@@ -96,6 +150,7 @@ const Question = () => {
             }
         },
         [
+            clearQuestionTimer,
             immediateRedirect,
             syncAndRedirectToCategories,
             URL.CATEGORIES,
@@ -105,9 +160,12 @@ const Question = () => {
 
     const syncAndFetchQuestion = useCallback(
         async levelOverride => {
-            const activeLevel = levelOverride || user.level;
             try {
                 const gameState = await getGameState(user.token);
+                const activeBet = getActionableActiveBet(gameState.data);
+                const syncedLevel = syncUserFromActiveBet(activeBet);
+                const activeLevel = levelOverride || syncedLevel || user.level;
+
                 if (gameState.data?.points !== undefined) {
                     updateUser({ points: gameState.data.points });
                 }
@@ -115,9 +173,20 @@ const Question = () => {
                     syncOverallTimerFromBackend(gameState.data.game_timer);
                 }
                 if (gameState.data?.status === "timer_expired") {
+                    clearQuestionTimer();
                     immediateRedirect(
                         URL.FINISHED,
                         "Game timer expired.",
+                        "error"
+                    );
+                    return false;
+                }
+
+                if (!activeLevel) {
+                    clearQuestionTimer();
+                    immediateRedirect(
+                        URL.CATEGORIES,
+                        "No active bet found.",
                         "error"
                     );
                     return false;
@@ -150,6 +219,22 @@ const Question = () => {
                     id: question_id
                 });
 
+                const nextUser = {};
+                if (
+                    data.category_id !== undefined &&
+                    data.category_id !== null
+                ) {
+                    nextUser.category = data.category_id;
+                }
+                if (data.level || activeLevel) {
+                    nextUser.level = data.level || activeLevel;
+                }
+                if (Object.keys(nextUser).length > 0) {
+                    updateUser(nextUser);
+                }
+
+                timerExpiredDuringSubmissionRef.current = false;
+                suppressLocalTimeoutRedirectRef.current = false;
                 localStorage.removeItem(TIMER_EXPIRED_FLAG);
 
                 if (game_timer) {
@@ -165,13 +250,19 @@ const Question = () => {
                     parsedStored = null;
                 }
 
-                if (parsedStored && parsedStored.questionId !== question_id) {
-                    clearQuestionTimer(parsedStored.questionId);
+                if (
+                    parsedStored &&
+                    !isSameQuestionId(parsedStored.questionId, question_id)
+                ) {
+                    clearQuestionTimer();
+                    parsedStored = null;
                 }
 
-                if (parsedStored && parsedStored.questionId === question_id) {
+                if (
+                    parsedStored &&
+                    isSameQuestionId(parsedStored.questionId, question_id)
+                ) {
                     if (hasExpiredQuestionTimer(question_id)) {
-                        clearQuestionTimer(question_id);
                         await syncAndRedirectToCategories(
                             "Time's up! Your bet was lost."
                         );
@@ -179,16 +270,13 @@ const Question = () => {
                     }
                     restoreQuestionTimer();
                 } else {
+                    const resolvedLevel = data.level || activeLevel;
                     const duration =
-                        question_timer_remaining_seconds ||
-                        question_timer_seconds ||
-                        timerConfig[activeLevel] ||
+                        question_timer_remaining_seconds ??
+                        question_timer_seconds ??
+                        timerConfig[resolvedLevel] ??
                         300;
-                    startQuestionTimer(question_id, activeLevel, duration);
-                }
-
-                if (activeLevel && activeLevel !== user.level) {
-                    updateUser({ level: activeLevel });
+                    startQuestionTimer(question_id, resolvedLevel, duration);
                 }
 
                 return true;
@@ -203,15 +291,18 @@ const Question = () => {
             user.level,
             updateUser,
             syncOverallTimerFromBackend,
+            clearQuestionTimer,
             immediateRedirect,
+            URL.CATEGORIES,
             URL.FINISHED,
             handleFetchError,
-            clearQuestionTimer,
+            syncUserFromActiveBet,
+            isSameQuestionId,
             hasExpiredQuestionTimer,
+            syncAndRedirectToCategories,
             restoreQuestionTimer,
             timerConfig,
-            startQuestionTimer,
-            syncAndRedirectToCategories
+            startQuestionTimer
         ]
     );
 
@@ -229,6 +320,7 @@ const Question = () => {
                 }
 
                 if (gameState.data?.status === "timer_expired") {
+                    clearQuestionTimer();
                     immediateRedirect(
                         URL.FINISHED,
                         "Game timer expired.",
@@ -237,11 +329,10 @@ const Question = () => {
                     return;
                 }
 
-                if (
-                    gameState.data?.open_bets_count > 0 &&
-                    gameState.data?.open_bet_levels?.length > 0
-                ) {
-                    const activeLevel = gameState.data.open_bet_levels[0];
+                const activeBet = getActionableActiveBet(gameState.data);
+                const activeLevel = syncUserFromActiveBet(activeBet);
+
+                if (activeLevel) {
                     const recovered = await syncAndFetchQuestion(activeLevel);
 
                     if (recovered) {
@@ -249,10 +340,11 @@ const Question = () => {
                             fallbackMessage ||
                                 "We restored your active question. Please try again."
                         );
-                        return;
                     }
+                    return;
                 }
 
+                clearQuestionTimer();
                 immediateRedirect(
                     URL.CATEGORIES,
                     "No active bet found.",
@@ -270,9 +362,11 @@ const Question = () => {
             user.token,
             updateUser,
             syncOverallTimerFromBackend,
+            clearQuestionTimer,
             immediateRedirect,
             URL.FINISHED,
             URL.CATEGORIES,
+            syncUserFromActiveBet,
             syncAndFetchQuestion,
             setErrorText
         ]
@@ -282,26 +376,28 @@ const Question = () => {
         syncAndFetchQuestion();
     }, [syncAndFetchQuestion]);
 
-    // Handle timer expiration redirect
     useEffect(() => {
-        if (
-            questionRemainingTime === 0 &&
-            questionTimer !== null &&
-            !submitting
-        ) {
-            if (localStorage.getItem(TIMER_EXPIRED_FLAG)) return;
-            localStorage.setItem(TIMER_EXPIRED_FLAG, "true");
-            clearQuestionTimer(question.id);
-            syncAndRedirectToCategories("Time's up! Your bet was lost.");
+        if (questionRemainingTime !== 0 || questionTimer === null) {
+            return;
         }
+
+        if (submitting || submitLockRef.current) {
+            timerExpiredDuringSubmissionRef.current = true;
+            return;
+        }
+
+        if (suppressLocalTimeoutRedirectRef.current) {
+            return;
+        }
+
+        if (localStorage.getItem(TIMER_EXPIRED_FLAG)) return;
+        localStorage.setItem(TIMER_EXPIRED_FLAG, "true");
+        syncAndRedirectToCategories("Time's up! Your bet was lost.");
     }, [
         questionRemainingTime,
         questionTimer,
-        clearQuestionTimer,
-        immediateRedirect,
-        URL.CATEGORIES,
         submitting,
-        question.id
+        syncAndRedirectToCategories
     ]);
 
     const handleAnswer = async opt => {
@@ -310,14 +406,13 @@ const Question = () => {
         try {
             submitLockRef.current = true;
             setSubmitting(true);
-            const totalDuration = timerConfig[questionTimer?.level] || 300;
-            const timeTaken = totalDuration - questionRemainingTime;
+            timerExpiredDuringSubmissionRef.current = false;
+            suppressLocalTimeoutRedirectRef.current = false;
 
             const { data, error } = await postAnswer(
                 question.id,
                 opt.id,
-                user.token,
-                timeTaken
+                user.token
             );
 
             if (error) {
@@ -364,10 +459,17 @@ const Question = () => {
                     errorDetail === "question timer not started" ||
                     errorDetail === "no open bet found"
                 ) {
+                    if (timerExpiredDuringSubmissionRef.current) {
+                        suppressLocalTimeoutRedirectRef.current = true;
+                    }
                     await recoverActiveQuestion(
                         "We restored your active question. Please try again."
                     );
                     return;
+                }
+
+                if (timerExpiredDuringSubmissionRef.current) {
+                    suppressLocalTimeoutRedirectRef.current = true;
                 }
 
                 handleError(error);
@@ -404,6 +506,9 @@ const Question = () => {
                 );
             }
         } catch (err) {
+            if (timerExpiredDuringSubmissionRef.current) {
+                suppressLocalTimeoutRedirectRef.current = true;
+            }
             await recoverActiveQuestion(
                 "Could not submit answer. We are resyncing your active question."
             );

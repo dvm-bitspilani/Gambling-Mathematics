@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../contexts/UserContext";
 import "../styles/categories.css";
@@ -6,7 +6,12 @@ import { useTitle } from "../utils/useHead";
 import { useURL } from "../utils/useData";
 import { useAlert } from "../contexts/AlertContext";
 import { useVerifyAuth } from "../utils/useAuth";
-import { getCategories, getGameConfig, getGameState } from "../utils/useFetch";
+import {
+    getCategories,
+    getGameConfig,
+    getGameState,
+    getActionableActiveBet
+} from "../utils/useFetch";
 import { useTimer } from "../contexts/TimerContext";
 
 const Categories = () => {
@@ -27,7 +32,27 @@ const Categories = () => {
 
     const [loading, setLoading] = useState(true);
     const [categories, setCategories] = useState([]);
-    const [hasGlobalActiveBet, setHasGlobalActiveBet] = useState(false);
+    const [redirecting, setRedirecting] = useState(false);
+
+    const syncUserFromActiveBet = useCallback(
+        activeBet => {
+            if (!activeBet?.level) {
+                return false;
+            }
+
+            const nextUser = { level: activeBet.level };
+            if (
+                activeBet.categoryId !== undefined &&
+                activeBet.categoryId !== null
+            ) {
+                nextUser.category = activeBet.categoryId;
+            }
+
+            updateUser(nextUser);
+            return true;
+        },
+        [updateUser]
+    );
 
     useEffect(() => {
         fetchData();
@@ -35,14 +60,17 @@ const Categories = () => {
 
     useEffect(() => {
         if (user.points === 0) {
+            setRedirecting(true);
             setErrorText(
                 "You have run out of points. Redirecting you to finish.",
                 URL.FINISHED
             );
         }
-    }, [user.points]);
+    }, [user.points, setErrorText, URL.FINISHED]);
 
     const fetchData = async () => {
+        setLoading(true);
+
         try {
             const [categoriesRes, configRes, gameStateRes] = await Promise.all([
                 getCategories(user.token),
@@ -54,7 +82,9 @@ const Categories = () => {
                 }))
             ]);
 
-            setLoading(categoriesRes.loading);
+            const gameState = gameStateRes?.data;
+            const activeBet = getActionableActiveBet(gameState);
+            let categoriesComplete = false;
 
             if (categoriesRes.data) {
                 if (!Array.isArray(categoriesRes.data)) {
@@ -69,20 +99,13 @@ const Categories = () => {
                 }
 
                 const shown = categoriesRes.data;
-
-                if (
+                categoriesComplete =
                     shown.length === 0 ||
                     shown.every(
                         category =>
                             !category.remaining_questions ||
                             category.remaining_questions <= 0
-                    )
-                ) {
-                    setSuccessText(
-                        "All categories completed! Redirecting you to finish.",
-                        URL.FINISHED
                     );
-                }
 
                 setCategories(shown);
             }
@@ -101,15 +124,16 @@ const Categories = () => {
                 }
             }
 
-            if (gameStateRes?.data?.game_timer) {
-                syncOverallTimerFromBackend(gameStateRes.data.game_timer);
+            if (gameState?.game_timer) {
+                syncOverallTimerFromBackend(gameState.game_timer);
             }
 
-            if (gameStateRes?.data?.points !== undefined) {
-                updateUser({ points: gameStateRes.data.points });
+            if (gameState?.points !== undefined) {
+                updateUser({ points: gameState.points });
             }
 
-            if (gameStateRes?.data?.status === "timer_expired") {
+            if (gameState?.status === "timer_expired") {
+                setRedirecting(true);
                 setErrorText(
                     "Overall time expired. Redirecting to finish.",
                     URL.FINISHED
@@ -117,12 +141,8 @@ const Categories = () => {
                 return;
             }
 
-            if (
-                gameStateRes?.data?.open_bets_count > 0 &&
-                gameStateRes?.data?.open_bet_levels?.length > 0
-            ) {
-                setHasGlobalActiveBet(true);
-                updateUser({ level: gameStateRes.data.open_bet_levels[0] });
+            if (syncUserFromActiveBet(activeBet)) {
+                setRedirecting(true);
                 setSuccessText(
                     "You have an active bet. Redirecting to your question.",
                     URL.QUESTION
@@ -130,9 +150,19 @@ const Categories = () => {
                 return;
             }
 
-            if (!gameStateRes?.data?.game_timer) {
+            if (categoriesComplete) {
+                setRedirecting(true);
+                setSuccessText(
+                    "All categories completed! Redirecting you to finish.",
+                    URL.FINISHED
+                );
+                return;
+            }
+
+            if (!gameState?.game_timer) {
                 const restoreResult = restoreOverallTimer();
                 if (restoreResult?.expired) {
+                    setRedirecting(true);
                     setErrorText(
                         "Overall time expired. Redirecting to finish.",
                         URL.FINISHED
@@ -143,10 +173,16 @@ const Categories = () => {
             }
         } catch (err) {
             console.error(err);
+        } finally {
+            setLoading(false);
         }
     };
 
     const handleLocate = async category => {
+        if (redirecting) {
+            return;
+        }
+
         try {
             if (
                 !category.remaining_questions ||
@@ -158,6 +194,7 @@ const Categories = () => {
                 return;
             }
 
+            setRedirecting(true);
             updateUser({ category: category.id });
 
             if (category.has_active_bet && category.active_bet_level) {
@@ -173,6 +210,7 @@ const Categories = () => {
                 );
             }
         } catch (err) {
+            setRedirecting(false);
             setErrorText("Failed to find this category. Try again.");
             console.error(err);
         }
@@ -201,9 +239,9 @@ const Categories = () => {
                         {categories?.map(category => (
                             <div
                                 key={category.id}
-                                className={`category${hasGlobalActiveBet || !category.remaining_questions || category.remaining_questions <= 0 ? " disabled" : ""}`}
+                                className={`category${redirecting || !category.remaining_questions || category.remaining_questions <= 0 ? " disabled" : ""}`}
                                 onClick={
-                                    hasGlobalActiveBet
+                                    redirecting
                                         ? undefined
                                         : category.remaining_questions > 0
                                           ? () => handleLocate(category)

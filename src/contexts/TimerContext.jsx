@@ -21,6 +21,25 @@ const DEFAULT_CONFIG = {
 
 const DEFAULT_OVERALL_SECONDS = 50 * 60;
 
+const normalizeQuestionId = questionId => {
+    if (questionId === undefined || questionId === null) {
+        return null;
+    }
+
+    return String(questionId);
+};
+
+const questionIdsMatch = (left, right) => {
+    const normalizedLeft = normalizeQuestionId(left);
+    const normalizedRight = normalizeQuestionId(right);
+
+    return (
+        normalizedLeft !== null &&
+        normalizedRight !== null &&
+        normalizedLeft === normalizedRight
+    );
+};
+
 export const useTimer = () => {
     const context = useContext(TimerContext);
 
@@ -86,8 +105,16 @@ const TimerContextProvider = ({ children }) => {
     const getStoredQuestionTimer = useCallback(() => {
         try {
             const stored = localStorage.getItem(QUESTION_TIMER_KEY);
-            return stored ? JSON.parse(stored) : null;
+            const parsed = stored ? JSON.parse(stored) : null;
+
+            return parsed
+                ? {
+                      ...parsed,
+                      questionId: normalizeQuestionId(parsed.questionId)
+                  }
+                : null;
         } catch {
+            localStorage.removeItem(QUESTION_TIMER_KEY);
             return null;
         }
     }, []);
@@ -97,7 +124,10 @@ const TimerContextProvider = ({ children }) => {
             if (timerData) {
                 localStorage.setItem(
                     QUESTION_TIMER_KEY,
-                    JSON.stringify(timerData)
+                    JSON.stringify({
+                        ...timerData,
+                        questionId: normalizeQuestionId(timerData.questionId)
+                    })
                 );
             } else {
                 localStorage.removeItem(QUESTION_TIMER_KEY);
@@ -134,19 +164,31 @@ const TimerContextProvider = ({ children }) => {
 
     const clearQuestionTimer = useCallback(
         questionId => {
+            const stored = getStoredQuestionTimer();
+            const normalizedQuestionId = normalizeQuestionId(questionId);
+            const shouldClearTimer =
+                normalizedQuestionId === null ||
+                questionIdsMatch(stored?.questionId, normalizedQuestionId) ||
+                questionIdsMatch(
+                    questionTimer?.questionId,
+                    normalizedQuestionId
+                );
+
+            if (!shouldClearTimer) {
+                return false;
+            }
+
             if (questionTimerIdRef.current) {
                 clearInterval(questionTimerIdRef.current);
                 questionTimerIdRef.current = null;
             }
 
-            const stored = getStoredQuestionTimer();
-            if (!questionId || (stored && stored.questionId === questionId)) {
-                setStoredQuestionTimer(null);
-                setQuestionTimer(null);
-                setQuestionRemainingTime(0);
-            }
+            setStoredQuestionTimer(null);
+            setQuestionTimer(null);
+            setQuestionRemainingTime(0);
+            return true;
         },
-        [getStoredQuestionTimer, setStoredQuestionTimer]
+        [getStoredQuestionTimer, questionTimer, setStoredQuestionTimer]
     );
 
     const clearAllTimers = useCallback(() => {
@@ -172,7 +214,10 @@ const TimerContextProvider = ({ children }) => {
             setOverallTimerSeconds(duration);
 
             try {
-                localStorage.setItem("overallTimerSeconds", duration.toString());
+                localStorage.setItem(
+                    "overallTimerSeconds",
+                    duration.toString()
+                );
             } catch (error) {
                 console.error("Failed to store overall timer seconds:", error);
             }
@@ -267,7 +312,7 @@ const TimerContextProvider = ({ children }) => {
     const hasExpiredQuestionTimer = useCallback(
         questionId => {
             const stored = getStoredQuestionTimer();
-            if (!stored || stored.questionId !== questionId) {
+            if (!stored || !questionIdsMatch(stored.questionId, questionId)) {
                 return false;
             }
             return Date.now() >= stored.endTime;
@@ -278,7 +323,7 @@ const TimerContextProvider = ({ children }) => {
     const getQuestionRemainingTime = useCallback(
         questionId => {
             const stored = getStoredQuestionTimer();
-            if (!stored || stored.questionId !== questionId) {
+            if (!stored || !questionIdsMatch(stored.questionId, questionId)) {
                 return 0;
             }
             return getTimeRemaining(stored.endTime);
@@ -288,6 +333,7 @@ const TimerContextProvider = ({ children }) => {
 
     const startQuestionTimer = useCallback(
         (questionId, level, customDuration = null) => {
+            const normalizedQuestionId = normalizeQuestionId(questionId);
             const duration =
                 customDuration ||
                 timerConfig[level] ||
@@ -296,12 +342,16 @@ const TimerContextProvider = ({ children }) => {
             const endTime = Date.now() + duration * 1000;
 
             setStoredQuestionTimer({
-                questionId,
+                questionId: normalizedQuestionId,
                 endTime,
                 level
             });
 
-            setQuestionTimer({ questionId, level, endTime });
+            setQuestionTimer({
+                questionId: normalizedQuestionId,
+                level,
+                endTime
+            });
             setQuestionRemainingTime(duration);
 
             if (questionTimerIdRef.current) {
@@ -334,7 +384,7 @@ const TimerContextProvider = ({ children }) => {
         }
 
         if (Date.now() >= stored.endTime) {
-            setStoredQuestionTimer(null);
+            clearQuestionTimer(stored.questionId);
             return { expired: true, questionId: stored.questionId };
         }
 
@@ -369,7 +419,12 @@ const TimerContextProvider = ({ children }) => {
             level: stored.level,
             remainingTime: remaining
         };
-    }, [getStoredQuestionTimer, setStoredQuestionTimer, getTimeRemaining]);
+    }, [
+        clearQuestionTimer,
+        getStoredQuestionTimer,
+        setStoredQuestionTimer,
+        getTimeRemaining
+    ]);
 
     const updateTimerConfig = useCallback(config => {
         const newConfig = { ...DEFAULT_CONFIG, ...config };

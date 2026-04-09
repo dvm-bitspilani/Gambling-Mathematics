@@ -143,6 +143,75 @@ const fetchData = async (url, method, data, headers, onLogout) => {
     }
 };
 
+const getActionableActiveBet = gameState => {
+    if (!gameState || typeof gameState !== "object") {
+        return null;
+    }
+
+    const activeBet = gameState.active_bet;
+    if (activeBet && typeof activeBet === "object") {
+        const level =
+            activeBet.level ||
+            activeBet.active_bet_level ||
+            activeBet.bet_level ||
+            activeBet.question_level ||
+            null;
+
+        const categoryId =
+            activeBet.category_id ??
+            activeBet.categoryId ??
+            activeBet.category?.id ??
+            null;
+
+        const questionId =
+            activeBet.question_id ??
+            activeBet.questionId ??
+            activeBet.assigned_question_id ??
+            activeBet.assignedQuestionId ??
+            activeBet.assigned_question?.id ??
+            activeBet.question?.id ??
+            null;
+
+        const hasQuestion = Boolean(
+            activeBet.has_question ??
+            activeBet.question_assigned ??
+            activeBet.question_started ??
+            activeBet.question_started_at ??
+            activeBet.question_start_time ??
+            activeBet.assigned_question ??
+            questionId
+        );
+
+        if (level) {
+            return {
+                id: activeBet.bet_id ?? activeBet.id ?? null,
+                level,
+                categoryId,
+                questionId,
+                hasQuestion,
+                raw: activeBet
+            };
+        }
+    }
+
+    const legacyLevels = Array.isArray(gameState.open_bet_levels)
+        ? gameState.open_bet_levels.filter(Boolean)
+        : [];
+
+    if (legacyLevels.length > 0) {
+        return {
+            id: null,
+            level: legacyLevels[0],
+            categoryId: null,
+            questionId: null,
+            hasQuestion: true,
+            raw: null
+        };
+    }
+
+    return null;
+};
+
 const createRequest = async (
     endpoint,
     method,
@@ -188,16 +257,11 @@ const getQuestion = async (userToken, userLevel) => {
     );
 };
 
-const postAnswer = async (
-    question_id,
-    option_id,
-    userToken,
-    time_taken = 0
-) => {
+const postAnswer = async (question_id, option_id, userToken) => {
     return await createRequest(
         "API_ANSWER",
         "post",
-        { question_id, option_id, time_taken },
+        { question_id, option_id },
         userToken
     );
 };
@@ -222,5 +286,6 @@ export {
     postAnswer,
     getLeaderboard,
     getGameConfig,
-    getGameState
+    getGameState,
+    getActionableActiveBet
 };

@@ -1,70 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "../styles/categories.css";
 import { useURL } from "../utils/useData";
 import { useUser } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import { useTimer } from "../contexts/TimerContext";
-import { useAlert } from "../contexts/AlertContext";
 import { usePathName } from "../utils/useHead";
 
 const Fixed = () => {
     const navigate = useNavigate();
     const pathName = usePathName();
-    const {
-        overallFormattedTime,
-        questionFormattedTime,
-        clearAllTimers,
-        clearQuestionTimer,
-        questionRemainingTime,
-        overallRemainingTime,
-        questionTimer
-    } = useTimer();
+    const { overallFormattedTime, questionFormattedTime, clearAllTimers } =
+        useTimer();
     const { logoutUser } = useUser();
-    const { setErrorText, immediateRedirect } = useAlert();
     const URL = useURL();
-    const TIMER_EXPIRED_FLAG = 'gambling_timer_expired_redirect';
 
-    const [overallTimerActive, setOverallTimerActive] = useState(false);
-    const [questionTimerActive, setQuestionTimerActive] = useState(false);
-
-    useEffect(() => {
-        const overallPages = [URL.CATEGORIES, URL.SELECT];
-        setOverallTimerActive(overallPages.includes(pathName));
-        setQuestionTimerActive(pathName === URL.QUESTION);
-    }, [pathName, URL]);
-
+    const questionTimerActive = pathName === URL.QUESTION;
     const displayTimer = questionTimerActive
         ? questionFormattedTime
         : overallFormattedTime;
-    const displayRemaining = questionTimerActive
-        ? questionRemainingTime
-        : overallRemainingTime;
-
-    useEffect(() => {
-        if (
-            questionTimerActive &&
-            questionTimer !== null &&
-            displayRemaining === 0 &&
-            questionFormattedTime === "00:00:00"
-        ) {
-            if (localStorage.getItem(TIMER_EXPIRED_FLAG)) return;
-            localStorage.setItem(TIMER_EXPIRED_FLAG, 'true');
-            clearQuestionTimer();
-            immediateRedirect(
-                URL.CATEGORIES,
-                "Time's up! Your bet was lost.",
-                'error'
-            );
-        }
-    }, [
-        questionTimerActive,
-        questionTimer,
-        displayRemaining,
-        questionFormattedTime,
-        URL,
-        immediateRedirect,
-        clearQuestionTimer
-    ]);
 
     const handleExit = () => {
         clearAllTimers();

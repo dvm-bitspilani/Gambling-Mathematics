@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/select.css";
 import "../styles/categories.css";
 import { useTitle } from "../utils/useHead";
 import { useLevels, useURL } from "../utils/useData";
 import { useAlert } from "../contexts/AlertContext";
-import { postBet, getGameState } from "../utils/useFetch";
+import {
+    postBet,
+    getGameState,
+    getActionableActiveBet
+} from "../utils/useFetch";
 import { useUser } from "../contexts/UserContext";
 import { useTimer } from "../contexts/TimerContext";
 import { useVerifyAuth } from "../utils/useAuth";
@@ -31,6 +35,68 @@ const Select = () => {
     const [selectedLevel, setSelectedLevel] = useState("hard");
     const [submitting, setSubmitting] = useState(false);
 
+    const syncUserFromActiveBet = useCallback(
+        activeBet => {
+            if (!activeBet?.level) {
+                return false;
+            }
+
+            const nextUser = { level: activeBet.level };
+            if (
+                activeBet.categoryId !== undefined &&
+                activeBet.categoryId !== null
+            ) {
+                nextUser.category = activeBet.categoryId;
+            }
+
+            updateUser(nextUser);
+            return true;
+        },
+        [updateUser]
+    );
+
+    const syncActiveBetAndRedirect = useCallback(
+        async message => {
+            try {
+                const { data } = await getGameState(user.token);
+
+                if (data?.points !== undefined) {
+                    updateUser({ points: data.points });
+                }
+                if (data?.game_timer) {
+                    syncOverallTimerFromBackend(data.game_timer);
+                }
+                if (data?.status === "timer_expired") {
+                    immediateRedirect(
+                        URL.FINISHED,
+                        "Game timer expired.",
+                        "error"
+                    );
+                    return true;
+                }
+
+                const activeBet = getActionableActiveBet(data);
+                if (syncUserFromActiveBet(activeBet)) {
+                    immediateRedirect(URL.QUESTION, message, "error");
+                    return true;
+                }
+            } catch (err) {
+                console.error("Failed to sync active bet:", err);
+            }
+
+            return false;
+        },
+        [
+            user.token,
+            updateUser,
+            syncOverallTimerFromBackend,
+            immediateRedirect,
+            syncUserFromActiveBet,
+            URL.FINISHED,
+            URL.QUESTION
+        ]
+    );
+
     // Effects
     useEffect(() => {
         updateUser({ level: selectedLevel });
@@ -55,12 +121,8 @@ const Select = () => {
                     return;
                 }
 
-                if (
-                    data?.open_bets_count > 0 &&
-                    data?.open_bet_levels?.length > 0
-                ) {
-                    const level = data.open_bet_levels[0];
-                    updateUser({ level });
+                const activeBet = getActionableActiveBet(data);
+                if (syncUserFromActiveBet(activeBet)) {
                     immediateRedirect(URL.QUESTION);
                 }
             } catch (err) {
@@ -114,7 +176,7 @@ const Select = () => {
             );
 
             if (error) {
-                handlePostBetError(error);
+                await handlePostBetError(error);
                 return;
             }
 
@@ -139,7 +201,7 @@ const Select = () => {
         }
     };
 
-    const handlePostBetError = error => {
+    const handlePostBetError = async error => {
         const status = error?.response?.status;
         const detail =
             error?.response?.data?.detail ||
@@ -161,10 +223,16 @@ const Select = () => {
             (detail === "open bet already exists for this category and level" ||
                 detail === "you already have an active bet")
         ) {
-            setErrorText(
-                "You already have an active bet. Redirecting you to the question page.",
-                URL.QUESTION
+            const redirected = await syncActiveBetAndRedirect(
+                "You already have an active bet. Redirecting you to the question page."
             );
+
+            if (!redirected) {
+                setErrorText(
+                    "You already have an active bet. Redirecting you to the question page.",
+                    URL.QUESTION
+                );
+            }
         } else {
             setErrorText(detail);
         }
