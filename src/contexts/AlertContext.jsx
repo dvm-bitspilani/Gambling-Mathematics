@@ -4,7 +4,8 @@ import React, {
     useState,
     useRef,
     useEffect,
-    useCallback
+    useCallback,
+    useMemo
 } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -78,7 +79,27 @@ const AlertContextProvider = ({ children }) => {
         };
     }, []);
 
-    const handleLink = link => {
+    const clearAll = useCallback((delay = 0) => {
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+            timeoutRef.current = null;
+        }
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
+        if (clearTimeoutRef.current) {
+            clearTimeout(clearTimeoutRef.current);
+        }
+        clearTimeoutRef.current = setTimeout(() => {
+            if (mountedRef.current) {
+                setError(initialState);
+                setSuccess(initialState);
+            }
+        }, delay);
+    }, []);
+
+    const handleLink = useCallback(link => {
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
             timeoutRef.current = null;
@@ -105,9 +126,9 @@ const AlertContextProvider = ({ children }) => {
                 }
             }, 1000);
         } else clearAll(3000);
-    };
+    }, [navigate, clearAll]);
 
-    const setErrorText = (message, link, title = "ERROR", immediate = false) => {
+    const setErrorText = useCallback((message, link, title = "ERROR", immediate = false) => {
         if (immediate) {
             immediateRedirect(link, message, 'error');
         } else {
@@ -115,9 +136,9 @@ const AlertContextProvider = ({ children }) => {
             setSuccess(initialState);
             handleLink(link);
         }
-    };
+    }, [immediateRedirect, handleLink]);
 
-    const setSuccessText = (message, link, immediate = false) => {
+    const setSuccessText = useCallback((message, link, immediate = false) => {
         if (immediate) {
             immediateRedirect(link, message, 'success');
         } else {
@@ -125,29 +146,9 @@ const AlertContextProvider = ({ children }) => {
             setError(initialState);
             handleLink(link);
         }
-    };
+    }, [immediateRedirect, handleLink]);
 
-    function clearAll(delay = 0) {
-        if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
-            timeoutRef.current = null;
-        }
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = null;
-        }
-        if (clearTimeoutRef.current) {
-            clearTimeout(clearTimeoutRef.current);
-        }
-        clearTimeoutRef.current = setTimeout(() => {
-            if (mountedRef.current) {
-                setError(initialState);
-                setSuccess(initialState);
-            }
-        }, delay);
-    }
-
-    const resetNavigation = () => {
+    const resetNavigation = useCallback(() => {
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
             timeoutRef.current = null;
@@ -160,9 +161,9 @@ const AlertContextProvider = ({ children }) => {
             clearTimeout(clearTimeoutRef.current);
             clearTimeoutRef.current = null;
         }
-    };
+    }, []);
 
-    const contextValue = {
+    const contextValue = useMemo(() => ({
         error,
         success,
         setErrorText,
@@ -170,7 +171,7 @@ const AlertContextProvider = ({ children }) => {
         clearAll,
         immediateRedirect,
         resetNavigation
-    };
+    }), [error, success, setErrorText, setSuccessText, clearAll, immediateRedirect, resetNavigation]);
 
     return (
         <AlertContext.Provider value={contextValue}>

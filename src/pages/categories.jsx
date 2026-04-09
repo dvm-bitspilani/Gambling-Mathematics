@@ -41,8 +41,7 @@ const Categories = () => {
         redirectingRef.current = redirecting;
     }, [redirecting]);
 
-    const fetchDataRef = useRef(fetchData);
-    fetchDataRef.current = fetchData;
+    const fetchDataRef = useRef(null);
 
     const syncUserFromActiveBet = useCallback(
         activeBet => {
@@ -65,13 +64,13 @@ const Categories = () => {
     );
 
     useEffect(() => {
-        fetchDataRef.current();
+        fetchDataRef.current?.();
     }, [location.pathname]);
 
     useEffect(() => {
         return () => {
             setRedirecting(false);
-        };
+fetchDataRef.current = fetchData;
     }, []);
 
     useEffect(() => {
@@ -191,6 +190,7 @@ const Categories = () => {
             if (!gameState?.game_timer) {
                 const restoreResult = restoreOverallTimer();
                 if (restoreResult?.expired) {
+                    shouldRedirectRef.current = true;
                     setRedirecting(true);
                     setErrorText(
                         "Overall time expired. Redirecting to finish.",
@@ -204,6 +204,9 @@ const Categories = () => {
             console.error(err);
         } finally {
             setLoading(false);
+            if (!shouldRedirectRef.current) {
+                setRedirecting(false);
+            }
         }
     };
 
