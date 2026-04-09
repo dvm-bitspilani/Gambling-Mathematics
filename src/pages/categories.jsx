@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useUser } from "../contexts/UserContext";
 import "../styles/categories.css";
@@ -41,27 +41,24 @@ const Categories = () => {
         redirectingRef.current = redirecting;
     }, [redirecting]);
 
-    const syncUserFromActiveBet = useCallback(
-        activeBet => {
-            if (!activeBet?.level) {
-                return false;
-            }
+    const syncUserFromActiveBet = activeBet => {
+        if (!activeBet?.level) {
+            return false;
+        }
 
-            const nextUser = { level: activeBet.level };
-            if (
-                activeBet.categoryId !== undefined &&
-                activeBet.categoryId !== null
-            ) {
-                nextUser.category = activeBet.categoryId;
-            }
+        const nextUser = { level: activeBet.level };
+        if (
+            activeBet.categoryId !== undefined &&
+            activeBet.categoryId !== null
+        ) {
+            nextUser.category = activeBet.categoryId;
+        }
 
-            updateUser(nextUser);
-            return true;
-        },
-        [updateUser]
-    );
+        updateUser(nextUser);
+        return true;
+    };
 
-    const fetchData = useCallback(async () => {
+    const fetchData = async () => {
         shouldRedirectRef.current = false;
         setLoading(true);
 
@@ -183,27 +180,12 @@ const Categories = () => {
                 setRedirecting(false);
             }
         }
-    }, [
-        user.token,
-        user.level,
-        updateUser,
-        setErrorText,
-        setSuccessText,
-        updateTimerConfig,
-        setOverallDuration,
-        syncOverallTimerFromBackend,
-        restoreOverallTimer,
-        overallTimer,
-        startOverallTimer,
-        syncUserFromActiveBet,
-        URL.FINISHED,
-        URL.QUESTION
-    ]);
+    };
 
     useEffect(() => {
         setRedirecting(false);
         fetchData();
-    }, [location.pathname, fetchData]);
+    }, [location.pathname, user.token]);
 
     useEffect(() => {
         return () => {
