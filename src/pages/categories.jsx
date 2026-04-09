@@ -41,8 +41,6 @@ const Categories = () => {
         redirectingRef.current = redirecting;
     }, [redirecting]);
 
-    const fetchDataRef = useRef(null);
-
     const syncUserFromActiveBet = useCallback(
         activeBet => {
             if (!activeBet?.level) {
@@ -63,31 +61,8 @@ const Categories = () => {
         [updateUser]
     );
 
-    useEffect(() => {
-        fetchDataRef.current?.();
-    }, [location.pathname]);
-
-    useEffect(() => {
-        return () => {
-            setRedirecting(false);
-fetchDataRef.current = fetchData;
-    }, []);
-
-    useEffect(() => {
-        setRedirecting(false);
-    }, [location.pathname]);
-
-    useEffect(() => {
-        if (user.points === 0) {
-            setRedirecting(true);
-            setErrorText(
-                "You have run out of points. Redirecting you to finish.",
-                URL.FINISHED
-            );
-        }
-    }, [user.points, setErrorText, URL.FINISHED]);
-
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
+        shouldRedirectRef.current = false;
         setLoading(true);
 
         try {
@@ -208,7 +183,43 @@ fetchDataRef.current = fetchData;
                 setRedirecting(false);
             }
         }
-    };
+    }, [
+        user.token,
+        user.level,
+        updateUser,
+        setErrorText,
+        setSuccessText,
+        updateTimerConfig,
+        setOverallDuration,
+        syncOverallTimerFromBackend,
+        restoreOverallTimer,
+        overallTimer,
+        startOverallTimer,
+        syncUserFromActiveBet,
+        URL.FINISHED,
+        URL.QUESTION
+    ]);
+
+    useEffect(() => {
+        setRedirecting(false);
+        fetchData();
+    }, [location.pathname, fetchData]);
+
+    useEffect(() => {
+        return () => {
+            setRedirecting(false);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (user.points === 0) {
+            setRedirecting(true);
+            setErrorText(
+                "You have run out of points. Redirecting you to finish.",
+                URL.FINISHED
+            );
+        }
+    }, [user.points, setErrorText, URL.FINISHED]);
 
     const handleLocate = async category => {
         if (redirectingRef.current) {
