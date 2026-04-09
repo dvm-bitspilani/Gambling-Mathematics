@@ -43,7 +43,8 @@ const Question = () => {
     const submitLockRef = useRef(false);
     const timerExpiredDuringSubmissionRef = useRef(false);
     const suppressLocalTimeoutRedirectRef = useRef(false);
-    const hasMountedRef = useRef(false);
+    const initialSyncRef = useRef(false);
+    const navigationInFlightRef = useRef(false);
 
     const isSameQuestionId = useCallback((left, right) => {
         if (left === undefined || left === null) {
@@ -79,6 +80,7 @@ const Question = () => {
 
     const syncAndRedirectToCategories = useCallback(
         async message => {
+            navigationInFlightRef.current = true;
             clearQuestionTimer();
             updateUser({ level: null, category: null });
             try {
@@ -165,8 +167,17 @@ const Question = () => {
 
     const syncAndFetchQuestion = useCallback(
         async levelOverride => {
+            if (navigationInFlightRef.current) {
+                return false;
+            }
+
             try {
                 const gameState = await getGameState(user.token);
+
+                if (navigationInFlightRef.current) {
+                    return false;
+                }
+
                 const activeBet = getActionableActiveBet(gameState.data);
                 const syncedLevel = syncUserFromActiveBet(activeBet);
                 const activeLevel = levelOverride || syncedLevel || user.level;
@@ -202,6 +213,10 @@ const Question = () => {
                     user.token,
                     activeLevel
                 );
+
+                if (navigationInFlightRef.current) {
+                    return false;
+                }
 
                 if (error) {
                     await handleFetchError(error);
@@ -314,8 +329,16 @@ const Question = () => {
 
     const recoverActiveQuestion = useCallback(
         async fallbackMessage => {
+            if (navigationInFlightRef.current) {
+                return;
+            }
+
             try {
                 const gameState = await getGameState(user.token);
+
+                if (navigationInFlightRef.current) {
+                    return;
+                }
 
                 if (gameState.data?.points !== undefined) {
                     updateUser({ points: gameState.data.points });
@@ -380,12 +403,9 @@ const Question = () => {
     );
 
     useEffect(() => {
-        if (hasMountedRef.current) return;
-        hasMountedRef.current = true;
+        if (initialSyncRef.current) return;
+        initialSyncRef.current = true;
         syncAndFetchQuestion();
-        return () => {
-            hasMountedRef.current = false;
-        };
     }, [syncAndFetchQuestion]);
 
     useEffect(() => {
@@ -432,6 +452,7 @@ const Question = () => {
                     error?.response?.data?.detail || error?.message || "";
 
                 if (errorDetail === "already answered") {
+                    navigationInFlightRef.current = true;
                     const gameState = await getGameState(user.token);
                     if (gameState.data?.points !== undefined) {
                         updateUser({ points: gameState.data.points });
@@ -490,6 +511,7 @@ const Question = () => {
             }
 
             clearQuestionTimer(question.id);
+            navigationInFlightRef.current = true;
             updateUser({ points: data.total_points, level: null, category: null });
 
             if (data.game_timer) {
