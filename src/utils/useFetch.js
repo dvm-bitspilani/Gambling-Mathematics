@@ -21,16 +21,19 @@ const getRefreshToken = () => {
     return null;
 };
 
-const updateTokenInCookies = newAccessToken => {
+const updateTokenInCookies = (newAccessToken, newRefreshToken = null) => {
     try {
         const storedUserCookie = Cookies.get("gm_user");
         if (storedUserCookie) {
             const user = JSON.parse(storedUserCookie);
             user.token = newAccessToken;
+            if (newRefreshToken) {
+                user.refresh = newRefreshToken;
+            }
             Cookies.set("gm_user", JSON.stringify(user), { expires: 365 });
         }
     } catch (error) {
-        console.error("Error updating access token in cookies.");
+        console.error("Error updating auth tokens in cookies.");
     }
 };
 
@@ -54,7 +57,10 @@ const refreshAccessToken = async refreshToken => {
 
         if (response.ok) {
             const data = await response.json();
-            return data.access;
+            return {
+                access: data.access,
+                refresh: data.refresh || null
+            };
         }
     } catch (error) {
         console.error("Error refreshing access token:", error);
@@ -75,14 +81,17 @@ const fetchData = async (url, method, data, headers, onLogout) => {
             const refreshToken = getRefreshToken();
 
             if (refreshToken) {
-                const newAccessToken = await refreshAccessToken(refreshToken);
+                const refreshedTokens = await refreshAccessToken(refreshToken);
 
-                if (newAccessToken) {
-                    updateTokenInCookies(newAccessToken);
+                if (refreshedTokens?.access) {
+                    updateTokenInCookies(
+                        refreshedTokens.access,
+                        refreshedTokens.refresh
+                    );
 
                     const newHeaders = {
                         ...headers,
-                        Authorization: `Bearer ${newAccessToken}`
+                        Authorization: `Bearer ${refreshedTokens.access}`
                     };
 
                     response = await fetch(url, {
@@ -112,20 +121,19 @@ const fetchData = async (url, method, data, headers, onLogout) => {
             }
         }
 
-        if (response.status === 409) {
+        if (!response.ok) {
             let body = {};
             try {
                 body = await response.json();
             } catch {}
-            const err = new Error(body.detail || "HTTP error! status: 409");
-            err.status = 409;
-            err.data = body;
-            err.response = { status: 409, data: body };
-            throw err;
-        }
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            const err = new Error(
+                body.detail || `HTTP error! status: ${response.status}`
+            );
+            err.status = response.status;
+            err.data = body;
+            err.response = { status: response.status, data: body };
+            throw err;
         }
 
         const responseData = await response.json();

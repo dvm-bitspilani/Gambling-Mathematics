@@ -47,7 +47,11 @@ const Categories = () => {
             const [categoriesRes, configRes, gameStateRes] = await Promise.all([
                 getCategories(user.token),
                 getGameConfig(),
-                getGameState(user.token).catch(e => ({ data: null, error: e, loading: false }))
+                getGameState(user.token).catch(e => ({
+                    data: null,
+                    error: e,
+                    loading: false
+                }))
             ]);
 
             setLoading(categoriesRes.loading);
@@ -66,7 +70,14 @@ const Categories = () => {
 
                 const shown = categoriesRes.data;
 
-                if (shown.length === 0) {
+                if (
+                    shown.length === 0 ||
+                    shown.every(
+                        category =>
+                            !category.remaining_questions ||
+                            category.remaining_questions <= 0
+                    )
+                ) {
                     setSuccessText(
                         "All categories completed! Redirecting you to finish.",
                         URL.FINISHED
@@ -98,20 +109,23 @@ const Categories = () => {
                 updateUser({ points: gameStateRes.data.points });
             }
 
-            if (gameStateRes?.data?.open_bets_count > 0 && gameStateRes?.data?.open_bet_levels?.length > 0) {
+            if (gameStateRes?.data?.status === "timer_expired") {
+                setErrorText(
+                    "Overall time expired. Redirecting to finish.",
+                    URL.FINISHED
+                );
+                return;
+            }
+
+            if (
+                gameStateRes?.data?.open_bets_count > 0 &&
+                gameStateRes?.data?.open_bet_levels?.length > 0
+            ) {
                 setHasGlobalActiveBet(true);
                 updateUser({ level: gameStateRes.data.open_bet_levels[0] });
                 setSuccessText(
                     "You have an active bet. Redirecting to your question.",
                     URL.QUESTION
-                );
-                return;
-            }
-
-            if (gameStateRes?.data?.status === "timer_expired") {
-                setErrorText(
-                    "Overall time expired. Redirecting to finish.",
-                    URL.FINISHED
                 );
                 return;
             }
@@ -134,8 +148,13 @@ const Categories = () => {
 
     const handleLocate = async category => {
         try {
-            if (!category.remaining_questions || category.remaining_questions <= 0) {
-                setErrorText("Cannot attempt more questions from this category — limit reached.");
+            if (
+                !category.remaining_questions ||
+                category.remaining_questions <= 0
+            ) {
+                setErrorText(
+                    "Cannot attempt more questions from this category — limit reached."
+                );
                 return;
             }
 
@@ -187,8 +206,8 @@ const Categories = () => {
                                     hasGlobalActiveBet
                                         ? undefined
                                         : category.remaining_questions > 0
-                                            ? () => handleLocate(category)
-                                            : undefined
+                                          ? () => handleLocate(category)
+                                          : undefined
                                 }
                             >
                                 <span className="category-name">

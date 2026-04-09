@@ -46,7 +46,19 @@ const Select = () => {
                 if (data?.game_timer) {
                     syncOverallTimerFromBackend(data.game_timer);
                 }
-                if (data?.open_bets_count > 0 && data?.open_bet_levels?.length > 0) {
+                if (data?.status === "timer_expired") {
+                    immediateRedirect(
+                        URL.FINISHED,
+                        "Game timer expired.",
+                        "error"
+                    );
+                    return;
+                }
+
+                if (
+                    data?.open_bets_count > 0 &&
+                    data?.open_bet_levels?.length > 0
+                ) {
                     const level = data.open_bet_levels[0];
                     updateUser({ level });
                     immediateRedirect(URL.QUESTION);
@@ -56,7 +68,13 @@ const Select = () => {
             }
         };
         syncGameStateOnLoad();
-    }, [user.token, updateUser, syncOverallTimerFromBackend, immediateRedirect, URL.QUESTION]);
+    }, [
+        user.token,
+        updateUser,
+        syncOverallTimerFromBackend,
+        immediateRedirect,
+        URL.QUESTION
+    ]);
 
     // Event Handlers
     const handleBetSelection = async () => {
@@ -64,7 +82,7 @@ const Select = () => {
 
         try {
             setSubmitting(true);
-            
+
             if (!bet) {
                 setErrorText(
                     "Please enter the number of points you want to bet."
@@ -108,7 +126,11 @@ const Select = () => {
                 syncOverallTimerFromBackend(data.game_timer);
             }
 
-            immediateRedirect(URL.QUESTION, "Bet placed successfully!", 'success');
+            immediateRedirect(
+                URL.QUESTION,
+                "Bet placed successfully!",
+                "success"
+            );
         } catch (err) {
             setErrorText("An error occurred while placing your bet.");
             console.error("Error placing bet:", err);
@@ -124,17 +146,23 @@ const Select = () => {
             error?.message ||
             "An error occurred while placing your bet.";
 
-        if (status === 403) {
+        if (status === 409 && detail.includes("overall")) {
+            setErrorText(
+                "Game timer expired. Redirecting you to finish.",
+                URL.FINISHED
+            );
+        } else if (status === 403) {
             setErrorText(
                 "You have selected a different category. Redirecting you back to the category selection page.",
                 URL.CATEGORIES
             );
         } else if (
             status === 400 &&
-            detail === "open bet already exists for this category and level"
+            (detail === "open bet already exists for this category and level" ||
+                detail === "you already have an active bet")
         ) {
             setErrorText(
-                "You have already placed a bet. Redirecting you to the questions page.",
+                "You already have an active bet. Redirecting you to the question page.",
                 URL.QUESTION
             );
         } else {
@@ -213,10 +241,10 @@ const Select = () => {
                         bet, click on the button below to start the game.
                     </div>
                     <div
-                        className={`btns${submitting ? ' disabled' : ''}`}
+                        className={`btns${submitting ? " disabled" : ""}`}
                         onClick={submitting ? undefined : handleBetSelection}
                     >
-                        {submitting ? 'PLACING...' : 'SELECT'}
+                        {submitting ? "PLACING..." : "SELECT"}
                     </div>
                 </div>
             </div>

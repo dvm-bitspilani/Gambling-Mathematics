@@ -55,6 +55,7 @@ const UserContextProvider = ({ children }) => {
         localStorage.removeItem("overallTimerSeconds");
         localStorage.removeItem("questionTimer");
         localStorage.removeItem("timerConfig");
+        localStorage.removeItem("gambling_timer_expired_redirect");
         setUser(initUser);
     };
 
