@@ -35,6 +35,7 @@ const Question = () => {
         id: null
     });
     const [submitting, setSubmitting] = useState(false);
+    const submitLockRef = React.useRef(false);
 
     const syncAndRedirectToCategories = useCallback(
         async message => {
@@ -304,9 +305,10 @@ const Question = () => {
     ]);
 
     const handleAnswer = async opt => {
-        if (submitting || !question.id) return;
+        if (submitting || submitLockRef.current || !question.id) return;
 
         try {
+            submitLockRef.current = true;
             setSubmitting(true);
             const totalDuration = timerConfig[questionTimer?.level] || 300;
             const timeTaken = totalDuration - questionRemainingTime;
@@ -407,6 +409,7 @@ const Question = () => {
             );
             console.log(err);
         } finally {
+            submitLockRef.current = false;
             setSubmitting(false);
         }
     };
