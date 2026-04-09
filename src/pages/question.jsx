@@ -131,6 +131,13 @@ const Question = () => {
                     "error"
                 );
             } else if (
+                detail === "question could not be loaded" ||
+                err?.response?.data?.code === "question_unavailable"
+            ) {
+                await syncAndRedirectToCategories(
+                    "Could not load question. Your bet was cancelled."
+                );
+            } else if (
                 detail === "question timer expired" ||
                 detail === "bet lost due to timeout"
             ) {
